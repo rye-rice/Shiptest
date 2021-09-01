@@ -240,7 +240,7 @@
 /turf/open/floor/plating/asteroid{
 	initial_gas_mix = "LAVALAND_ATMOS"
 	},
-/area/lavaland/surface/outdoors)
+/area/ruin/unpowered/ash_walkers)
 "pv" = (
 /obj/structure/mineral_door/wood,
 /turf/open/floor/vault,
