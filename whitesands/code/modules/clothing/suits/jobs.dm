@@ -2,9 +2,6 @@
 /obj/item/clothing/suit/lieutenant_trenchcoat
 	name = "lieutenant's trenchcoat"
 	desc = "A design taken from a war over 500 years ago. Makes you look like a badass."
-
-
-
 	icon_state = "trenchcoat_blueshield"
 	item_state = "trenchcoat_blueshield"
 	blood_overlay_type = "coat"
@@ -19,8 +16,6 @@
 /obj/item/clothing/suit/solgov_trenchcoat
 	name = "solgov trenchcoat"
 	desc = "A solgov official's trenchcoat. Has a lot of pockets."
-
-
 	icon_state = "trenchcoat_solgov"
 	item_state = "trenchcoat_solgov"
 	body_parts_covered = CHEST|LEGS|ARMS
@@ -32,8 +27,6 @@
 // Security //
 
 /obj/item/clothing/suit/armor/vest/security
-
-
 	item_state = "armor"
 	body_parts_covered = CHEST|GROIN|ARMS
 	cold_protection = CHEST|GROIN|ARMS|HANDS

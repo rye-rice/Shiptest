@@ -140,8 +140,8 @@
 		to_chat(user, "<span class='cult italic'>The magic in [src] is weak, it will be ready to use again in [DisplayTimeText(cooldowntime - world.time)].</span>")
 		return
 	var/list/items = list(
-		"Shielded Robe" = image(icon = 'icons/obj/clothing/suits.dmi', icon_state = "cult_armor"),
-		"Flagellant's Robe" = image(icon = 'icons/obj/clothing/suits.dmi', icon_state = "cultrobes"),
+		"Shielded Robe" = image(icon = 'icons/obj/clothing/suits/suits.dmi', icon_state = "cult_armor"),
+		"Flagellant's Robe" = image(icon = 'icons/obj/clothing/suits/suits.dmi', icon_state = "cultrobes"),
 		"Mirror Shield" = image(icon = 'icons/obj/shields.dmi', icon_state = "mirror_shield")
 		)
 	var/choice = show_radial_menu(user, src, items, custom_check = CALLBACK(src, .proc/check_menu, user), require_near = TRUE, tooltips = TRUE)

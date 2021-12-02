@@ -1065,7 +1065,6 @@
 /obj/item/clothing/suit/ascetic
 	name = "dunewalker's garb"
 	desc = "Sand-bitten robes of roughspun cloth, fit for the hardy life of a travelling hermit. There's a strange aura about them- like a fragile desert haze."
-	icon = 'icons/obj/clothing/suits.dmi'
 	icon_state = "britte_master"//suffering
 	mob_overlay_icon = 'icons/mob/clothing/suit.dmi'
 	mob_overlay_state = "brittle_master"

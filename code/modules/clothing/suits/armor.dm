@@ -1,4 +1,5 @@
 /obj/item/clothing/suit/armor
+	icon = 'icons/obj/clothing/suits/armor.dmi'
 	allowed = null
 	body_parts_covered = CHEST
 	cold_protection = CHEST|GROIN
@@ -21,6 +22,7 @@
 /obj/item/clothing/suit/armor/vest
 	name = "armor vest"
 	desc = "A slim Type I armored vest that provides decent protection against most types of damage."
+	icon = 'icons/obj/clothing/suits/vest.dmi'
 	icon_state = "armor"
 	item_state = "armor"
 	blood_overlay_type = "armor"
