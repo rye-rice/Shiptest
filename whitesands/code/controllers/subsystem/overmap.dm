@@ -200,6 +200,7 @@ SUBSYSTEM_DEF(overmap)
 	var/datum/map_generator/mapgen
 	var/area/target_area
 	var/turf/surface = /turf/open/space
+	var/river_turf
 	if(planet_type)
 		switch(planet_type)
 			if(DYNAMIC_WORLD_LAVA)
@@ -207,11 +208,13 @@ SUBSYSTEM_DEF(overmap)
 				mapgen = new /datum/map_generator/cave_generator/lavaland
 				target_area = /area/overmap_encounter/planetoid/lava
 				surface = /turf/open/floor/plating/asteroid/basalt/lava_land_surface
+				river_turf = /turf/open/lava/smooth/lava_land_surface
 			if(DYNAMIC_WORLD_ICE)
 				ruin_list = SSmapping.ice_ruins_templates
 				mapgen = new /datum/map_generator/cave_generator/icemoon
 				target_area = /area/overmap_encounter/planetoid/ice
 				surface = /turf/open/floor/plating/asteroid/snow/icemoon
+				river_turf = /turf/open/lava/plasma/ice_moon
 			if(DYNAMIC_WORLD_SAND)
 				ruin_list = SSmapping.sand_ruins_templates
 				mapgen = new /datum/map_generator/cave_generator/whitesands
@@ -230,6 +233,7 @@ SUBSYSTEM_DEF(overmap)
 				mapgen = new /datum/map_generator/cave_generator/rockplanet
 				target_area = /area/overmap_encounter/planetoid/rockplanet
 				surface = /turf/open/floor/plating/asteroid
+				river_turf = /turf/open/floor/plating/rust
 			if(DYNAMIC_WORLD_REEBE)
 				ruin_list = SSmapping.yellow_ruins_templates
 				mapgen = new /datum/map_generator/cave_generator/reebe
@@ -267,6 +271,9 @@ SUBSYSTEM_DEF(overmap)
 
 	if(mapgen)
 		mapgen.generate_terrain(vlevel.get_unreserved_block())
+
+	if(river_turf)
+		spawn_rivers(vlevel, turf_type = river_turf, whitelist_area = target_area, new_baseturfs = /turf/open/floor/plating/asteroid/basalt/lava_land_surface)
 
 	// locates the first dock in the bottom left, accounting for padding and the border
 	var/turf/primary_docking_turf = locate(
