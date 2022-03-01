@@ -1,5 +1,5 @@
 /datum/map_generator/cave_generator/rockplanet
-	open_turf_types = list(/turf/open/floor/plating/asteroid = 50,
+	open_turf_types = list(/turf/open/floor/plating/asteroid/rockplanet = 50,
 						/turf/open/floor/plating/rust/rockplanet = 10,
 						/turf/open/floor/plating/rockplanet = 5)
 
@@ -58,12 +58,12 @@
 
 /turf/closed/mineral/random/asteroid/rockplanet
 	name = "iron rock"
-	icon = 'icons/turf/mining.dmi'
-	icon_state = "redrock"
-	smooth_icon = 'icons/turf/walls/red_wall.dmi'
-	base_icon_state = "red_wall"
+	icon = 'icons/turf/walls/rp_wall.dmi'
+	icon_state = "rp_wall"
+	base_icon_state = "rp_wall"
+	smooth_icon = 'icons/turf/walls/rp_wall.dmi'
 	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
-	turf_type = /turf/open/floor/plating/asteroid
+	turf_type = /turf/open/floor/plating/asteroid/rockplanet
 	mineralSpawnChanceList = list(/obj/item/stack/ore/uranium = 7, /obj/item/stack/ore/diamond = 1, /obj/item/stack/ore/gold = 5,
 		/obj/item/stack/ore/silver = 7, /obj/item/stack/ore/plasma = 15, /obj/item/stack/ore/iron = 55, /obj/item/stack/ore/titanium = 6,
 		/turf/closed/mineral/gibtonite/rockplanet = 4, /obj/item/stack/ore/bluespace_crystal = 1)
@@ -71,17 +71,17 @@
 
 /turf/closed/mineral/gibtonite/rockplanet
 	name = "iron rock"
-	icon = 'icons/turf/mining.dmi'
+	icon = 'icons/turf/walls/rp_wall.dmi'
+	smooth_icon = 'icons/turf/walls/rp_wall.dmi'
 	icon_state = "redrock"
-	smooth_icon = 'icons/turf/walls/red_wall.dmi'
-	base_icon_state = "red_wall"
+	base_icon_state = "rp_wall"
 
 
 /turf/open/floor/plating/rockplanet
-	baseturfs = /turf/open/floor/plating/asteroid
+	baseturfs = /turf/open/floor/plating/asteroid/rockplanet
 
 /turf/open/floor/plating/rust/rockplanet
-	baseturfs = /turf/open/floor/plating/asteroid
+	baseturfs = /turf/open/floor/plating/asteroid/rockplanet
 
 //CUSTOM MOB
 /mob/living/simple_animal/hostile/abandoned_minebot

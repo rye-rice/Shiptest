@@ -211,3 +211,13 @@
 /turf/open/floor/plating/asteroid/snow/atmosphere
 	initial_gas_mix = FROZEN_ATMOS
 	planetary_atmos = FALSE
+
+/turf/open/floor/plating/asteroid/rockplanet
+	icon = 'whitesands/icons/turf/rockplanet_placeholder.dmi'
+	icon_state = "rp_floor"
+	icon_plating = "rp_floor"
+	environment_type = "rp_floor"
+	floor_variance = 0
+	baseturfs = /turf/open/floor/plating/asteroid/rockplanet
+	turf_type = /turf/open/floor/plating/asteroid/rockplanet
+
