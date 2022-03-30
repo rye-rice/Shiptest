@@ -56,12 +56,15 @@
 /turf/closed/wall/rust
 	name = "rusted wall"
 	desc = "A rusted metal wall."
-	icon = 'icons/turf/walls/rusty_wall.dmi'
-	icon_state = "rusty_wall-0"
-	base_icon_state = "rusty_wall"
-	smoothing_flags = SMOOTH_BITMASK
 	hardness = 45
 
+/turf/closed/wall/rust/Initialize(mapload)
+	. = ..()
+	update_icon()
+
+/turf/closed/wall/rust/update_overlays()
+	. = ..()
+	. += "rust"
 /turf/closed/wall/rust/icecropolis
 	baseturfs = /turf/open/indestructible/necropolis/air
 	initial_gas_mix = "o2=22;n2=82;TEMP=293.15"
@@ -69,11 +72,15 @@
 /turf/closed/wall/r_wall/rust
 	name = "rusted reinforced wall"
 	desc = "A huge chunk of rusted reinforced metal."
-	icon = 'icons/turf/walls/rusty_reinforced_wall.dmi'
-	icon_state = "rusty_reinforced_wall-0"
-	base_icon_state = "rusty_reinforced_wall"
-	smoothing_flags = SMOOTH_BITMASK
 	hardness = 15
+
+/turf/closed/wall/r_wall/rust/Initialize(mapload)
+	. = ..()
+	update_icon()
+
+/turf/closed/wall/r_wall/rust/update_overlays()
+	. = ..()
+	. += "rust"
 
 /turf/closed/wall/mineral/bronze
 	name = "clockwork wall"
