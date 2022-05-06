@@ -37,7 +37,7 @@
 	desc = "A sign labelling an area containing pharmacy equipment."
 	icon_state = "pharmacy"
 	is_editable = TRUE
-	
+
 /obj/structure/sign/departments/psychology
 	name = "\improper Psychology sign"
 	sign_change_name = "Department - Medbay: Psychology"
@@ -137,14 +137,14 @@
 /obj/structure/sign/departments/mait
 	name = "\improper Maintenance Tunnel sign"
 	sign_change_name = "Location - Maintenance"
-	desc = "A sign labelling an area where the departments of the station are linked together."
+	desc = "A sign labelling an area where open walkspace is connected to maintenance tunnels."
 	icon_state = "mait1"
 	is_editable = TRUE
 
 /obj/structure/sign/departments/mait/alt
 	name = "\improper Maintenance Tunnel sign"
 	sign_change_name = "Location - Maintenance Alt"
-	desc = "A sign labelling an area where the departments of the station are linked together."
+	desc = "A sign labelling an area where open walkways are linked together by maintnence backways."
 	icon_state = "mait2"
 	is_editable = TRUE
 

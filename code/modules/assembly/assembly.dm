@@ -1,8 +1,8 @@
-#define WIRE_RECEIVE		(1<<0)
-#define WIRE_PULSE			(1<<1)
-#define WIRE_PULSE_SPECIAL	(1<<2)
-#define WIRE_RADIO_RECEIVE	(1<<3)
-#define WIRE_RADIO_PULSE	(1<<4)
+#define WIRE_RECEIVE (1<<0)
+#define WIRE_PULSE (1<<1)
+#define WIRE_PULSE_SPECIAL (1<<2)
+#define WIRE_RADIO_RECEIVE (1<<3)
+#define WIRE_RADIO_PULSE (1<<4)
 #define ASSEMBLY_BEEP_VOLUME 5
 
 /obj/item/assembly
@@ -27,6 +27,16 @@
 	var/attachable = FALSE // can this be attached to wires
 	var/datum/wires/connected = null
 	var/next_activate = 0 //When we're next allowed to activate - for spam control
+
+/obj/item/assembly/Initialize()
+	. = ..()
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
+/obj/item/assembly/proc/on_entered(datum/source, atom/movable/AM)
+	SIGNAL_HANDLER
 
 /obj/item/assembly/get_part_rating()
 	return 1

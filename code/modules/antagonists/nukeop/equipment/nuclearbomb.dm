@@ -73,7 +73,7 @@
 	var/datum/game_mode/nuclear/NM = SSticker.mode
 	switch(off_station)
 		if(0)
-			if(istype(NM) && !NM.nuke_team.syndies_escaped())
+			if(istype(NM))
 				return CINEMATIC_ANNIHILATION
 			else
 				return CINEMATIC_NUKE_WIN
@@ -417,8 +417,6 @@
 	if(timing)
 		previous_level = get_security_level()
 		detonation_timer = world.time + (timer_set * 10)
-		for(var/obj/item/pinpointer/nuke/syndicate/S in GLOB.pinpointer_list)
-			S.switch_mode_to(TRACK_INFILTRATOR)
 		countdown.start()
 		SSredbot.send_discord_message("admin","A nuclear device has been set to explode in [timing] seconds!","round ending event")
 		set_security_level("delta")
@@ -474,7 +472,7 @@
 	var/turf/bomb_location = get_turf(src)
 	var/area/A = get_area(bomb_location)
 
-	if(bomb_location && is_station_level(bomb_location.z))
+	if(bomb_location)
 		if(istype(A, /area/space))
 			off_station = NUKE_NEAR_MISS
 		if((bomb_location.x < (128-NUKERANGE)) || (bomb_location.x > (128+NUKERANGE)) || (bomb_location.y < (128-NUKERANGE)) || (bomb_location.y > (128+NUKERANGE)))
@@ -485,7 +483,6 @@
 		off_station = NUKE_MISS_STATION
 
 	if(off_station < 2)
-		SSshuttle.registerHostileEnvironment(src)
 		SSshuttle.lockdown = TRUE
 
 	SSredbot.send_discord_message("admin","A nuclear device has destroyed the station.","round ending event")
@@ -497,7 +494,7 @@
 
 /obj/machinery/nuclearbomb/proc/really_actually_explode(off_station)
 	Cinematic(get_cinematic_type(off_station),world,CALLBACK(SSticker,/datum/controller/subsystem/ticker/proc/station_explosion_detonation,src))
-	INVOKE_ASYNC(GLOBAL_PROC,.proc/KillEveryoneOnZLevel, get_virtual_z_level())
+	INVOKE_ASYNC(GLOBAL_PROC,.proc/KillEveryoneOnZLevel, virtual_z())
 
 /obj/machinery/nuclearbomb/proc/get_cinematic_type(off_station)
 	if(off_station < 2)
@@ -539,14 +536,10 @@
 	if(!bomb_location)
 		disarm()
 		return
-	if(is_station_level(bomb_location.z))
-		var/datum/round_event_control/E = locate(/datum/round_event_control/vent_clog/beer) in SSevents.control
-		if(E)
-			E.runEvent()
-		addtimer(CALLBACK(src, .proc/really_actually_explode), 110)
-	else
-		visible_message("<span class='notice'>[src] fizzes ominously.</span>")
-		addtimer(CALLBACK(src, .proc/fizzbuzz), 110)
+	var/datum/round_event_control/E = locate(/datum/round_event_control/vent_clog/beer) in SSevents.control
+	if(E)
+		E.runEvent()
+	addtimer(CALLBACK(src, .proc/really_actually_explode), 110)
 
 /obj/machinery/nuclearbomb/beer/proc/disarm()
 	detonation_timer = null
@@ -576,7 +569,7 @@
 	if(!z)
 		return
 	for(var/mob/M in GLOB.mob_list)
-		if(M.stat != DEAD && M.get_virtual_z_level() == z)
+		if(M.stat != DEAD && M.virtual_z() == z)
 			M.gib()
 
 /*
@@ -601,20 +594,14 @@ This is here to make the tiles around the station mininuke change when it's arme
 		SSmapping.remove_nuke_threat(src)
 
 //==========DAT FUKKEN DISK===============
-/obj/item/disk
-	icon = 'icons/obj/module.dmi'
-	w_class = WEIGHT_CLASS_TINY
-	item_state = "card-id"
-	lefthand_file = 'icons/mob/inhands/equipment/idcards_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/equipment/idcards_righthand.dmi'
-	icon_state = "datadisk0"
-	drop_sound = 'sound/items/handling/disk_drop.ogg'
-	pickup_sound =  'sound/items/handling/disk_pickup.ogg'
 
 /obj/item/disk/nuclear
 	name = "nuclear authentication disk"
-	desc = "Better keep this safe."
-	icon_state = "nucleardisk"
+	desc = "The authentication disk of some sort of nuclear bomb. This thing is probably useless."
+	random_color = FALSE
+	icon_state = "nuke_disk_map"
+	color = "#4ED57C"
+	illustration = "nuke_new"
 	persistence_replacement = /obj/item/disk/nuclear/fake
 	max_integrity = 250
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 30, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 100)
@@ -631,10 +618,6 @@ This is here to make the tiles around the station mininuke change when it's arme
 		GLOB.poi_list |= src
 		last_disk_move = world.time
 		START_PROCESSING(SSobj, src)
-
-/obj/item/disk/nuclear/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/stationloving, !fake)
 
 /obj/item/disk/nuclear/process()
 	if(fake)
@@ -719,3 +702,4 @@ This is here to make the tiles around the station mininuke change when it's arme
 /obj/item/disk/nuclear/fake/obvious
 	name = "cheap plastic imitation of the nuclear authentication disk"
 	desc = "How anyone could mistake this for the real thing is beyond you."
+	illustration = "nuke_retro"

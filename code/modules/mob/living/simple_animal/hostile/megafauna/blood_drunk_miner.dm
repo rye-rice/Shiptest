@@ -40,6 +40,7 @@ Difficulty: Medium
 	ranged = TRUE
 	ranged_cooldown_time = 16
 	pixel_x = -16
+	base_pixel_x = -16
 	crusher_loot = list(/obj/item/melee/transforming/cleaving_saw, /obj/item/gun/energy/kinetic_accelerator, /obj/item/crusher_trophy/miner_eye)
 	loot = list(/obj/item/melee/transforming/cleaving_saw, /obj/item/gun/energy/kinetic_accelerator)
 	wander = FALSE
@@ -58,9 +59,10 @@ Difficulty: Medium
 	deathmessage = "falls to the ground, decaying into glowing particles."
 	deathsound = "bodyfall"
 	footstep_type = FOOTSTEP_MOB_HEAVY
-	attack_action_types = list(/datum/action/innate/megafauna_attack/dash,
-							   /datum/action/innate/megafauna_attack/kinetic_accelerator,
-							   /datum/action/innate/megafauna_attack/transform_weapon)
+	attack_action_types = list(
+		/datum/action/innate/megafauna_attack/dash,
+		/datum/action/innate/megafauna_attack/kinetic_accelerator,
+		/datum/action/innate/megafauna_attack/transform_weapon)
 
 /mob/living/simple_animal/hostile/megafauna/blood_drunk_miner/Initialize()
 	. = ..()
@@ -132,7 +134,7 @@ Difficulty: Medium
 		new /obj/effect/temp_visual/dir_setting/miner_death(loc, dir)
 
 /mob/living/simple_animal/hostile/megafauna/blood_drunk_miner/Move(atom/newloc)
-	if(dashing || (newloc && newloc.get_virtual_z_level() == get_virtual_z_level() && (islava(newloc) || ischasm(newloc)))) //we're not stupid!
+	if(dashing || (newloc && newloc.virtual_z() == virtual_z() && (islava(newloc) || ischasm(newloc)))) //we're not stupid!
 		return FALSE
 	return ..()
 
@@ -156,11 +158,10 @@ Difficulty: Medium
 		if(L.stat == DEAD)
 			visible_message("<span class='danger'>[src] butchers [L]!</span>",
 			"<span class='userdanger'>You butcher [L], restoring your health!</span>")
-			if(!is_station_level(z) || client) //NPC monsters won't heal while on station
-				if(guidance)
-					adjustHealth(-L.maxHealth)
-				else
-					adjustHealth(-(L.maxHealth * 0.5))
+			if(guidance)
+				adjustHealth(-L.maxHealth)
+			else
+				adjustHealth(-(L.maxHealth * 0.5))
 			L.gib()
 			return TRUE
 	changeNext_move(CLICK_CD_MELEE)
@@ -291,7 +292,8 @@ Difficulty: Medium
 	desc = "A miner destined to hop across dimensions for all eternity, hunting anomalous creatures."
 	speed = 8
 	move_to_delay = 8
-	ranged_cooldown_time = 8
-	dash_cooldown = 8
+	ranged_cooldown_time = 15
+	dash_cooldown = 15
+	aggro_vision_range = 3
 
 #undef MINER_DASH_RANGE

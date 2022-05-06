@@ -1,17 +1,17 @@
-#define CART_SECURITY	(1<<0)
-#define CART_ENGINE	(1<<1)
-#define CART_ATMOS	(1<<2)
-#define CART_MEDICAL	(1<<3)
-#define CART_CLOWN	(1<<5)
-#define CART_MIME	(1<<6)
-#define CART_JANITOR	(1<<7)
-#define CART_REAGENT_SCANNER	(1<<8)
-#define CART_NEWSCASTER			(1<<9)
-#define CART_REMOTE_DOOR		(1<<10)
-#define CART_STATUS_DISPLAY		(1<<11)
-#define CART_QUARTERMASTER		(1<<12)
-#define CART_HYDROPONICS		(1<<13)
-#define CART_DRONEPHONE			(1<<14)
+#define CART_SECURITY (1<<0)
+#define CART_ENGINE (1<<1)
+#define CART_ATMOS (1<<2)
+#define CART_MEDICAL (1<<3)
+#define CART_CLOWN (1<<5)
+#define CART_MIME (1<<6)
+#define CART_JANITOR (1<<7)
+#define CART_REAGENT_SCANNER (1<<8)
+#define CART_NEWSCASTER (1<<9)
+#define CART_REMOTE_DOOR (1<<10)
+#define CART_STATUS_DISPLAY (1<<11)
+#define CART_QUARTERMASTER (1<<12)
+#define CART_HYDROPONICS (1<<13)
+#define CART_DRONEPHONE (1<<14)
 
 
 /obj/item/cartridge
@@ -233,7 +233,7 @@ Code:
 <a href='byond://?src=[REF(src)];choice=Send Signal'>Send Signal</A><BR>"}
 		if (41) //crew manifest
 			menu = "<h4>[PDAIMG(notes)] Crew Manifest</h4>"
-			menu += "<center>[GLOB.data_core.get_manifest_html(monochrome=TRUE)]</center>"
+			menu += "<center>[SSjob.get_manifest_html()]</center>"
 
 
 		if (42) //status displays
@@ -261,7 +261,7 @@ Code:
 			for(var/obj/machinery/computer/monitor/pMon in GLOB.machines)
 				if(pMon.machine_stat & (NOPOWER | BROKEN)) //check to make sure the computer is functional
 					continue
-				if(pda_turf.get_virtual_z_level() != pMon.get_virtual_z_level()) //and that we're on the same zlevel as the computer (lore: limited signal strength)
+				if(pda_turf.virtual_z() != pMon.virtual_z()) //and that we're on the same zlevel as the computer (lore: limited signal strength)
 					continue
 				if(pMon.is_secret_monitor) //make sure it isn't a secret one (ie located on a ruin), allowing people to metagame that the location exists
 					continue
@@ -406,55 +406,6 @@ Code:
 
 			menu += "<br>"
 
-		if (47) //quartermaster order records
-			menu = "<h4>[PDAIMG(crate)] Supply Record Interlink</h4>"
-
-			menu += "<BR><B>Supply shuttle</B><BR>"
-			menu += "Location: "
-			switch(SSshuttle.supply.mode)
-				if(SHUTTLE_CALL)
-					menu += "Moving to "
-					if(!is_station_level(SSshuttle.supply.z))
-						menu += "station"
-					else
-						menu += "CentCom"
-					menu += " ([SSshuttle.supply.timeLeft(600)] Mins)"
-				else
-					menu += "At "
-					if(!is_station_level(SSshuttle.supply.z))
-						menu += "CentCom"
-					else
-						menu += "station"
-			menu += "<BR>Current approved orders: <BR><ol>"
-			for(var/S in SSshuttle.shoppinglist)
-				var/datum/supply_order/SO = S
-				menu += "<li>#[SO.id] - [SO.pack.name] approved by [SO.orderer] [SO.reason ? "([SO.reason])":""]</li>"
-			menu += "</ol>"
-
-			menu += "Current requests: <BR><ol>"
-			for(var/S in SSshuttle.requestlist)
-				var/datum/supply_order/SO = S
-				menu += "<li>#[SO.id] - [SO.pack.name] requested by [SO.orderer]</li>"
-			// menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management." DOESNT EXIST, SO COMMENTED OUT
-
-		if (48) // quartermaster ore logs
-			menu = list("<h4>[PDAIMG(crate)] Ore Silo Logs</h4>")
-			if (GLOB.ore_silo_default)
-				var/list/logs = GLOB.silo_access_logs[REF(GLOB.ore_silo_default)]
-				var/len = LAZYLEN(logs)
-				var/i = 0
-				for(var/M in logs)
-					if (++i > 30)
-						menu += "(... older logs not shown ...)"
-						break
-					var/datum/ore_silo_log/entry = M
-					menu += "[len - i]. [entry.formatted]<br><br>"
-				if(i == 0)
-					menu += "Nothing!"
-			else
-				menu += "<b>No ore silo detected!</b>"
-			menu = jointext(menu, "")
-
 		if (49) //janitorial locator
 			menu = "<h4>[PDAIMG(bucket)] Persistent Custodial Object Locator</h4>"
 
@@ -469,7 +420,7 @@ Code:
 					var/turf/ml = get_turf(M)
 
 					if(ml)
-						if (ml.get_virtual_z_level() != cl.get_virtual_z_level())
+						if (ml.virtual_z() != cl.virtual_z())
 							continue
 						var/direction = get_dir(src, M)
 						ldat += "Mop - <b>\[[ml.x],[ml.y] ([uppertext(dir2text(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
@@ -486,7 +437,7 @@ Code:
 					var/turf/bl = get_turf(B)
 
 					if(bl)
-						if (bl.get_virtual_z_level() != cl.get_virtual_z_level())
+						if (bl.virtual_z() != cl.virtual_z())
 							continue
 						var/direction = get_dir(src, B)
 						ldat += "Cart - <b>\[[bl.x],[bl.y] ([uppertext(dir2text(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
@@ -503,7 +454,7 @@ Code:
 					var/turf/bl = get_turf(B)
 
 					if(bl)
-						if (bl.get_virtual_z_level() != cl.get_virtual_z_level())
+						if (bl.virtual_z() != cl.virtual_z())
 							continue
 						var/direction = get_dir(src, B)
 						ldat += "Cleanbot - <b>\[[bl.x],[bl.y] ([uppertext(dir2text(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
@@ -620,9 +571,6 @@ Code:
 			powmonitor = powermonitors[pnum]
 			host_pda.mode = 433
 
-		if("Supply Orders")
-			host_pda.mode =47
-
 		if("Newscaster Access")
 			host_pda.mode = 53
 
@@ -717,11 +665,11 @@ Code:
 	else
 		menu += "<BR><A href='byond://?src=[REF(src)];op=botlist'>[PDAIMG(refresh)]Scan for active bots</A><BR><BR>"
 		var/turf/current_turf = get_turf(src)
-		var/zlevel = current_turf.get_virtual_z_level()
+		var/zlevel = current_turf.virtual_z()
 		var/botcount = 0
 		for(var/B in GLOB.bots_list) //Git da botz
 			var/mob/living/simple_animal/bot/Bot = B
-			if(!Bot.on || Bot.get_virtual_z_level() != zlevel || Bot.remote_disabled || !(bot_access_flags & Bot.bot_type)) //Only non-emagged bots on the same Z-level are detected!
+			if(!Bot.on || Bot.virtual_z() != zlevel || Bot.remote_disabled || !(bot_access_flags & Bot.bot_type)) //Only non-emagged bots on the same Z-level are detected!
 				continue //Also, the PDA must have access to the bot type.
 			menu += "[PDAIMG(medbot)]   <A href='byond://?src=[REF(src)];op=control;bot=[REF(Bot)]'><b>[Bot.name]</b> ([Bot.get_mode()])</a><BR>"
 			botcount++

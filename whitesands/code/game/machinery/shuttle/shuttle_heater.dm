@@ -36,7 +36,6 @@
 
 /obj/machinery/atmospherics/components/unary/shuttle/heater/New()
 	. = ..()
-	GLOB.custom_shuttle_machines += src
 	SetInitDirections()
 	update_adjacent_engines()
 	update_gas_stats()
@@ -44,12 +43,15 @@
 /obj/machinery/atmospherics/components/unary/shuttle/heater/Destroy()
 	. = ..()
 	update_adjacent_engines()
-	GLOB.custom_shuttle_machines -= src
 
 /obj/machinery/atmospherics/components/unary/shuttle/heater/on_construction()
 	..(dir, dir)
 	SetInitDirections()
 	update_adjacent_engines()
+
+/obj/machinery/atmospherics/components/unary/shuttle/heater/process_atmos()
+	if(!use_tank)
+		update_parents()
 
 /obj/machinery/atmospherics/components/unary/shuttle/heater/default_change_direction_wrench(mob/user, obj/item/I)
 	if(!..())
@@ -68,7 +70,7 @@
 	if(node)
 		node.atmosinit()
 		node.addMember(src)
-	build_network()
+	SSair.add_to_rebuild_queue(src)
 	return TRUE
 
 /obj/machinery/atmospherics/components/unary/shuttle/heater/RefreshParts()
@@ -126,7 +128,7 @@
 		return
 	if(!gas_type)
 		var/datum/gas_mixture/removed = air_contents.remove(amount)
-		return removed.return_volume()
+		return removed.total_moles()
 	else
 		var/starting_amt = air_contents.get_moles(gas_type)
 		air_contents.adjust_moles(gas_type, -amount)

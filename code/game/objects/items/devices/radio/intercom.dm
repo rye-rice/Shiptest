@@ -1,7 +1,7 @@
 /obj/item/radio/intercom
-	name = "station intercom"
+	name = "shortwave intercom"
 	desc = "Talk through this."
-	icon = 'whitesands/icons/obj/radio.dmi'
+	icon = 'icons/obj/radio.dmi'
 	icon_state = "intercom"
 	anchored = TRUE
 	w_class = WEIGHT_CLASS_BULKY
@@ -60,6 +60,10 @@
 /obj/item/radio/intercom/attack_ai(mob/user)
 	interact(user)
 
+/obj/item/radio/intercom/attack_paw(mob/user)
+	return attack_hand(user)
+
+
 /obj/item/radio/intercom/attack_hand(mob/user)
 	. = ..()
 	if(.)
@@ -67,16 +71,22 @@
 	interact(user)
 
 /obj/item/radio/intercom/ui_state(mob/user)
-	return GLOB.default_state
+	if(issilicon(user)) // for silicons give default_state
+		return GLOB.default_state
 
-/obj/item/radio/intercom/can_receive(freq, level)
+	return GLOB.physical_state // for other non-dexterous mobs give physical_state
+
+
+
+/obj/item/radio/intercom/can_receive(freq, map_zones)
 	if(!on)
 		return FALSE
 	if(wires.is_cut(WIRE_RX))
 		return FALSE
-	if(!(0 in level))
+	if(!(0 in map_zones))
 		var/turf/position = get_turf(src)
-		if(isnull(position) || !(position.get_virtual_z_level() in level))
+		var/datum/map_zone/mapzone = position.get_map_zone()
+		if(!position || !(mapzone in map_zones))
 			return FALSE
 	if(!listening)
 		return FALSE

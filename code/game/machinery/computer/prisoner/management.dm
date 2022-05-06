@@ -35,7 +35,7 @@
 		var/turf/Tr = null
 		for(var/obj/item/implant/chem/C in GLOB.tracked_chem_implants)
 			Tr = get_turf(C)
-			if((Tr) && (Tr.get_virtual_z_level() != src.get_virtual_z_level()))
+			if((Tr) && (Tr.virtual_z() != src.virtual_z()))
 				continue//Out of range
 			if(!C.imp_in)
 				continue
@@ -50,16 +50,12 @@
 			if(!isliving(T.imp_in))
 				continue
 			Tr = get_turf(T)
-			if((Tr) && (Tr.get_virtual_z_level() != src.get_virtual_z_level()))
+			if((Tr) && (Tr.virtual_z() != src.virtual_z()))
 				continue//Out of range
 
-			var/loc_display = "Unknown"
 			var/mob/living/M = T.imp_in
-			if(is_station_level(Tr.z) && !isspaceturf(M.loc))
-				var/turf/mob_loc = get_turf(M)
-				loc_display = mob_loc.loc
 
-			dat += "ID: [T.imp_in.name] | Location: [loc_display]<BR>"
+			dat += "ID: [T.imp_in.name] | Location: [get_area(M)]<BR>"
 			dat += "<A href='?src=[REF(src)];warn=[REF(T)]'>(<font class='bad'><i>Message Holder</i></font>)</A> |<BR>"
 			dat += "********************************<BR>"
 		dat += "<HR><A href='?src=[REF(src)];lock=1'>{Log Out}</A>"

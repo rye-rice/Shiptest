@@ -181,7 +181,11 @@
 
 /obj/item/antag_spawner/nuke_ops/borg_tele/saboteur
 	name = "syndicate saboteur teleporter"
-	borg_to_spawn = "Saboteur"
+
+/obj/item/antag_spawner/nuke_ops/borg_tele/commando
+	name = "mysterious device"
+	desc = "A dusty brick of electronics, wired to some kind of bluespace launch apparatus. A small plastic sticker on the side of the housing reads MODPICK!BRIG@DORPROTOTYPE in hastily-scrawled sharpie."
+	borg_to_spawn = "Commando"
 
 /obj/item/antag_spawner/nuke_ops/borg_tele/spawn_antag(client/C, turf/T, kind, datum/mind/user)
 	var/mob/living/silicon/robot/R
@@ -194,6 +198,8 @@
 			R = new /mob/living/silicon/robot/modules/syndicate/medical(T)
 		if("Saboteur")
 			R = new /mob/living/silicon/robot/modules/syndicate/saboteur(T)
+		if("Commando")
+			R = new /mob/living/silicon/robot/modules/syndicateproto(T)
 		else
 			R = new /mob/living/silicon/robot/modules/syndicate(T) //Assault borg by default
 
@@ -233,9 +239,6 @@
 
 
 /obj/item/antag_spawner/slaughter_demon/attack_self(mob/user)
-	if(!is_station_level(user.z))
-		to_chat(user, "<span class='warning'>You should probably wait until you reach the station.</span>")
-		return
 	if(used)
 		return
 	var/list/candidates = pollCandidatesForMob("Do you want to play as a [initial(demon_type.name)]?", ROLE_ALIEN, null, ROLE_ALIEN, 50, src)

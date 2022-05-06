@@ -15,6 +15,7 @@
 	icon_state = "capsule"
 	icon = 'icons/obj/mining.dmi'
 	w_class = WEIGHT_CLASS_TINY
+	custom_price = 400
 	var/template_id = "shelter_alpha"
 	var/datum/map_template/shelter/template
 	var/used = FALSE
@@ -60,10 +61,6 @@
 
 		playsound(src, 'sound/effects/phasein.ogg', 100, TRUE)
 
-		var/turf/T = deploy_location
-		if(!is_mining_level(T.z)) //only report capsules away from the mining/lavaland level
-			message_admins("[ADMIN_LOOKUPFLW(usr)] activated a bluespace capsule away from the mining level! [ADMIN_VERBOSEJMP(T)]")
-			log_admin("[key_name(usr)] activated a bluespace capsule away from the mining level at [AREACOORD(T)]")
 		template.load(deploy_location, centered = TRUE)
 		new /obj/effect/particle_effect/smoke(get_turf(src))
 		qdel(src)
@@ -74,37 +71,38 @@
 	name = "luxury bluespace shelter capsule"
 	desc = "An exorbitantly expensive luxury suite stored within a pocket of bluespace."
 	template_id = "shelter_beta"
+	custom_price = 3500
 
 /obj/item/survivalcapsule/luxuryelite
 	name = "luxury elite bar capsule"
 	desc = "A luxury bar in a capsule. Bartender required and not included."
 	template_id = "shelter_charlie"
-
+	custom_price = 5000
+	custom_premium_price = 10000
 //Pod objects
 
 //Window
-/obj/structure/window/shuttle/survival_pod
+/obj/structure/window/reinforced/fulltile/shuttle/survival_pod
 	name = "pod window"
 	icon = 'icons/obj/smooth_structures/pod_window.dmi'
 	icon_state = "pod_window-0"
 	base_icon_state = "pod_window"
-	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = list(SMOOTH_GROUP_SHUTTLE_PARTS, SMOOTH_GROUP_SURVIVAL_TIANIUM_POD)
 	canSmoothWith = list(SMOOTH_GROUP_SURVIVAL_TIANIUM_POD)
-
-/obj/structure/window/shuttle/survival_pod/spawner/north
-	dir = NORTH
-
-/obj/structure/window/shuttle/survival_pod/spawner/east
-	dir = EAST
-
-/obj/structure/window/shuttle/survival_pod/spawner/west
-	dir = WEST
 
 /obj/structure/window/reinforced/survival_pod
 	name = "pod window"
 	icon = 'icons/obj/lavaland/survival_pod.dmi'
 	icon_state = "pwindow"
+
+/obj/structure/window/reinforced/survival_pod/spawner/north
+	dir = NORTH
+
+/obj/structure/window/reinforced/survival_pod/spawner/east
+	dir = EAST
+
+/obj/structure/window/reinforced/survival_pod/spawner/west
+	dir = WEST
 
 //Door
 /obj/machinery/door/airlock/survival_pod

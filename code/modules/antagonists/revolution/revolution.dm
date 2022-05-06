@@ -363,8 +363,7 @@
 /// Checks if heads have won
 /datum/team/revolution/proc/check_heads_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries())
-		var/turf/rev_turf = get_turf(rev_mind.current)
-		if(!considered_afk(rev_mind) && considered_alive(rev_mind) && is_station_level(rev_turf.z))
+		if(!considered_afk(rev_mind) && considered_alive(rev_mind))
 			if(ishuman(rev_mind.current))
 				return FALSE
 	return TRUE
@@ -380,7 +379,6 @@
 	else
 		return
 
-	SSshuttle.clearHostileEnvironment(src)
 	save_members()
 
 	// Remove everyone as a revolutionary
@@ -423,11 +421,6 @@
 				target_body.makeUncloneable()
 			else
 				mind.announce_objectives()
-
-		for (var/job_name in GLOB.command_positions + GLOB.security_positions)
-			var/datum/job/job = SSjob.GetJob(job_name)
-			job.allow_bureaucratic_error = FALSE
-			job.total_positions = 0
 
 		if (revs_win_injection_amount)
 			var/datum/game_mode/dynamic/dynamic = SSticker.mode
@@ -482,13 +475,13 @@
 	if(headrevs.len)
 		var/list/headrev_part = list()
 		headrev_part += "<span class='header'>The head revolutionaries were:</span>"
-		headrev_part += printplayerlist(headrevs, !check_rev_victory())
+		headrev_part += printplayerlist(headrevs)
 		result += headrev_part.Join("<br>")
 
 	if(revs.len)
 		var/list/rev_part = list()
 		rev_part += "<span class='header'>The revolutionaries were:</span>"
-		rev_part += printplayerlist(revs, !check_rev_victory())
+		rev_part += printplayerlist(revs)
 		result += rev_part.Join("<br>")
 
 	var/list/heads = SSjob.get_all_heads()

@@ -12,8 +12,10 @@
 	var/lastattackerckey = null
 
 	//Health and life related vars
-	var/maxHealth = 100 ///Maximum health that should be possible.
-	var/health = 100 	///A mob's health
+	/// Maximum health that should be possible.
+	var/maxHealth = MAX_LIVING_HEALTH
+	/// The mob's current health.
+	var/health = MAX_LIVING_HEALTH
 
 	//Damage related vars, NOTE: THESE SHOULD ONLY BE MODIFIED BY PROCS
 	var/bruteloss = 0	///Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
@@ -49,11 +51,11 @@
 	var/timeofdeath = 0
 
 	/**
-	  * Allows mobs to move through dense areas without restriction. For instance, in space or out of holder objects.
-	  *
-	  * FALSE is off, [INCORPOREAL_MOVE_BASIC] is normal, [INCORPOREAL_MOVE_SHADOW] is for ninjas
-	  * and [INCORPOREAL_MOVE_JAUNT] is blocked by holy water/salt
-	  */
+	* Allows mobs to move through dense areas without restriction. For instance, in space or out of holder objects.
+	*
+	* FALSE is off, [INCORPOREAL_MOVE_BASIC] is normal, [INCORPOREAL_MOVE_SHADOW] is for ninjas
+	* and [INCORPOREAL_MOVE_JAUNT] is blocked by holy water/salt
+	*/
 	var/incorporeal_move = FALSE
 
 	var/list/roundstart_quirks = list()
@@ -128,6 +130,7 @@
 	var/stuttering = 0
 	var/slurring = 0
 	var/cultslurring = 0
+	var/clockcultslurring = 0 //Shiptest edit
 	var/derpspeech = 0
 
 	var/list/implants = null
@@ -138,7 +141,6 @@
 
 	var/list/obj/effect/proc_holder/abilities = list()
 
-	var/can_be_held = FALSE	//whether this can be picked up and held.
 	var/worn_slot_flags = NONE //if it can be held, can it be equipped to any slots? (think pAI's on head)
 
 	var/radiation = 0 ///If the mob is irradiated.
@@ -166,3 +168,8 @@
 	var/icon/held_rh = 'icons/mob/pets_held_rh.dmi'
 	var/icon/head_icon = 'icons/mob/pets_held.dmi'//what it looks like on your head
 	var/held_state = ""//icon state for the above
+
+	///Default X offset
+	var/body_pixel_x_offset = 0
+	///Default Y offset
+	var/body_pixel_y_offset = 0

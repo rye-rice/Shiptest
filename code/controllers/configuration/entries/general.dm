@@ -104,8 +104,6 @@
 
 /datum/config_entry/flag/allow_vote_mode	// allow votes to change mode
 
-/datum/config_entry/flag/allow_vote_map	// allow votes to change map
-
 /datum/config_entry/number/vote_delay	// minimum time between voting sessions (deciseconds, 10 minute default)
 	config_entry_value = 6000
 	integer = FALSE
@@ -232,19 +230,22 @@
 /datum/config_entry/string/banappeals
 
 /datum/config_entry/string/wikiurl
-	config_entry_value = "https://wiki.white-sands.space"
+	config_entry_value = "https://shiptest.net/wiki/"
 
 /datum/config_entry/string/forumurl
-	config_entry_value = "https://forum.white-sands.space"
+	config_entry_value = "https://shiptest.net/discord"
 
 /datum/config_entry/string/rulesurl
-	config_entry_value = "https://wiki.white-sands.space/Rules"
+	config_entry_value = "https://shiptest.net/wiki/Rules"
 
 /datum/config_entry/string/githuburl
-	config_entry_value = "https://github.com/Whitesands13/Whitesands"
+	config_entry_value = "https://github.com/shiptest-ss13/Shiptest"
 
 /datum/config_entry/string/discordurl
-	config_entry_value = "https://discord.gg/BUM8uRc"
+	config_entry_value = "https://shiptest.net/discord"
+
+/datum/config_entry/string/mapviewerurl
+	config_entry_value = "https://shiptest.net/map"
 
 /datum/config_entry/string/centcom_ban_db	// URL for the CentCom Galactic Ban DB API
 

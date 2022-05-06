@@ -14,14 +14,16 @@
 ///This proc handles the creation of a turf of a specific biome type
 /datum/biome/proc/generate_turf(var/turf/gen_turf)
 	gen_turf.ChangeTurf(turf_type, initial(turf_type.baseturfs), CHANGETURF_DEFER_CHANGE)
-	if(length(fauna_types) && prob(fauna_density))
+	var/area/A = gen_turf.loc
+	if(length(fauna_types) && prob(fauna_density) && (A.area_flags & MOB_SPAWN_ALLOWED))
 		var/mob/fauna = pick(fauna_types)
 		new fauna(gen_turf)
 
-	if(length(flora_types) && prob(flora_density))
+	if(length(flora_types) && prob(flora_density) && (A.area_flags & FLORA_ALLOWED))
 		var/obj/structure/flora = pick(flora_types)
 		new flora(gen_turf)
 
+//jungle planet biomes
 /datum/biome/mudlands
 	turf_type = /turf/open/floor/plating/dirt/jungle/dark
 	flora_types = list(/obj/structure/flora/grass/jungle,/obj/structure/flora/grass/jungle/b, /obj/structure/flora/rock/jungle, /obj/structure/flora/rock/pile/largejungle)
@@ -34,11 +36,25 @@
 
 /datum/biome/jungle
 	turf_type = /turf/open/floor/plating/grass/jungle
-	flora_types = list(/obj/structure/flora/grass/jungle,/obj/structure/flora/grass/jungle/b, /obj/structure/flora/tree/jungle, /obj/structure/flora/rock/jungle, /obj/structure/flora/junglebush, /obj/structure/flora/junglebush/b, /obj/structure/flora/junglebush/c, /obj/structure/flora/junglebush/large, /obj/structure/flora/rock/pile/largejungle)
-	flora_density = 40
+	flora_types = list(/obj/structure/flora/grass/jungle,/obj/structure/flora/grass/jungle/b, /obj/structure/flora/tree/jungle, /obj/structure/flora/rock/jungle, /obj/structure/flora/junglebush, /obj/structure/flora/junglebush/b, /obj/structure/flora/junglebush/c, /obj/structure/flora/junglebush/large, /obj/structure/flora/rock/pile/largejungle, /obj/structure/spacevine)
+	flora_density = 50
 
 /datum/biome/jungle/deep
-	flora_density = 65
+	flora_types = list(/obj/structure/flora/grass/jungle,/obj/structure/flora/grass/jungle/b, /obj/structure/flora/tree/jungle, /obj/structure/flora/rock/jungle, /obj/structure/flora/junglebush, /obj/structure/flora/junglebush/b,
+	/obj/structure/flora/junglebush/c,
+	/obj/structure/flora/junglebush/large,
+	/obj/structure/flora/rock/pile/largejungle,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine/dense,
+	/obj/structure/spacevine
+	)
+	flora_density = 90
 
 /datum/biome/wasteland
 	turf_type = /turf/open/floor/plating/dirt/jungle/wasteland

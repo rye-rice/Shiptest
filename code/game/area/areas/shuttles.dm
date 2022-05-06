@@ -28,16 +28,11 @@
 	. = ..()
 	if(length(new_baseturfs) > 1 || fake_turf_type)
 		return // More complicated larger changes indicate this isn't a player
-	if(ispath(new_baseturfs[1], /turf/open/floor/plating) && !new_baseturfs.Find(/turf/baseturf_skipover/shuttle))
+	if(ispath(new_baseturfs[1], /turf/open/floor/plating) && !(/turf/baseturf_skipover/shuttle in new_baseturfs))
 		new_baseturfs.Insert(1, /turf/baseturf_skipover/shuttle)
 
 /area/shuttle/proc/link_to_shuttle(obj/docking_port/mobile/M)
 	mobile_port = M
-
-/area/shuttle/get_virtual_z_level()
-	if(mobile_port)
-		return mobile_port.get_virtual_z_level()
-	return ..()
 
 ////////////////////////////Multi-area shuttles////////////////////////////
 
@@ -180,9 +175,6 @@
 
 /area/shuttle/transport
 	name = "Transport Shuttle"
-
-/area/shuttle/assault_pod
-	name = "Steel Rain"
 
 /area/shuttle/sbc_starfury
 	name = "SBC Starfury"

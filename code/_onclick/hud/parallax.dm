@@ -155,7 +155,8 @@
 
 		L.transform = newtransform
 
-		animate(L, transform = matrix(), time = T, loop = -1, flags = ANIMATION_END_NOW)
+		animate(L, transform = L.transform, time = 0, loop = -1, flags = ANIMATION_END_NOW)
+		animate(transform = matrix(), time = T)
 
 /datum/hud/proc/update_parallax()
 	var/client/C = mymob.client
@@ -310,13 +311,7 @@
 	absolute = TRUE //Status of seperation
 	speed = 3
 	layer = 30
-
-/atom/movable/screen/parallax_layer/planet/update_status(mob/M)
-	var/client/C = M.client
-	var/turf/posobj = get_turf(C.eye)
-	if(!posobj)
-		return
-	invisibility = is_station_level(posobj.z) ? 0 : INVISIBILITY_ABSTRACT
+	invisibility = INVISIBILITY_ABSTRACT //currently not used
 
 /atom/movable/screen/parallax_layer/planet/update_o()
 	icon_state = "planet"

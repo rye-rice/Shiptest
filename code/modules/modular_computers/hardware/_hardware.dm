@@ -22,8 +22,8 @@
 
 /obj/item/computer_hardware/New(var/obj/L)
 	..()
-	pixel_x = rand(-8, 8)
-	pixel_y = rand(-8, 8)
+	pixel_x = base_pixel_x + rand(-8, 8)
+	pixel_y = base_pixel_y + rand(-8, 8)
 
 /obj/item/computer_hardware/Destroy()
 	if(holder)
@@ -91,8 +91,9 @@
 	return
 
 // Called when component is removed from PC.
-/obj/item/computer_hardware/proc/on_remove(obj/item/modular_computer/M, mob/living/user = null)
-	try_eject(forced = 1)
+/obj/item/computer_hardware/proc/on_remove(obj/item/modular_computer/M, mob/living/user)
+	if(M.physical || !QDELETED(M))
+		try_eject(forced = TRUE)
 
 // Called when someone tries to insert something in it - paper in printer, card in card reader, etc.
 /obj/item/computer_hardware/proc/try_insert(obj/item/I, mob/living/user = null)

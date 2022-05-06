@@ -18,6 +18,7 @@
 #define LAZYFIND(L, V) L ? L.Find(V) : 0
 #define LAZYACCESS(L, I) (L ? (isnum(I) ? (I > 0 && I <= length(L) ? L[I] : null) : L[I]) : null)
 #define LAZYSET(L, K, V) if(!L) { L = list(); } L[K] = V;
+#define LAZYISIN(L, V) (L ? (V in L) : FALSE)
 #define LAZYLEN(L) length(L)
 #define LAZYCLEARLIST(L) if(L) L.Cut()
 #define SANITIZE_LIST(L) ( islist(L) ? L : list() )
@@ -25,6 +26,7 @@
 #define LAZYADDASSOC(L, K, V) if(!L) { L = list(); } L[K] += list(V);
 #define LAZYREMOVEASSOC(L, K, V) if(L) { if(L[K]) { L[K] -= V; if(!length(L[K])) L -= K; } if(!length(L)) L = null; }
 #define LAZYACCESSASSOC(L, I, K) L ? L[I] ? L[I][K] ? L[I][K] : null : null : null
+#define QDEL_LAZYLIST(L) for(var/I in L) qdel(I); L = null;
 
 /// Passed into BINARY_INSERT to compare keys
 #define COMPARE_KEY __BIN_LIST[__BIN_MID]
@@ -610,3 +612,16 @@
 	for(var/key in l)
 		ret += l[key]
 	return ret
+
+/proc/to_list_string(list/l)
+	. = "list("
+	var/first_entry = TRUE
+	for(var/item in l)
+		if(!first_entry)
+			. += ", "
+		if(l[item])
+			. += sanitize_simple("[item] = [l[item]]", list("{"="", "}"="", "\""="", ";"="", ","=""))
+		else
+			. += sanitize_simple("[item]", list("{"="", "}"="", "\""="", ";"="", ","=""))
+		first_entry = FALSE
+	. += ")"

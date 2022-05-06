@@ -15,7 +15,7 @@
 	var/list/fill_icon_thresholds = null
 	var/fill_icon_state = null // Optional custom name for reagent fill icon_state prefix
 
-	/// To enable caps, set can_have_cap to TRUE and define a . Do not change at runtime.
+	/// To enable caps, set can_have_cap to TRUE and define a cap_icon_state. Do not change at runtime.
 	var/can_have_cap = FALSE
 	VAR_PROTECTED/cap_icon_state = null
 	/// Whether the container has a cap on. Do not set directly at runtime; use set_cap_status().
@@ -25,6 +25,8 @@
 
 /obj/item/reagent_containers/Initialize(mapload, vol)
 	. = ..()
+	if(can_have_cap && cap_icon_state)
+		cap_overlay = mutable_appearance(icon, cap_icon_state)
 	if(isnum(vol) && vol > 0)
 		volume = vol
 	create_reagents(volume, reagent_flags)
@@ -53,14 +55,9 @@
 	if(value_to_set)
 		cap_on = TRUE
 		spillable = FALSE
-		if(!cap_overlay)
-			cap_overlay = mutable_appearance(icon, cap_icon_state)
-		add_overlay(cap_overlay, TRUE)
 	else
 		cap_on = FALSE
 		spillable = TRUE
-		if(cap_overlay)
-			cut_overlay(cap_overlay, TRUE)
 
 	update_icon()
 
@@ -121,6 +118,7 @@
 		else
 			set_cap_status(TRUE)
 			to_chat(user, "<span class='notice'>You put the cap on [src].</span>")
+		playsound(src, 'sound/items/glass_cap.ogg', 50, 1)
 
 /obj/item/reagent_containers/proc/canconsume(mob/eater, mob/user)
 	if(!iscarbon(eater))
@@ -172,6 +170,7 @@
 			reagents.total_volume *= rand(5,10) * 0.1 //Not all of it makes contact with the target
 		var/mob/M = target
 		var/R
+		playsound(src, 'sound/items/glass_splash.ogg', 50, 1)
 		target.visible_message("<span class='danger'>[M] is splashed with something!</span>", \
 						"<span class='userdanger'>[M] is splashed with something!</span>")
 		for(var/datum/reagent/A in reagents.reagent_list)
@@ -190,6 +189,7 @@
 			log_combat(thrownby, target, "splashed (thrown) [english_list(reagents.reagent_list)]", "in [AREACOORD(target)]")
 			log_game("[key_name(thrownby)] splashed (thrown) [english_list(reagents.reagent_list)] on [target] in [AREACOORD(target)].")
 			message_admins("[ADMIN_LOOKUPFLW(thrownby)] splashed (thrown) [english_list(reagents.reagent_list)] on [target] in [ADMIN_VERBOSEJMP(target)].")
+		playsound(src, 'sound/items/glass_splash.ogg', 50, 1)
 		visible_message("<span class='notice'>[src] spills its contents all over [target].</span>")
 		reagents.expose(target, TOUCH)
 		if(QDELETED(src))
@@ -204,11 +204,23 @@
 /obj/item/reagent_containers/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	reagents.expose_temperature(exposed_temperature)
 
+/obj/item/reagent_containers/attackby(obj/item/I, mob/user, params) //procs dip_object any time an object is used on a container, makes the noises if any reagent returned true
+	var/success = FALSE
+	if(!src.cap_on)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			if(R.dip_object(I, user, src))
+				success = TRUE
+		if(success)
+			to_chat(user, "<span class='notice'>You dip [I] into [src], and the solution begins to bubble.</span>")
+			playsound(src, 'sound/effects/bubbles.ogg', 80, TRUE)
+
 /obj/item/reagent_containers/on_reagent_change(changetype)
 	update_icon()
 
 /obj/item/reagent_containers/update_overlays()
 	. = ..()
+	if(cap_on)
+		. += cap_overlay
 	if(!fill_icon_thresholds)
 		return
 	if(reagents.total_volume)
@@ -224,3 +236,10 @@
 
 		filling.color = mix_color_from_reagents(reagents.reagent_list)
 		. += filling
+
+/obj/item/reagent_containers/get_save_vars()
+	list_reagents = list()
+	for(var/reagent in reagents.reagent_list)
+		var/datum/reagent/R = reagent
+		list_reagents[R.type] = R.volume
+	return ..() + "list_reagents"

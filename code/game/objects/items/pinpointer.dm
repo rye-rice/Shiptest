@@ -66,7 +66,7 @@
 		return
 	var/turf/here = get_turf(src)
 	var/turf/there = get_turf(target)
-	if(here.get_virtual_z_level() != there.get_virtual_z_level())
+	if(here.virtual_z() != there.virtual_z())
 		. += "pinon[alert ? "alert" : ""]null[icon_suffix]"
 		return
 	. += get_direction_icon(here, there)
@@ -97,7 +97,7 @@
 
 /obj/item/pinpointer/crew/proc/trackable(mob/living/carbon/human/H)
 	var/turf/here = get_turf(src)
-	if((H.z == 0 || H.get_virtual_z_level() == here.get_virtual_z_level()) && istype(H.w_uniform, /obj/item/clothing/under))
+	if((H.z == 0 || H.virtual_z() == here.virtual_z()) && istype(H.w_uniform, /obj/item/clothing/under))
 		var/obj/item/clothing/under/U = H.w_uniform
 
 		// Suit sensors must be on maximum.
@@ -105,7 +105,7 @@
 			return FALSE
 
 		var/turf/there = get_turf(H)
-		return (H.z != 0 || (there && ((there.get_virtual_z_level() == here.get_virtual_z_level()))))
+		return (H.z != 0 || (there && ((there.virtual_z() == here.virtual_z()))))
 
 	return FALSE
 
@@ -214,21 +214,3 @@
 
 	A.other_pair = B
 	B.other_pair = A
-
-/obj/item/pinpointer/shuttle
-	name = "fugitive pinpointer"
-	desc = "A handheld tracking device that locates the bounty hunter shuttle for quick escapes."
-	icon_state = "pinpointer_hunter"
-	icon_suffix = "_hunter"
-	var/obj/shuttleport
-
-/obj/item/pinpointer/shuttle/Initialize(mapload)
-	. = ..()
-	shuttleport = SSshuttle.getShuttle("huntership")
-
-/obj/item/pinpointer/shuttle/scan_for_target()
-	target = shuttleport
-
-/obj/item/pinpointer/shuttle/Destroy()
-	shuttleport = null
-	. = ..()

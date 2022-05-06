@@ -334,7 +334,7 @@
 
 /datum/spellbook_entry/item/scryingorb
 	name = "Scrying Orb"
-	desc = "An incandescent orb of crackling energy. Using it will allow you to release your ghost while alive, allowing you to spy upon the station and talk to the deceased. In addition, buying it will permanently grant you X-ray vision."
+	desc = "An incandescent orb of crackling energy. Using it will allow you to release your ghost while alive, allowing you to spy upon others and talk to the deceased. In addition, buying it will permanently grant you X-ray vision."
 	item_path = /obj/item/scrying
 	category = "Defensive"
 
@@ -446,7 +446,7 @@
 
 /datum/spellbook_entry/item/warpwhistle
 	name = "Warp Whistle"
-	desc = "A strange whistle that will transport you to a distant safe place on the station. There is a window of vulnerability at the beginning of every use."
+	desc = "A strange whistle that will transport you to a distant safe place. There is a window of vulnerability at the beginning of every use."
 	item_path = /obj/item/warpwhistle
 	category = "Mobility"
 	cost = 1
@@ -533,7 +533,7 @@
 /datum/spellbook_entry/summon/events
 	name = "Summon Events"
 	desc = "Give Murphy's law a little push and replace all events with special wizard ones that will confound and confuse everyone. Multiple castings increase the rate of these events."
-	cost = 2 
+	cost = 2
 	limit = 1
 	var/times = 0
 
@@ -560,7 +560,7 @@
 
 /datum/spellbook_entry/summon/curse_of_madness
 	name = "Curse of Madness"
-	desc = "Curses the station, warping the minds of everyone inside, causing lasting traumas. Warning: this spell can affect you if not cast from a safe distance."
+	desc = "Curses the sectors, warping the minds of everyone within, causing lasting traumas. Warning: this spell can affect you if not cast from a safe distance."
 	cost = 4
 
 /datum/spellbook_entry/summon/curse_of_madness/Buy(mob/living/carbon/human/user, obj/item/spellbook/book)
@@ -661,7 +661,7 @@
 			dat += "For spells: the number after the spell name is the cooldown time.<BR>"
 			dat += "You can reduce this number by spending more points on the spell.<BR>"
 		if("Challenges")
-			dat += "The Wizard Federation typically has hard limits on the potency and number of spells brought to the station based on risk.<BR>"
+			dat += "The Wizard Federation typically has hard limits on the potency and number of spells brought to the sector based on risk.<BR>"
 			dat += "Arming the station against you will increases the risk, but will grant you one more charge for your spellbook.<BR>"
 		if("Rituals")
 			dat += "These powerful spells change the very fabric of reality. Not always in your favour.<BR>"
@@ -673,16 +673,16 @@
 	dat += {"
 	<head>
 		<style type="text/css">
-      		body { font-size: 80%; font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif; }
-      		ul#tabs { list-style-type: none; margin: 30px 0 0 0; padding: 0 0 0.3em 0; }
-      		ul#tabs li { display: inline; }
-      		ul#tabs li a { color: #42454a; background-color: #dedbde; border: 1px solid #c9c3ba; border-bottom: none; padding: 0.3em; text-decoration: none; }
-      		ul#tabs li a:hover { background-color: #f1f0ee; }
-      		ul#tabs li a.selected { color: #000; background-color: #f1f0ee; font-weight: bold; padding: 0.7em 0.3em 0.38em 0.3em; }
-      		div.tabContent { border: 1px solid #c9c3ba; padding: 0.5em; background-color: #f1f0ee; }
-      		div.tabContent.hide { display: none; }
-    	</style>
-  	</head>
+			body { font-size: 80%; font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif; }
+			ul#tabs { list-style-type: none; margin: 30px 0 0 0; padding: 0 0 0.3em 0; }
+			ul#tabs li { display: inline; }
+			ul#tabs li a { color: #42454a; background-color: #dedbde; border: 1px solid #c9c3ba; border-bottom: none; padding: 0.3em; text-decoration: none; }
+			ul#tabs li a:hover { background-color: #f1f0ee; }
+			ul#tabs li a.selected { color: #000; background-color: #f1f0ee; font-weight: bold; padding: 0.7em 0.3em 0.38em 0.3em; }
+			div.tabContent { border: 1px solid #c9c3ba; padding: 0.5em; background-color: #f1f0ee; }
+			div.tabContent.hide { display: none; }
+		</style>
+	</head>
 	"}
 	dat += {"[content]</body></html>"}
 	return dat

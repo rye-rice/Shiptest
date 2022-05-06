@@ -61,14 +61,6 @@ const DebuggingTab = (props, context) => {
           content="Change all maintenance doors to brig access only"
           onClick={() => act("maint_access_brig")} />
       </Flex.Item>
-      <Flex.Item mt={0.5} mb={-0.5}>
-        <Button
-          lineHeight={lineHeightDebug}
-          icon="question"
-          fluid
-          content="Remove cap on security officers"
-          onClick={() => act("infinite_sec")} />
-      </Flex.Item>
     </Flex>
   );
 };
@@ -221,37 +213,6 @@ const HelpfulTab = (props, context) => {
             onClick={() => act("reset_name")} />
         </Flex.Item>
       </Flex>
-      <Flex
-        grow={1}
-        direction="row"
-        height="100%"
-        align="stretch"
-        justify="space-between">
-        <Flex.Item grow={1}>
-          <Button
-            icon="plane-departure"
-            lineHeight={lineHeightNormal}
-            fluid
-            content="Move Ferry"
-            onClick={() => act("moveferry")} />
-        </Flex.Item>
-        <Flex.Item grow={1} mx={0.5}>
-          <Button
-            icon="plane"
-            lineHeight={lineHeightNormal}
-            fluid
-            content="Toggle Arrivals"
-            onClick={() => act("togglearrivals")} />
-        </Flex.Item>
-        <Flex.Item grow={1}>
-          <Button
-            icon="plane-arrival"
-            lineHeight={lineHeightNormal}
-            fluid
-            content="Move Labor"
-            onClick={() => act("movelaborshuttle")} />
-        </Flex.Item>
-      </Flex>
     </Flex>
   );
 };
@@ -338,22 +299,6 @@ const FunTab = (props, context) => {
             fluid
             content="Anonymous Names"
             onClick={() => act("anon_name")} />
-        </Flex.Item>
-        <Flex.Item grow={1} mx={0.5}>
-          <Button
-            icon="users"
-            lineHeight={lineHeightNormal}
-            fluid
-            content="Triple AI mode"
-            onClick={() => act("tripleAI")} />
-        </Flex.Item>
-        <Flex.Item grow={1}>
-          <Button
-            icon="bullhorn"
-            lineHeight={lineHeightNormal}
-            fluid
-            content="THERE CAN ONLY BE ONE!"
-            onClick={() => act("onlyone")} />
         </Flex.Item>
       </Flex>
       <Flex

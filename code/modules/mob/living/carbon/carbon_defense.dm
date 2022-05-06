@@ -44,7 +44,7 @@
 
 /mob/living/carbon/proc/can_catch_item(skip_throw_mode_check)
 	. = FALSE
-	if(!skip_throw_mode_check && !in_throw_mode)
+	if(!skip_throw_mode_check && !throw_mode)
 		return
 	if(get_active_held_item())
 		return
@@ -62,7 +62,7 @@
 					if(get_active_held_item() == I) //if our attack_hand() picks up the item...
 						visible_message("<span class='warning'>[src] catches [I]!</span>", \
 										"<span class='userdanger'>You catch [I] in mid-air!</span>")
-						throw_mode_off()
+						throw_mode_off(THROW_MODE_TOGGLE)
 						return 1
 	..()
 
@@ -79,10 +79,10 @@
 	if(!affecting) //missing limb? we select the first bodypart (you can never have zero, because of chest)
 		affecting = bodyparts[1]
 	SEND_SIGNAL(I, COMSIG_ITEM_ATTACK_ZONE, src, user, affecting)
-	send_item_attack_message(I, user, affecting.name)
+	send_item_attack_message(I, user, parse_zone(affecting.body_zone))
 	if(I.force)
 		apply_damage(I.force, I.damtype, affecting)
-		if(I.damtype == BRUTE && affecting.status == BODYPART_ORGANIC)
+		if(I.damtype == BRUTE && (IS_ORGANIC_LIMB(affecting)))
 			if(prob(33))
 				I.add_mob_blood(src)
 				var/turf/location = get_turf(src)
@@ -114,6 +114,14 @@
 //ATTACK HAND IGNORING PARENT RETURN VALUE
 /mob/living/carbon/attack_hand(mob/living/carbon/human/user)
 
+	for(var/datum/surgery/S in surgeries)
+		if(body_position != LYING_DOWN && S.lying_required)
+			continue
+		if(!S.self_operable && user == src)
+			continue
+		if(S.next_step(user, user.a_intent))
+			return TRUE
+
 	for(var/thing in diseases)
 		var/datum/disease/D = thing
 		if(D.spread_flags & DISEASE_SPREAD_CONTACT_SKIN)
@@ -124,11 +132,6 @@
 		if(D.spread_flags & DISEASE_SPREAD_CONTACT_SKIN)
 			ContactContractDisease(D)
 
-	for(var/datum/surgery/S in surgeries)
-		if(body_position == LYING_DOWN || !S.lying_required)
-			if(user.a_intent == INTENT_HELP || user.a_intent == INTENT_DISARM)
-				if(S.next_step(user, user.a_intent))
-					return 1
 	return 0
 
 
@@ -360,8 +363,7 @@
 		return
 
 	var/embeds = FALSE
-	for(var/X in bodyparts)
-		var/obj/item/bodypart/LB = X
+	for(var/obj/item/bodypart/LB as anything in bodyparts)
 		for(var/obj/item/I in LB.embedded_objects)
 			if(!embeds)
 				embeds = TRUE

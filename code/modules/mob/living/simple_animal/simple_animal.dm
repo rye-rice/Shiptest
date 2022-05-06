@@ -145,7 +145,7 @@
 	///What kind of footstep this mob should have. Null if it shouldn't have any.
 	var/footstep_type
 
-/mob/living/simple_animal/Initialize()
+/mob/living/simple_animal/Initialize(mapload)
 	. = ..()
 	GLOB.simple_animals[AIStatus] += src
 	if(gender == PLURAL)
@@ -157,6 +157,8 @@
 	update_simplemob_varspeed()
 	if(dextrous)
 		AddComponent(/datum/component/personal_crafting)
+	if(footstep_type)
+		AddComponent(/datum/component/footstep, footstep_type)
 
 /mob/living/simple_animal/Destroy()
 	GLOB.simple_animals[AIStatus] -= src
@@ -207,8 +209,6 @@
 		else
 			set_stat(CONSCIOUS)
 	med_hud_set_status()
-	if(footstep_type)
-		AddComponent(/datum/component/footstep, footstep_type)
 
 /mob/living/simple_animal/handle_status_effects()
 	..()
@@ -276,10 +276,10 @@
 	if(isturf(loc) && isopenturf(loc))
 		var/turf/open/ST = loc
 		if(ST.air)
-			var/tox = ST.air.get_moles(/datum/gas/plasma)
-			var/oxy = ST.air.get_moles(/datum/gas/oxygen)
-			var/n2  = ST.air.get_moles(/datum/gas/nitrogen)
-			var/co2 = ST.air.get_moles(/datum/gas/carbon_dioxide)
+			var/tox = ST.air.get_moles(GAS_PLASMA)
+			var/oxy = ST.air.get_moles(GAS_O2)
+			var/n2  = ST.air.get_moles(GAS_N2)
+			var/co2 = ST.air.get_moles(GAS_CO2)
 
 			if(atmos_requirements["min_oxy"] && oxy < atmos_requirements["min_oxy"])
 				. = FALSE

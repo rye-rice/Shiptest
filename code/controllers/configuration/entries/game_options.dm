@@ -111,7 +111,6 @@
 
 /datum/config_entry/flag/enforce_human_authority	//If non-human species are barred from joining as a head of staff
 
-/datum/config_entry/flag/allow_latejoin_antagonists	// If late-joining players can be traitor/changeling
 
 /datum/config_entry/flag/use_antag_rep // see game_options.txt for details
 
@@ -158,6 +157,10 @@
 
 /datum/config_entry/flag/join_with_mutant_humans	//players can pick mutant bodyparts for humans before joining the game
 
+/datum/config_entry/number/max_loadout_items	//maximum number of items that can be in a player's loadout
+	config_entry_value = 10
+	min_val = 0
+
 /datum/config_entry/flag/no_summon_guns	//No
 
 /datum/config_entry/flag/no_summon_magic	//Fun
@@ -165,15 +168,6 @@
 /datum/config_entry/flag/no_summon_events	//Allowed
 
 /datum/config_entry/flag/no_intercept_report	//Whether or not to send a communications intercept report roundstart. This may be overridden by gamemodes.
-
-/datum/config_entry/number/arrivals_shuttle_dock_window	//Time from when a player late joins on the arrivals shuttle to when the shuttle docks on the station
-	config_entry_value = 55
-	integer = FALSE
-	min_val = 30
-
-/datum/config_entry/flag/arrivals_shuttle_require_undocked	//Require the arrivals shuttle to be undocked before latejoiners can join
-
-/datum/config_entry/flag/arrivals_shuttle_require_safe_latejoin	//Require the arrivals shuttle to be operational in order for latejoiners to join
 
 /datum/config_entry/string/alert_green
 	config_entry_value = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -206,7 +200,6 @@
 
 /datum/config_entry/flag/emojis
 
-/datum/config_entry/flag/chat_markup //WS edit - Chat markup
 
 /datum/config_entry/keyed_list/multiplicative_movespeed
 	key_mode = KEY_MODE_TYPE
@@ -415,10 +408,12 @@
 
 /datum/config_entry/flag/dynamic_config_enabled
 
-/datum/config_entry/flag/allow_crew_objectives
+/datum/config_entry/number/respawn_timer
+	min_val = 0
+	config_entry_value = 1 MINUTES
 
 /datum/config_entry/number/max_shuttle_count
-	config_entry_value = 6
+	config_entry_value = 20
 
 /datum/config_entry/number/max_shuttle_size
-	config_entry_value = 250
+	config_entry_value = 300

@@ -9,12 +9,12 @@
 	var/obj/item/card/id/stored_card = null
 	var/obj/item/card/id/stored_card2 = null
 
-/obj/item/computer_hardware/card_slot/handle_atom_del(atom/A)
+/obj/item/computer_hardware/card_slot/Exited(atom/A, atom/newloc)
 	if(A == stored_card)
 		try_eject(1, null, TRUE)
 	if(A == stored_card2)
 		try_eject(2, null, TRUE)
-	. = ..()
+	return ..()
 
 /obj/item/computer_hardware/card_slot/Destroy()
 	try_eject()
@@ -83,7 +83,7 @@
 
 	var/ejected = 0
 	if(stored_card && (!slot || slot == 1))
-		if(user)
+		if(user && Adjacent(user) && !issiliconoradminghost(user))
 			user.put_in_hands(stored_card)
 		else
 			stored_card.forceMove(drop_location())
@@ -91,7 +91,7 @@
 		ejected++
 
 	if(stored_card2 && (!slot || slot == 2))
-		if(user)
+		if(user && Adjacent(user) && !issiliconoradminghost(user))
 			user.put_in_hands(stored_card2)
 		else
 			stored_card2.forceMove(drop_location())

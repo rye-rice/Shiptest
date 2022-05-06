@@ -19,15 +19,15 @@ GLOBAL_LIST_INIT(cable_colors, list(
 ////////////////////////////////
 
 /* Cable directions (d1 and d2)
-  9   1   5
-	\ | /
-  8 - 0 - 4
-	/ | \
-  10  2   6
-If d1 = 0 and d2 = 0, there's no cable
-If d1 = 0 and d2 = dir, it's a O-X cable, getting from the center of the tile to dir (knot cable)
-If d1 = dir1 and d2 = dir2, it's a full X-X cable, getting from dir1 to dir2
-By design, d1 is the smallest direction and d2 is the highest
+*  9   1   5
+*    \ | /
+*  8 - 0 - 4
+*    / | \
+*  10  2   6
+* If d1 = 0 and d2 = 0, there's no cable
+* If d1 = 0 and d2 = dir, it's a O-X cable, getting from the center of the tile to dir (knot cable)
+* If d1 = dir1 and d2 = dir2, it's a full X-X cable, getting from dir1 to dir2
+* By design, d1 is the smallest direction and d2 is the highest
 */
 
 /obj/structure/cable
@@ -35,6 +35,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	desc = "A flexible, superconducting insulated cable for heavy-duty power transfer."
 	icon = 'icons/obj/power_cond/cables.dmi'
 	icon_state = "0-1"
+	plane = FLOOR_PLANE
 	layer = WIRE_LAYER //Above hidden pipes, GAS_PIPE_HIDDEN_LAYER
 	anchored = TRUE
 	obj_flags = CAN_BE_HIT | ON_BLUEPRINTS
@@ -527,8 +528,8 @@ GLOBAL_LIST_INIT(cable_coil_recipes, list(new/datum/stack_recipe("cable restrain
 	if(cable_colors[cable_color])
 		cable_color = cable_colors[cable_color]
 
-	pixel_x = rand(-2,2)
-	pixel_y = rand(-2,2)
+	pixel_x = base_pixel_x + rand(-2,2)
+	pixel_y = base_pixel_y + rand(-2,2)
 	update_icon()
 	recipes = GLOB.cable_coil_recipes
 
@@ -544,9 +545,9 @@ GLOBAL_LIST_INIT(cable_coil_recipes, list(new/datum/stack_recipe("cable restrain
 		return ..()
 
 	var/obj/item/bodypart/affecting = H.get_bodypart(check_zone(user.zone_selected))
-	if(affecting && affecting.status == BODYPART_ROBOTIC)
+	if(affecting && (!IS_ORGANIC_LIMB(affecting)))
 		if(user == H)
-			user.visible_message("<span class='notice'>[user] starts to fix some of the wires in [H]'s [affecting.name].</span>", "<span class='notice'>You start fixing some of the wires in [H == user ? "your" : "[H]'s"] [affecting.name].</span>")
+			user.visible_message("<span class='notice'>[user] starts to fix some of the wires in [H]'s [parse_zone(affecting.body_zone)].</span>", "<span class='notice'>You start fixing some of the wires in [H == user ? "your" : "[H]'s"] [parse_zone(affecting.body_zone)].</span>")
 			if(!do_mob(user, H, 50))
 				return
 		if(item_heal_robotic(H, user, 0, 15))

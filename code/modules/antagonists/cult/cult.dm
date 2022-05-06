@@ -76,7 +76,7 @@
 	. += cult_give_item(/obj/item/melee/cultblade/dagger, H)
 	if(metal)
 		. += cult_give_item(/obj/item/stack/sheet/runed_metal/ten, H)
-	to_chat(owner, "These will help you start the cult on this station. Use them well, and remember - you are not the only one.</span>")
+	to_chat(owner, "These will help you jumpstart a cult of your own in this sector. Use them well, and remember - you are not the only one.</span>")
 
 
 /datum/antagonist/cult/proc/cult_give_item(obj/item/item_path, mob/living/carbon/human/mob)
@@ -367,7 +367,7 @@
 	var/sanity = 0
 	while(summon_spots.len < SUMMON_POSSIBILITIES && sanity < 100)
 		var/area/summon_area = pick(GLOB.sortedAreas - summon_spots)
-		if(summon_area && is_station_level(summon_area.z) && (summon_area.area_flags & VALID_TERRITORY))
+		if(summon_area && (summon_area.area_flags & VALID_TERRITORY))
 			summon_spots += summon_area
 		sanity++
 	update_explanation_text()

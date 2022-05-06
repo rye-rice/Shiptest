@@ -46,6 +46,10 @@
 			break
 	AddElement(/datum/element/bsa_blocker)
 	RegisterSignal(src, COMSIG_ATOM_BSA_BEAM, .proc/bluespace_reaction)
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
 
 /obj/singularity/Destroy()
 	STOP_PROCESSING(SSobj, src)
@@ -136,8 +140,8 @@
 		step(src, drifting_dir)
 	return
 
-/obj/singularity/Crossed(atom/A)
-	..()
+/obj/singularity/proc/on_entered(datum/source, atom/A)
+	SIGNAL_HANDLER
 	consume(A)
 
 /obj/singularity/Bumped(atom/movable/AM)
@@ -368,10 +372,10 @@
 	var/dir2 = 0
 	var/dir3 = 0
 	switch(direction)
-		if(NORTH||SOUTH)
+		if(NORTH, SOUTH)
 			dir2 = 4
 			dir3 = 8
-		if(EAST||WEST)
+		if(EAST, WEST)
 			dir2 = 1
 			dir3 = 2
 	var/turf/T2 = T
@@ -427,8 +431,9 @@
 
 /obj/singularity/proc/combust_mobs()
 	for(var/mob/living/carbon/C in urange(20, src, 1))
-		C.visible_message("<span class='warning'>[C]'s skin bursts into flame!</span>", \
-						  "<span class='userdanger'>You feel an inner fire as your skin bursts into flames!</span>")
+		C.visible_message(
+			"<span class='warning'>[C]'s skin bursts into flame!</span>", \
+			"<span class='userdanger'>You feel an inner fire as your skin bursts into flames!</span>")
 		C.adjust_fire_stacks(5)
 		C.IgniteMob()
 	return
@@ -475,7 +480,7 @@
 /obj/singularity/deadchat_controlled/Initialize(mapload, starting_energy)
 	. = ..()
 	AddComponent(/datum/component/deadchat_control, DEMOCRACY_MODE, list(
-	 "up" = CALLBACK(GLOBAL_PROC, .proc/_step, src, NORTH),
-	 "down" = CALLBACK(GLOBAL_PROC, .proc/_step, src, SOUTH),
-	 "left" = CALLBACK(GLOBAL_PROC, .proc/_step, src, WEST),
-	 "right" = CALLBACK(GLOBAL_PROC, .proc/_step, src, EAST)))
+		"up" = CALLBACK(GLOBAL_PROC, .proc/_step, src, NORTH),
+		"down" = CALLBACK(GLOBAL_PROC, .proc/_step, src, SOUTH),
+		"left" = CALLBACK(GLOBAL_PROC, .proc/_step, src, WEST),
+		"right" = CALLBACK(GLOBAL_PROC, .proc/_step, src, EAST)))

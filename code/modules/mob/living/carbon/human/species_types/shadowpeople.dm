@@ -4,7 +4,7 @@
 /datum/species/shadow
 	// Humans cursed to stay in the darkness, lest their life forces drain. They regain health in shadow and die in light.
 	name = "???"
-	id = "shadow"
+	id = SPECIES_SHADOW
 	sexes = 0
 	meat = /obj/item/reagent_containers/food/snacks/meat/slab/human/mutant/shadow
 	species_traits = list(NOBLOOD,NOEYESPRITES)
@@ -14,6 +14,13 @@
 	mutanteyes = /obj/item/organ/eyes/night_vision
 	species_language_holder = /datum/language_holder/shadowpeople
 
+	species_chest = /obj/item/bodypart/chest/shadow
+	species_head = /obj/item/bodypart/head/shadow
+	species_l_arm = /obj/item/bodypart/l_arm/shadow
+	species_r_arm = /obj/item/bodypart/r_arm/shadow
+	species_l_leg = /obj/item/bodypart/l_leg/shadow
+	species_r_leg = /obj/item/bodypart/r_leg/shadow
+
 
 /datum/species/shadow/spec_life(mob/living/carbon/human/H)
 	var/turf/T = H.loc
@@ -21,9 +28,9 @@
 		var/light_amount = T.get_lumcount()
 
 		if(light_amount > SHADOW_SPECIES_LIGHT_THRESHOLD) //if there's enough light, start dying
-			H.take_overall_damage(1,1, 0, BODYPART_ORGANIC)
+			H.take_overall_damage(1,1, 0, BODYTYPE_ORGANIC)
 		else if (light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD) //heal in the dark
-			H.heal_overall_damage(1,1, 0, BODYPART_ORGANIC)
+			H.heal_overall_damage(1,1, 0, BODYTYPE_ORGANIC)
 
 /datum/species/shadow/check_roundstart_eligible()
 	if(SSevents.holidays && SSevents.holidays[HALLOWEEN])
@@ -33,7 +40,6 @@
 /datum/species/shadow/nightmare
 	name = "Nightmare"
 	id = "nightmare"
-	limbs_id = "shadow"
 	burnmod = 1.5
 	no_equip = list(ITEM_SLOT_MASK, ITEM_SLOT_OCLOTHING, ITEM_SLOT_GLOVES, ITEM_SLOT_FEET, ITEM_SLOT_ICLOTHING, ITEM_SLOT_SUITSTORE)
 	species_traits = list(NOBLOOD,NO_UNDERWEAR,NO_DNA_COPY,NOTRANSSTING,NOEYESPRITES)
@@ -106,13 +112,15 @@
 /obj/item/organ/heart/nightmare/attack(mob/M, mob/living/carbon/user, obj/target)
 	if(M != user)
 		return ..()
-	user.visible_message("<span class='warning'>[user] raises [src] to [user.p_their()] mouth and tears into it with [user.p_their()] teeth!</span>", \
-						 "<span class='danger'>[src] feels unnaturally cold in your hands. You raise [src] your mouth and devour it!</span>")
+	user.visible_message(
+		"<span class='warning'>[user] raises [src] to [user.p_their()] mouth and tears into it with [user.p_their()] teeth!</span>", \
+		"<span class='danger'>[src] feels unnaturally cold in your hands. You raise [src] your mouth and devour it!</span>")
 	playsound(user, 'sound/magic/demon_consume.ogg', 50, TRUE)
 
 
-	user.visible_message("<span class='warning'>Blood erupts from [user]'s arm as it reforms into a weapon!</span>", \
-						 "<span class='userdanger'>Icy blood pumps through your veins as your arm reforms itself!</span>")
+	user.visible_message(
+		"<span class='warning'>Blood erupts from [user]'s arm as it reforms into a weapon!</span>", \
+		"<span class='userdanger'>Icy blood pumps through your veins as your arm reforms itself!</span>")
 	user.temporarilyRemoveItemFromInventory(src, TRUE)
 	Insert(user)
 

@@ -8,13 +8,14 @@
 	bolt_type = BOLT_TYPE_STANDARD
 	semi_auto = FALSE
 	internal_magazine = TRUE
-	fire_sound = 'sound/weapons/gun/rifle/shot.ogg'
+	fire_sound = 'sound/weapons/gun/rifle/mosin.ogg'
 	fire_sound_volume = 90
 	vary_fire_sound = FALSE
 	rack_sound = 'sound/weapons/gun/rifle/bolt_out.ogg'
 	bolt_drop_sound = 'sound/weapons/gun/rifle/bolt_in.ogg'
 	tac_reloads = FALSE
 	weapon_weight = WEAPON_MEDIUM
+	pickup_sound =  'sound/items/handling/rifle_pickup.ogg'
 
 /obj/item/gun/ballistic/rifle/update_overlays()
 	. = ..()
@@ -55,6 +56,10 @@
 	sawn_desc = "An extremely sawn-off Mosin Nagant, popularly known as an \"obrez\". There was probably a reason it wasn't manufactured this short to begin with."
 	w_class = WEIGHT_CLASS_BULKY
 	weapon_weight = WEAPON_HEAVY
+	icon = 'icons/obj/guns/48x32guns.dmi'
+	mob_overlay_icon = 'icons/mob/clothing/back.dmi'
+	lefthand_file = 'icons/mob/inhands/weapons/64x_guns_left.dmi'
+	righthand_file = 'icons/mob/inhands/weapons/64x_guns_right.dmi'
 	icon_state = "moistnugget"
 	item_state = "moistnugget"
 	slot_flags = ITEM_SLOT_BACK
@@ -69,6 +74,7 @@
 	if(.)
 		spread = 36
 		can_bayonet = FALSE
+		item_state = "moistnugget_sawn"
 
 /obj/item/gun/ballistic/rifle/boltaction/blow_up(mob/user)
 	. = 0
@@ -88,6 +94,9 @@
 	desc = "Pew Pew Pew."
 	fire_sound = 'sound/weapons/emitter.ogg'
 	pin = /obj/item/firing_pin/magic
+	icon = 'icons/obj/guns/projectile.dmi'
+	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
 	icon_state = "arcane_barrage"
 	item_state = "arcane_barrage"
 	slot_flags = null

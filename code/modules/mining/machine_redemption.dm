@@ -9,7 +9,6 @@
 	density = TRUE
 	input_dir = NORTH
 	output_dir = SOUTH
-	req_access = list(ACCESS_MINERAL_STOREROOM)
 	layer = BELOW_OBJ_LAYER
 	circuit = /obj/item/circuitboard/machine/ore_redemption
 	needs_item_input = TRUE
@@ -18,6 +17,7 @@
 	var/points = 0
 	var/ore_multiplier = 1
 	var/point_upgrade = 1
+	var/list/ore_values = list(/datum/material/iron = 1, /datum/material/glass = 1,  /datum/material/plasma = 15,  /datum/material/silver = 16, /datum/material/gold = 18, /datum/material/titanium = 30, /datum/material/uranium = 30, /datum/material/diamond = 50, /datum/material/bluespace = 50, /datum/material/bananium = 60)
 	/// Variable that holds a timer which is used for callbacks to `send_console_message()`. Used for preventing multiple calls to this proc while the ORM is eating a stack of ores.
 	var/console_notify_timer
 	var/datum/techweb/stored_research
@@ -109,37 +109,6 @@
 	for(var/ore in ores_to_process)
 		smelt_ore(ore)
 
-/obj/machinery/mineral/ore_redemption/proc/send_console_message()
-	var/datum/component/material_container/mat_container = materials.mat_container
-	if(!mat_container || !is_station_level(z))
-		return
-
-	console_notify_timer = null
-
-	var/area/A = get_area(src)
-	var/msg = "Now available in [A]:<br>"
-
-	var/has_minerals = FALSE
-
-	for(var/mat in mat_container.materials)
-		var/datum/material/M = mat
-		var/mineral_amount = mat_container.materials[mat] / MINERAL_MATERIAL_AMOUNT
-		if(mineral_amount)
-			has_minerals = TRUE
-		msg += "[capitalize(M.name)]: [mineral_amount] sheets<br>"
-
-	if(!has_minerals)
-		return
-
-	var/datum/signal/subspace/messaging/rc/signal = new(src, list(
-		"ore_update" = TRUE,
-		"sender" = "Ore Redemption Machine",
-		"message" = msg,
-		"verified" = "<font color='green'><b>Verified by Ore Redemption Machine</b></font>",
-		"priority" = REQ_NORMAL_MESSAGE_PRIORITY
-	))
-	signal.send_to_receivers()
-
 /obj/machinery/mineral/ore_redemption/pickup_item(datum/source, atom/movable/target, atom/oldLoc)
 	if(QDELETED(target))
 		return
@@ -154,10 +123,6 @@
 		smelt_ore(O)
 	else
 		return
-
-	if(!console_notify_timer)
-		// gives 5 seconds for a load of ores to be sucked up by the ORM before it sends out request console notifications. This should be enough time for most deposits that people make
-		console_notify_timer = addtimer(CALLBACK(src, .proc/send_console_message), 5 SECONDS)
 
 /obj/machinery/mineral/ore_redemption/default_unfasten_wrench(mob/user, obj/item/I)
 	. = ..()
@@ -213,10 +178,7 @@
 
 /obj/machinery/mineral/ore_redemption/ui_data(mob/user)
 	var/list/data = list()
-	var/datum/bank_account/user_account = user.get_bank_account()
 	data["unclaimedPoints"] = points
-	if (user_account)
-		data["userCash"] = user_account.account_balance
 
 	data["materials"] = list()
 	var/datum/component/material_container/mat_container = materials.mat_container
@@ -226,12 +188,12 @@
 			var/amount = mat_container.materials[M]
 			var/sheet_amount = amount / MINERAL_MATERIAL_AMOUNT
 			var/ref = REF(M)
-			data["materials"] += list(list("name" = M.name, "id" = ref, "amount" = sheet_amount, "value" = mat_container.get_material_cost(M, MINERAL_MATERIAL_AMOUNT)))
+			data["materials"] += list(list("name" = M.name, "id" = ref, "amount" = sheet_amount, "value" = ore_values[M.type]))
 
 		data["alloys"] = list()
 		for(var/v in stored_research.researched_designs)
 			var/datum/design/D = SSresearch.techweb_design_by_id(v)
-			data["alloys"] += list(list("name" = D.name, "id" = D.id, "amount" = can_smelt_alloy(D), "value" = mat_container.get_material_list_cost(D.materials)))
+			data["alloys"] += list(list("name" = D.name, "id" = D.id, "amount" = can_smelt_alloy(D)))
 
 	if (!mat_container)
 		data["disconnected"] = "local mineral storage is unavailable"
@@ -271,7 +233,6 @@
 				to_chat(usr, "<span class='warning'>No points to claim.</span>")
 			return TRUE
 		if("Release")
-			var/obj/item/card/id/I = usr.get_idcard(TRUE)
 			if(!mat_container)
 				return
 			if(materials.on_hold())
@@ -298,7 +259,7 @@
 
 				var/sheets_to_remove = round(min(desired,50,stored_amount))
 
-				var/count = mat_container.retrieve_sheets(sheets_to_remove, mat, get_step(src, output_dir), I?.registered_account)
+				var/count = mat_container.retrieve_sheets(sheets_to_remove, mat, get_step(src, output_dir))
 				var/list/mats = list()
 				mats[mat] = MINERAL_MATERIAL_AMOUNT
 				materials.silo_log(src, "released", -count, "sheets", mats)
@@ -333,20 +294,15 @@
 			var/datum/design/alloy = stored_research.isDesignResearchedID(alloy_id)
 			var/mob/M = usr
 			var/obj/item/card/id/I = M.get_idcard(TRUE)
-			var/datum/bank_account/user_account = I?.registered_account
 			if((check_access(I) || allowed(usr)) && alloy)
 				var/smelt_amount = can_smelt_alloy(alloy)
-				if(mat_container.linked_account && !(obj_flags & EMAGGED))
-					var/cost = mat_container.get_material_list_cost(alloy.materials)
-					if(cost)
-						smelt_amount = min(smelt_amount, FLOOR(user_account?.account_balance / cost, 1))
 				var/desired = 0
 				if (params["sheets"])
 					desired = text2num(params["sheets"])
 				else
 					desired = input("How many sheets?", "How many sheets would you like to smelt?", 1) as null|num
 				var/amount = round(min(desired,50,smelt_amount))
-				mat_container.use_materials(alloy.materials, amount, user_account, !(obj_flags & EMAGGED))
+				mat_container.use_materials(alloy.materials, amount)
 				materials.silo_log(src, "released", -amount, "sheets", alloy.materials)
 				var/output
 				if(ispath(alloy.build_path, /obj/item/stack/sheet))

@@ -185,7 +185,7 @@ feedback data can be recorded in 5 formats:
 "tally"
 	used to track the number of occurances of multiple related values i.e. how many times each type of gun is fired
 	further calls to the same key will:
-	 	add or subtract from the saved value of the data key if it already exists
+		add or subtract from the saved value of the data key if it already exists
 		append the key and it's value if it doesn't exist
 	calls:	SSblackbox.record_feedback("tally", "example", 1, "sample data")
 			SSblackbox.record_feedback("tally", "example", 4, "sample data")
@@ -197,7 +197,7 @@ feedback data can be recorded in 5 formats:
 	the final element in the data list is used as the tracking key, all prior elements are used for nesting
 	all data list elements must be strings
 	further calls to the same key will:
-	 	add or subtract from the saved value of the data key if it already exists in the same multi-dimensional position
+		add or subtract from the saved value of the data key if it already exists in the same multi-dimensional position
 		append the key and it's value if it doesn't exist
 	calls: 	SSblackbox.record_feedback("nested tally", "example", 1, list("fruit", "orange", "apricot"))
 			SSblackbox.record_feedback("nested tally", "example", 2, list("fruit", "orange", "orange"))
@@ -318,8 +318,8 @@ Versioning
 		return
 
 	var/datum/DBQuery/query_report_death = SSdbcore.NewQuery({"
-		INSERT INTO [format_table_name("death")] (pod, x_coord, y_coord, z_coord, mapname, server_ip, server_port, round_id, tod, job, special, name, byondkey, laname, lakey, bruteloss, fireloss, brainloss, oxyloss, toxloss, cloneloss, staminaloss, last_words, suicide)
-		VALUES (:pod, :x_coord, :y_coord, :z_coord, :map, INET_ATON(:internet_address), :port, :round_id, :time, :job, :special, :name, :key, :laname, :lakey, :brute, :fire, :brain, :oxy, :tox, :clone, :stamina, :last_words, :suicide)
+		INSERT INTO [format_table_name("death")] (pod, x_coord, y_coord, z_coord, server_ip, server_port, round_id, tod, job, special, name, byondkey, laname, lakey, bruteloss, fireloss, brainloss, oxyloss, toxloss, cloneloss, staminaloss, last_words, suicide)
+		VALUES (:pod, :x_coord, :y_coord, :z_coord, INET_ATON(:internet_address), :port, :round_id, :time, :job, :special, :name, :key, :laname, :lakey, :brute, :fire, :brain, :oxy, :tox, :clone, :stamina, :last_words, :suicide)
 	"}, list(
 		"name" = L.real_name,
 		"key" = L.ckey,
@@ -340,7 +340,6 @@ Versioning
 		"z_coord" = L.z,
 		"last_words" = L.last_words,
 		"suicide" = L.suiciding,
-		"map" = SSmapping.config.map_name,
 		"internet_address" = world.internet_address || "0",
 		"port" = "[world.port]",
 		"round_id" = GLOB.round_id,

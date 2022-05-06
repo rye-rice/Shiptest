@@ -62,7 +62,7 @@
 		for(var/i = 1 to nest_range)
 			closest = get_step(closest, get_dir(closest, src))
 		forceMove(closest) // someone teleported out probably and the megafauna kept chasing them
-		target = null
+		LoseTarget()
 		return
 	return ..()
 
@@ -117,8 +117,7 @@
 	visible_message(
 		"<span class='danger'>[src] devours [L]!</span>",
 		"<span class='userdanger'>You feast on [L], restoring your health!</span>")
-	if(!is_station_level(z) || client) //NPC monsters won't heal while on station
-		adjustBruteLoss(-L.maxHealth/2)
+	adjustBruteLoss(-L.maxHealth/2)
 	L.gib()
 	return TRUE
 
@@ -145,7 +144,7 @@
 	if(!grant_achievement.len)
 		for(var/mob/living/L in view(7,src))
 			grant_achievement += L
-	for(var/mob/living/L in grant_achievement)
+	for(var/mob/living/L as anything in grant_achievement)
 		if(L.stat || !L.client)
 			continue
 		L.client.give_award(/datum/award/achievement/boss/boss_killer, L)
@@ -160,19 +159,18 @@
 	name = "Megafauna Attack"
 	icon_icon = 'icons/mob/actions/actions_animal.dmi'
 	button_icon_state = ""
-	var/mob/living/simple_animal/hostile/megafauna/M
 	var/chosen_message
 	var/chosen_attack_num = 0
 
 /datum/action/innate/megafauna_attack/Grant(mob/living/L)
-	if(istype(L, /mob/living/simple_animal/hostile/megafauna))
-		M = L
-		return ..()
-	return FALSE
+	if(!ismegafauna(L))
+		return FALSE
+	return ..()
 
 /datum/action/innate/megafauna_attack/Activate()
-	M.chosen_attack = chosen_attack_num
-	to_chat(M, chosen_message)
+	var/mob/living/simple_animal/hostile/megafauna/fauna = owner
+	fauna.chosen_attack = chosen_attack_num
+	to_chat(fauna, chosen_message)
 
 /mob/living/simple_animal/hostile/megafauna
 	var/list/enemies = list()
@@ -199,22 +197,23 @@
 /mob/living/simple_animal/hostile/megafauna/proc/Retaliate()
 	var/list/around = view(src, vision_range)
 
-	for(var/atom/movable/A in around)
+	for(var/atom/A as anything in around)
 		if(A == src)
 			continue
 		if(isliving(A))
 			var/mob/living/M = A
 			if(faction_check_mob(M) && attack_same || !faction_check_mob(M))
 				enemies |= M
+			if(ismegafauna(M))
+				var/mob/living/simple_animal/hostile/megafauna/boss = M
+				if(faction_check_mob(boss) && !attack_same && !boss.attack_same)
+					boss.enemies |= enemies
 		else if(ismecha(A))
 			var/obj/mecha/M = A
 			if(M.occupant)
 				enemies |= M
 				enemies |= M.occupant
 
-	for(var/mob/living/simple_animal/hostile/megafauna/H in around)
-		if(faction_check_mob(H) && !attack_same && !H.attack_same)
-			H.enemies |= enemies
 	return 0
 
 /mob/living/simple_animal/hostile/megafauna/adjustHealth(amount, updating_health = TRUE, forced = FALSE)

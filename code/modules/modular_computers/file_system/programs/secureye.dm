@@ -177,12 +177,12 @@
 // Returns the list of cameras accessible from this computer
 /datum/computer_file/program/secureye/proc/get_available_cameras()
 	var/list/L = list()
-	for (var/obj/machinery/camera/cam in GLOB.cameranet.cameras)
-		if(!is_station_level(cam.z))//Only show station cameras.
+	for (var/obj/machinery/camera/cam as anything in GLOB.cameranet.cameras)
+		if(cam.virtual_z() != computer.virtual_z())//Only show cameras on the same level.
 			continue
 		L.Add(cam)
 	var/list/camlist = list()
-	for(var/obj/machinery/camera/cam in L)
+	for(var/obj/machinery/camera/cam as anything in L)
 		if(!cam.network)
 			stack_trace("Camera in a cameranet has no camera network")
 			continue

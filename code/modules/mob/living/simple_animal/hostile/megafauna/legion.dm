@@ -43,16 +43,19 @@
 	crusher_achievement_type = /datum/award/achievement/boss/legion_crusher
 	score_achievement_type = /datum/award/score/legion_score
 	pixel_y = -16
+	base_pixel_y = -16
 	pixel_x = -32
+	base_pixel_x = -32
 	loot = list(/obj/item/stack/sheet/bone = 3)
 	vision_range = 13
 	wander = FALSE
 	elimination = TRUE
 	appearance_flags = LONG_GLIDE
 	mouse_opacity = MOUSE_OPACITY_ICON
-	attack_action_types = list(/datum/action/innate/megafauna_attack/create_skull,
-							   /datum/action/innate/megafauna_attack/charge_target,
-							   /datum/action/innate/megafauna_attack/create_turrets)
+	attack_action_types = list(
+		/datum/action/innate/megafauna_attack/create_skull,
+		/datum/action/innate/megafauna_attack/charge_target,
+		/datum/action/innate/megafauna_attack/create_turrets)
 	small_sprite_type = /datum/action/small_sprite/megafauna/legion
 	var/size = 3
 	var/charging = FALSE
@@ -278,12 +281,13 @@
 	if(!user_area || !user_turf || (user_area.type in excluded_areas))
 		to_chat(user, "<span class='warning'>Something is preventing you from using the staff here.</span>")
 		return
+	var/datum/weather_controller/weather_controller = SSmapping.get_map_zone_weather_controller(user_turf)
 	var/datum/weather/A
-	for(var/V in SSweather.processing)
-		var/datum/weather/W = V
-		if((user_turf.z in W.impacted_z_levels) && W.area_type == user_area.type)
-			A = W
-			break
+	if(weather_controller.current_weathers)
+		for(var/datum/weather/W as anything in weather_controller.current_weathers)
+			if(W.my_controller.mapzone.is_in_bounds(user_turf) && W.area_type == user_area.type)
+				A = W
+				break
 
 	if(A)
 		if(A.stage != END_STAGE)

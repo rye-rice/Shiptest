@@ -105,6 +105,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
 	critical_machine = TRUE
 	base_icon_state = "darkmatter"
+	interacts_with_air = TRUE
 
 	///The id of our supermatter
 	var/uid = 1
@@ -147,67 +148,67 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 	var/gas_change_rate = 0.05
 	///The list of gases we will be interacting with in process_atoms()
 	var/list/gases_we_care_about = list(
-		/datum/gas/oxygen,
-		/datum/gas/water_vapor,
-		/datum/gas/plasma,
-		/datum/gas/carbon_dioxide,
-		/datum/gas/nitrous_oxide,
-		/datum/gas/nitrogen,
-		/datum/gas/pluoxium,
-		/datum/gas/tritium,
-		/datum/gas/bz,
-		/datum/gas/freon,
+		GAS_O2,
+		GAS_H2O,
+		GAS_PLASMA,
+		GAS_CO2,
+		GAS_NITROUS,
+		GAS_N2,
+		GAS_PLUOXIUM,
+		GAS_TRITIUM,
+		GAS_BZ,
+		GAS_FREON,
 	)
 	///The list of gases mapped against their current comp. We use this to calculate different values the supermatter uses, like power or heat resistance. It doesn't perfectly match the air around the sm, instead moving up at a rate determined by gas_change_rate per call. Ranges from 0 to 1
 	var/list/gas_comp = list(
-		/datum/gas/oxygen = 0,
-		/datum/gas/water_vapor = 0,
-		/datum/gas/plasma = 0,
-		/datum/gas/carbon_dioxide = 0,
-		/datum/gas/nitrous_oxide = 0,
-		/datum/gas/nitrogen = 0,
-		/datum/gas/pluoxium = 0,
-		/datum/gas/tritium = 0,
-		/datum/gas/bz = 0,
-		/datum/gas/freon = 0,
+		GAS_O2 = 0,
+		GAS_H2O = 0,
+		GAS_PLASMA = 0,
+		GAS_CO2 = 0,
+		GAS_NITROUS = 0,
+		GAS_N2 = 0,
+		GAS_PLUOXIUM = 0,
+		GAS_TRITIUM = 0,
+		GAS_BZ = 0,
+		GAS_FREON = 0,
 	)
 	///The list of gases mapped against their transmit values. We use it to determine the effect different gases have on radiation
 	var/list/gas_trans = list(
-		/datum/gas/oxygen = OXYGEN_TRANSMIT_MODIFIER,
-		/datum/gas/water_vapor = H2O_TRANSMIT_MODIFIER,
-		/datum/gas/plasma = PLASMA_TRANSMIT_MODIFIER,
-		/datum/gas/pluoxium = PLUOXIUM_TRANSMIT_MODIFIER,
-		/datum/gas/tritium = TRITIUM_TRANSMIT_MODIFIER,
-		/datum/gas/bz = BZ_TRANSMIT_MODIFIER,
+		GAS_O2 = OXYGEN_TRANSMIT_MODIFIER,
+		GAS_H2O = H2O_TRANSMIT_MODIFIER,
+		GAS_PLASMA = PLASMA_TRANSMIT_MODIFIER,
+		GAS_PLUOXIUM = PLUOXIUM_TRANSMIT_MODIFIER,
+		GAS_TRITIUM = TRITIUM_TRANSMIT_MODIFIER,
+		GAS_BZ = BZ_TRANSMIT_MODIFIER,
 	)
 	///The list of gases mapped against their heat penaltys. We use it to determin molar and heat output
 	var/list/gas_heat = list(
-		/datum/gas/oxygen = OXYGEN_HEAT_PENALTY,
-		/datum/gas/water_vapor = H2O_HEAT_PENALTY,
-		/datum/gas/plasma = PLASMA_HEAT_PENALTY,
-		/datum/gas/carbon_dioxide = CO2_HEAT_PENALTY,
-		/datum/gas/nitrogen = NITROGEN_HEAT_PENALTY,
-		/datum/gas/pluoxium = PLUOXIUM_HEAT_PENALTY,
-		/datum/gas/tritium = TRITIUM_HEAT_PENALTY,
-		/datum/gas/bz = BZ_HEAT_PENALTY,
-		/datum/gas/freon = FREON_HEAT_PENALTY,
+		GAS_O2 = OXYGEN_HEAT_PENALTY,
+		GAS_H2O = H2O_HEAT_PENALTY,
+		GAS_PLASMA = PLASMA_HEAT_PENALTY,
+		GAS_CO2 = CO2_HEAT_PENALTY,
+		GAS_N2 = NITROGEN_HEAT_PENALTY,
+		GAS_PLUOXIUM = PLUOXIUM_HEAT_PENALTY,
+		GAS_TRITIUM = TRITIUM_HEAT_PENALTY,
+		GAS_BZ = BZ_HEAT_PENALTY,
+		GAS_FREON = FREON_HEAT_PENALTY,
 	)
 	///The list of gases mapped against their heat resistance. We use it to moderate heat damage.
 	var/list/gas_resist = list(
-		/datum/gas/nitrous_oxide = N2O_HEAT_RESISTANCE,
-		/datum/gas/pluoxium = PLUOXIUM_HEAT_RESISTANCE,
+		GAS_NITROUS = N2O_HEAT_RESISTANCE,
+		GAS_PLUOXIUM = PLUOXIUM_HEAT_RESISTANCE,
 	)
 	///The list of gases mapped against their powermix ratio
 	var/list/gas_powermix = list(
-		/datum/gas/oxygen = 1,
-		/datum/gas/water_vapor = 1,
-		/datum/gas/plasma = 1,
-		/datum/gas/carbon_dioxide = 1,
-		/datum/gas/nitrogen = -1,
-		/datum/gas/pluoxium = -1,
-		/datum/gas/tritium = 1,
-		/datum/gas/bz = 1,
-		/datum/gas/freon = -1,
+		GAS_O2 = 1,
+		GAS_H2O = 1,
+		GAS_PLASMA = 1,
+		GAS_CO2 = 1,
+		GAS_N2 = -1,
+		GAS_PLUOXIUM = -1,
+		GAS_TRITIUM = 1,
+		GAS_BZ = 1,
+		GAS_FREON = -1,
 	)
 	///The last air sample's total molar count, will always be above or equal to 0
 	var/combined_gas = 0
@@ -271,7 +272,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 /obj/machinery/power/supermatter_crystal/Initialize()
 	. = ..()
 	uid = gl_uid++
-	SSair.atmos_machinery += src
+	SSair.start_processing_machine(src)
 	countdown = new(src)
 	countdown.start()
 	GLOB.poi_list |= src
@@ -290,7 +291,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 
 /obj/machinery/power/supermatter_crystal/Destroy()
 	investigate_log("has been destroyed.", INVESTIGATE_SUPERMATTER)
-	SSair.atmos_machinery -= src
+	SSair.stop_processing_machine(src)
 	QDEL_NULL(radio)
 	GLOB.poi_list -= src
 	QDEL_NULL(countdown)
@@ -351,23 +352,26 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 	integrity = integrity < 0 ? 0 : integrity
 	return integrity
 
+/obj/machinery/power/supermatter_crystal/update_overlays()
+	. = ..()
+	if(final_countdown)
+		. += "casuality_field"
+
 /obj/machinery/power/supermatter_crystal/proc/countdown()
 	set waitfor = FALSE
 
 	if(final_countdown) // We're already doing it go away
 		return
 	final_countdown = TRUE
-
-	var/image/causality_field = image(icon, null, "causality_field")
-	add_overlay(causality_field, TRUE)
+	update_icon()
 
 	var/speaking = "[emergency_alert] The supermatter has reached critical integrity failure. Emergency causality destabilization field has been activated."
 	radio.talk_into(src, speaking, common_channel, language = get_selected_language())
 	for(var/i in SUPERMATTER_COUNTDOWN_TIME to 0 step -10)
 		if(damage < explosion_point) // Cutting it a bit close there engineers
 			radio.talk_into(src, "[safe_alert] Failsafe has been disengaged.", common_channel)
-			cut_overlay(causality_field, TRUE)
 			final_countdown = FALSE
+			update_icon()
 			return
 		else if((i % 50) != 0 && i > 50) // A message once every 5 seconds until the final 5 seconds which count down individualy
 			sleep(10)
@@ -384,7 +388,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 /obj/machinery/power/supermatter_crystal/proc/explode()
 	for(var/mob in GLOB.alive_mob_list)
 		var/mob/living/L = mob
-		if(istype(L) && L.get_virtual_z_level() == get_virtual_z_level())
+		if(istype(L) && L.virtual_z() == virtual_z())
 			if(ishuman(mob))
 				//Hilariously enough, running into a closet should make you get hit the hardest.
 				var/mob/living/carbon/human/H = mob
@@ -394,7 +398,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 
 	var/turf/T = get_turf(src)
 	for(var/mob/M in GLOB.player_list)
-		if(M.get_virtual_z_level() == get_virtual_z_level())
+		if(M.virtual_z() == virtual_z())
 			SEND_SOUND(M, 'sound/magic/charge.ogg')
 			to_chat(M, "<span class='boldannounce'>You feel reality distort for a moment...</span>")
 			SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "delam", /datum/mood_event/delam)
@@ -460,7 +464,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 	var/datum/gas_mixture/removed
 	if(produces_gas)
 		//Remove gas from surrounding area
-		removed = env.remove(gasefficency * env.total_moles())
+		removed = env.remove_ratio(gasefficency)
 	else
 		// Pass all the gas related code an empty gas container
 		removed = new()
@@ -514,13 +518,13 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 		var/list/resistance_mod = gases_we_care_about.Copy()
 
 		//We're concerned about pluoxium being too easy to abuse at low percents, so we make sure there's a substantial amount.
-		var/pluoxiumbonus = (gas_comp[/datum/gas/pluoxium] >= 0.15) //makes pluoxium only work at 15%+
-		var/h2obonus = 1 - (gas_comp[/datum/gas/water_vapor] * 0.25)//At max this value should be 0.75
-		var/freonbonus = (gas_comp[/datum/gas/freon] <= 0.03) //Let's just yeet power output if this shit is high
+		var/pluoxiumbonus = (gas_comp[GAS_PLUOXIUM] >= 0.15) //makes pluoxium only work at 15%+
+		var/h2obonus = 1 - (gas_comp[GAS_H2O] * 0.25)//At max this value should be 0.75
+		var/freonbonus = (gas_comp[GAS_FREON] <= 0.03) //Let's just yeet power output if this shit is high
 
-		heat_mod[/datum/gas/pluoxium] = pluoxiumbonus
-		transit_mod[/datum/gas/pluoxium] = pluoxiumbonus
-		resistance_mod[/datum/gas/pluoxium] = pluoxiumbonus
+		heat_mod[GAS_PLUOXIUM] = pluoxiumbonus
+		transit_mod[GAS_PLUOXIUM] = pluoxiumbonus
+		resistance_mod[GAS_PLUOXIUM] = pluoxiumbonus
 
 		//No less then zero, and no greater then one, we use this to do explosions and heat to power transfer
 		//Be very careful with modifing this var by large amounts, and for the love of god do not push it past 1
@@ -554,8 +558,8 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 		//Ramps up or down in increments of 0.02 up to the proportion of co2
 		//Given infinite time, powerloss_dynamic_scaling = co2comp
 		//Some value between 0 and 1
-		if (combined_gas > POWERLOSS_INHIBITION_MOLE_THRESHOLD && gas_comp[/datum/gas/carbon_dioxide] > POWERLOSS_INHIBITION_GAS_THRESHOLD) //If there are more then 20 mols, and more then 20% co2
-			powerloss_dynamic_scaling = clamp(powerloss_dynamic_scaling + clamp(gas_comp[/datum/gas/carbon_dioxide] - powerloss_dynamic_scaling, -0.02, 0.02), 0, 1)
+		if (combined_gas > POWERLOSS_INHIBITION_MOLE_THRESHOLD && gas_comp[GAS_CO2] > POWERLOSS_INHIBITION_GAS_THRESHOLD) //If there are more then 20 mols, and more then 20% co2
+			powerloss_dynamic_scaling = clamp(powerloss_dynamic_scaling + clamp(gas_comp[GAS_CO2] - powerloss_dynamic_scaling, -0.02, 0.02), 0, 1)
 		else
 			powerloss_dynamic_scaling = clamp(powerloss_dynamic_scaling - 0.05, 0, 1)
 		//Ranges from 0 to 1(1-(value between 0 and 1 * ranges from 1 to 1.5(mol / 500)))
@@ -586,8 +590,8 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 
 		if(prob(50))
 			//(1 + (tritRad + pluoxDampen * bzDampen * o2Rad * plasmaRad / (10 - bzrads))) * freonbonus
-			radiation_pulse(src, power * max(0, (1 + (power_transmission_bonus/(10-(gas_comp[/datum/gas/bz] * BZ_RADIOACTIVITY_MODIFIER)))) * freonbonus))// RadModBZ(500%)
-		if(gas_comp[/datum/gas/bz] >= 0.4 && prob(30 * gas_comp[/datum/gas/bz]))
+			radiation_pulse(src, power * max(0, (1 + (power_transmission_bonus/(10-(gas_comp[GAS_BZ] * BZ_RADIOACTIVITY_MODIFIER)))) * freonbonus))// RadModBZ(500%)
+		if(gas_comp[GAS_BZ] >= 0.4 && prob(30 * gas_comp[GAS_BZ]))
 			src.fire_nuclear_particle()        // Start to emit radballs at a maximum of 30% chance per tick
 
 		//Power * 0.55
@@ -606,10 +610,9 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 		removed.set_temperature(max(0, min(removed.return_temperature(), 2500 * dynamic_heat_modifier)))
 
 		//Calculate how much gas to release
-		//Varies based on power and gas content
-		removed.adjust_moles(/datum/gas/plasma, max((device_energy * dynamic_heat_modifier) / PLASMA_RELEASE_MODIFIER, 0))
-		//Varies based on power, gas content, and heat
-		removed.adjust_moles(/datum/gas/oxygen, max(((device_energy + removed.return_temperature() * dynamic_heat_modifier) - T0C) / OXYGEN_RELEASE_MODIFIER, 0))
+		removed.adjust_moles(GAS_PLASMA, max((device_energy * dynamic_heat_modifier) / PLASMA_RELEASE_MODIFIER, 0))
+
+		removed.adjust_moles(GAS_O2, max(((device_energy + removed.return_temperature() * dynamic_heat_modifier) - T0C) / OXYGEN_RELEASE_MODIFIER, 0))
 
 		if(produces_gas)
 			env.merge(removed)
@@ -739,7 +742,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 	message_admins("Singularity has consumed a supermatter shard and can now become stage six.")
 	visible_message("<span class='userdanger'>[src] is consumed by the singularity!</span>")
 	for(var/mob/M in GLOB.player_list)
-		if(M.get_virtual_z_level() == get_virtual_z_level())
+		if(M.virtual_z() == virtual_z())
 			SEND_SOUND(M, 'sound/effects/supermatter.ogg') //everyone goan know bout this
 			to_chat(M, "<span class='boldannounce'>A horrible screeching fills your ears, and a wave of dread washes over you...</span>")
 	qdel(src)

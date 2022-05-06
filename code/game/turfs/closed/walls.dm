@@ -29,10 +29,8 @@
 	var/list/dent_decals
 
 
-/turf/closed/wall/Initialize(mapload)
+/turf/closed/wall/Initialize(mapload, inherited_virtual_z)
 	. = ..()
-	if(is_station_level(z))
-		GLOB.station_turfs += src
 	if(smoothing_flags & SMOOTH_DIAGONAL_CORNERS && fixed_underlay) //Set underlays for the diagonal walls.
 		var/mutable_appearance/underlay_appearance = mutable_appearance(layer = TURF_LAYER, plane = FLOOR_PLANE)
 		if(fixed_underlay["space"])
@@ -44,13 +42,6 @@
 			underlay_appearance.icon_state = fixed_underlay["icon_state"]
 		fixed_underlay = string_assoc_list(fixed_underlay)
 		underlays += underlay_appearance
-
-
-/turf/closed/wall/Destroy()
-	if(is_station_level(z))
-		GLOB.station_turfs -= src
-	..()
-
 
 /turf/closed/wall/examine(mob/user)
 	. += ..()
@@ -71,10 +62,8 @@
 		if(newgirder) //maybe we don't /want/ a girder!
 			transfer_fingerprints_to(newgirder)
 
-	for(var/obj/O in src.contents) //Eject contents!
-		if(istype(O, /obj/structure/sign/poster))
-			var/obj/structure/sign/poster/P = O
-			P.roll_and_drop(src)
+	for(var/obj/structure/sign/poster/P in src.contents) //Eject contents!
+		P.roll_and_drop(src)
 
 	ScrapeAway()
 
@@ -189,7 +178,7 @@
 	var/turf/T = user.loc	//get user's location for delay checks
 
 	//the istype cascade has been spread among various procs for easy overriding
-	if(try_clean(W, user, T) || try_wallmount(W, user, T) || try_decon(W, user, T))
+	if(try_clean(W, user, T) || try_wallmount(W, user, T) || try_decon(W, user, T) || try_destroy(W, user, T))
 		return
 
 	return ..()
@@ -238,6 +227,19 @@
 				dismantle_wall()
 			return TRUE
 
+	return FALSE
+
+
+/turf/closed/wall/proc/try_destroy(obj/item/I, mob/user, turf/T)
+	if(istype(I, /obj/item/pickaxe/drill/jackhammer))
+		to_chat(user, "<span class='notice'>You begin to smash though [src]...</span>")
+		if(do_after(user, 50, target = src))
+			if(!iswallturf(src))
+				return TRUE
+			I.play_tool_sound(src)
+			visible_message("<span class='warning'>[user] smashes through [src] with [I]!</span>", "<span class='italics'>You hear the grinding of metal.</span>")
+			dismantle_wall()
+			return TRUE
 	return FALSE
 
 /turf/closed/wall/singularity_pull(S, current_size)

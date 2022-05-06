@@ -1,7 +1,7 @@
 /obj/item/extinguisher
 	name = "fire extinguisher"
 	desc = "A traditional red fire extinguisher."
-	icon = 'icons/obj/items_and_weapons.dmi'
+	icon = 'icons/obj/extinguisher.dmi'
 	icon_state = "fire_extinguisher0"
 	item_state = "fire_extinguisher"
 	hitsound = 'sound/weapons/smash.ogg'
@@ -50,7 +50,8 @@
 
 /obj/item/extinguisher/proc/refill()
 	create_reagents(max_water, AMOUNT_VISIBLE)
-	reagents.add_reagent(chem, max_water)
+	if(chem)
+		reagents.add_reagent(chem, max_water)
 
 /obj/item/extinguisher/Initialize()
 	. = ..()

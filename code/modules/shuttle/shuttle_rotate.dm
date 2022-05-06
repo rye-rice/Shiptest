@@ -80,6 +80,10 @@ If ever any of these procs are useful for non-shuttles, rename it to proc/rotate
 	params &= ~ROTATE_OFFSET
 	return ..()
 
+/obj/structure/reflector/shuttleRotate(rotation, params)
+	. = ..()
+	setAngle(SIMPLIFY_DEGREES(rotation_angle + rotation))
+
 /************************************Machine rotate procs************************************/
 
 /obj/machinery/atmospherics/shuttleRotate(rotation, params)
@@ -95,6 +99,11 @@ If ever any of these procs are useful for non-shuttles, rename it to proc/rotate
 	for(var/i in 1 to device_type)
 		var/new_pos = supposed_node_connect.Find(real_node_connect[i])
 		nodes[new_pos] = nodes_copy[i]
+
+/obj/machinery/mineral/shuttleRotate(rotation, params)
+	. = ..()
+	input_dir = angle2dir(rotation + dir2angle(input_dir))
+	output_dir = angle2dir(rotation + dir2angle(output_dir))
 
 //prevents shuttles attempting to rotate this since it messes up sprites
 /obj/machinery/gateway/shuttleRotate(rotation, params)

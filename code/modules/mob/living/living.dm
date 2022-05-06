@@ -10,6 +10,11 @@
 	faction += "[REF(src)]"
 	GLOB.mob_living_list += src
 
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 /mob/living/prepare_huds()
 	..()
 	prepare_data_huds()
@@ -44,6 +49,9 @@
 		S.sharerDies(FALSE)
 		S.removeSoulsharer(src) //If a sharer is destroy()'d, they are simply removed
 	sharedSoullinks = null
+
+	QDEL_LIST(abilities) // so that the actions are deleted, which will clear refs to owner
+	QDEL_LIST(roundstart_quirks)
 	return ..()
 
 /mob/living/onZImpact(turf/T, levels)
@@ -212,6 +220,7 @@
 		return
 	now_pushing = TRUE
 	var/dir_to_target = get_dir(src, AM)
+	dir_to_target = dir_to_target ? dir_to_target : dir //we will fall back to using the mob's dir if on same tile as obj
 
 	// If there's no dir_to_target then the player is on the same turf as the atom they're trying to push.
 	// This can happen when a player is stood on the same turf as a directional window. All attempts to push
@@ -343,22 +352,22 @@
 	M.setDir(get_dir(M, src))
 	switch(M.dir)
 		if(NORTH)
-			animate(M, pixel_x = 0, pixel_y = offset, 3)
+			animate(M, pixel_x = M.base_pixel_x, pixel_y = M.base_pixel_y + offset, 3)
 		if(SOUTH)
-			animate(M, pixel_x = 0, pixel_y = -offset, 3)
+			animate(M, pixel_x = M.base_pixel_x, pixel_y = M.base_pixel_y - offset, 3)
 		if(EAST)
 			if(M.lying_angle == 270) //update the dragged dude's direction if we've turned
 				M.set_lying_angle(90)
-			animate(M, pixel_x = offset, pixel_y = 0, 3)
+			animate(M, pixel_x = M.base_pixel_x + offset, pixel_y = M.base_pixel_y, 3)
 		if(WEST)
 			if(M.lying_angle == 90)
 				M.set_lying_angle(270)
-			animate(M, pixel_x = -offset, pixel_y = 0, 3)
+			animate(M, pixel_x = M.base_pixel_x - offset, pixel_y = M.base_pixel_y, 3)
 
 /mob/living/proc/reset_pull_offsets(mob/living/M, override)
 	if(!override && M.buckled)
 		return
-	animate(M, pixel_x = 0, pixel_y = 0, 1)
+	animate(M, pixel_x = M.base_pixel_x, pixel_y = M.base_pixel_y, 1)
 
 //mob verbs are a lot faster than object verbs
 //for more info on why this is not atom/pull, see examinate() in mob.dm
@@ -658,8 +667,8 @@
 	SetUnconscious(0)
 
 
-/mob/living/Crossed(atom/movable/AM)
-	. = ..()
+/mob/living/proc/on_entered(datum/source, atom/movable/AM)
+	SIGNAL_HANDLER
 	for(var/i in get_equipped_items())
 		var/obj/item/item = i
 		SEND_SIGNAL(item, COMSIG_ITEM_WEARERCROSSED, AM, src)
@@ -923,11 +932,11 @@
 	if(anchored || (buckled && buckled.anchored))
 		fixed = 1
 	if(on && !(movement_type & FLOATING) && !fixed)
-		animate(src, pixel_y = 2, time = 10, loop = -1, flags = ANIMATION_RELATIVE)
-		animate(pixel_y = -2, time = 10, loop = -1, flags = ANIMATION_RELATIVE)
+		animate(src, pixel_y = base_pixel_y + 2, time = 10, loop = -1, flags = ANIMATION_RELATIVE)
+		animate(pixel_y = base_pixel_y - 2, time = 10, loop = -1, flags = ANIMATION_RELATIVE)
 		setMovetype(movement_type | FLOATING)
 	else if(((!on || fixed) && (movement_type & FLOATING)))
-		animate(src, pixel_y = get_standard_pixel_y_offset(lying_angle), time = 10)
+		animate(src, pixel_y = base_pixel_y + get_standard_pixel_y_offset(lying_angle), time = 1 SECONDS)
 		setMovetype(movement_type & ~FLOATING)
 
 // The src mob is trying to strip an item from someone
@@ -1012,8 +1021,8 @@
 	var/amplitude = min(4, (jitteriness/100) + 1)
 	var/pixel_x_diff = rand(-amplitude, amplitude)
 	var/pixel_y_diff = rand(-amplitude/3, amplitude/3)
-	var/final_pixel_x = get_standard_pixel_x_offset(body_position == LYING_DOWN)
-	var/final_pixel_y = get_standard_pixel_y_offset(body_position == LYING_DOWN)
+	var/final_pixel_x = base_pixel_y + get_standard_pixel_x_offset(body_position == LYING_DOWN)
+	var/final_pixel_y = base_pixel_y + get_standard_pixel_y_offset(body_position == LYING_DOWN)
 	animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 2, loop = 6)
 	animate(pixel_x = final_pixel_x , pixel_y = final_pixel_y , time = 2)
 	setMovetype(movement_type & ~FLOATING) // If we were without gravity, the bouncing animation got stopped, so we make sure to restart it in next life().
@@ -1027,7 +1036,7 @@
 			loc_temp = obj_temp
 	else if(isspaceturf(get_turf(src)))
 		var/turf/heat_turf = get_turf(src)
-		loc_temp = heat_turf.temperature
+		loc_temp = heat_turf.return_temperature()
 	return loc_temp
 
 /mob/living/proc/get_standard_pixel_x_offset(lying = 0)
@@ -1047,9 +1056,9 @@
 	var/turf/T = get_turf(src)
 	if(!T)
 		return FALSE
-	if(is_centcom_level(T.z)) //dont detect mobs on centcom
+	if(is_centcom_level(T)) //dont detect mobs on centcom
 		return FALSE
-	if(is_away_level(T.z))
+	if(is_away_level(T))
 		return FALSE
 	if(user != null && src == user)
 		return FALSE
@@ -1328,7 +1337,7 @@
 	var/mob/living/U = user
 	if(isliving(dropping))
 		var/mob/living/M = dropping
-		if(M.can_be_held && U.pulling == M)
+		if(HAS_TRAIT(M, TRAIT_HOLDABLE) && U.pulling == M)
 			M.mob_try_pickup(U)//blame kevinz
 			return//dont open the mobs inventory if you are picking them up
 	. = ..()
@@ -1762,7 +1771,7 @@
 	//this won't really work with species with more than 2 legs, but it'll function
 	if(broken_legs > 0)
 		var/broken_slowdown = 0
-		broken_slowdown += (default_num_legs - broken_legs) * 2
+		broken_slowdown += broken_legs
 		add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/bones, multiplicative_slowdown=broken_slowdown) //can't move fast with a broken leg
 	else
 		remove_movespeed_modifier(/datum/movespeed_modifier/bones)
@@ -1825,3 +1834,42 @@
 /mob/living/proc/on_handsblocked_end()
 	REMOVE_TRAIT(src, TRAIT_UI_BLOCKED, TRAIT_HANDS_BLOCKED)
 	REMOVE_TRAIT(src, TRAIT_PULL_BLOCKED, TRAIT_HANDS_BLOCKED)
+
+/// Special key down handling of /living mobs, currently only used for typing indicator
+/mob/living/key_down(_key, client/user)
+	if(!typing_indicator && stat == CONSCIOUS)
+		for(var/kb_name in user.prefs.key_bindings[_key])
+			switch(kb_name)
+				if("Say")
+					set_typing_indicator(TRUE)
+					break
+				if("Me")
+					set_typing_indicator(TRUE)
+					break
+	return ..()
+
+/// Used for setting typing indicator on/off. Checking the state should be done not on the proc to avoid overhead.
+/mob/living/set_typing_indicator(state)
+	typing_indicator = state
+	var/state_of_bubble = bubble_icon? "[bubble_icon]0" : "default0"
+	var/mutable_appearance/bubble_overlay = mutable_appearance('icons/mob/talk.dmi', state_of_bubble, plane = RUNECHAT_PLANE)
+	bubble_overlay.appearance_flags = RESET_COLOR | RESET_TRANSFORM | TILE_BOUND | PIXEL_SCALE
+	if(typing_indicator)
+		add_overlay(bubble_overlay)
+	else
+		cut_overlay(bubble_overlay)
+
+/mob/living/remove_air(amount) //To prevent those in contents suffocating
+	return loc ? loc.remove_air(amount) : null
+
+/mob/living/remove_air_ratio(ratio)
+	return loc ? loc.remove_air_ratio(ratio) : null
+
+/mob/living/proc/seizure()
+	set waitfor = 0
+	if(!IsParalyzed() && stat == CONSCIOUS)
+		visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", "<span class='userdanger'>Your muscles spasm violently!</span>")
+		var/howfuck = rand(8,16)
+		AdjustParalyzed(howfuck)
+		AdjustKnockdown(howfuck)
+		Jitter(rand(150,200))

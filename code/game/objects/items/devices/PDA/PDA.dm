@@ -3,13 +3,13 @@
 
 GLOBAL_LIST_EMPTY(PDAs)
 
-#define PDA_SCANNER_NONE		0
-#define PDA_SCANNER_MEDICAL		1
-#define PDA_SCANNER_FORENSICS	2 //unused
-#define PDA_SCANNER_REAGENT		3
-#define PDA_SCANNER_HALOGEN		4
-#define PDA_SCANNER_GAS			5
-#define PDA_SPAM_DELAY		    2 MINUTES
+#define PDA_SCANNER_NONE 0
+#define PDA_SCANNER_MEDICAL 1
+#define PDA_SCANNER_FORENSICS 2 //unused
+#define PDA_SCANNER_REAGENT 3
+#define PDA_SCANNER_HALOGEN 4
+#define PDA_SCANNER_GAS 5
+#define PDA_SPAM_DELAY 2 MINUTES
 
 /obj/item/pda
 	name = "\improper PDA"
@@ -373,7 +373,7 @@ GLOBAL_LIST_EMPTY(PDAs)
 			if(41) //crew manifest
 				dat += "<h4>Crew Manifest</h4>"
 				dat += "<center>"
-				dat += GLOB.data_core.get_manifest_html()
+				dat += SSjob.get_manifest_html()
 				dat += "</center>"
 
 			if(3)
@@ -394,16 +394,16 @@ GLOBAL_LIST_EMPTY(PDAs)
 						for(var/id in environment.get_gases())
 							var/gas_level = environment.get_moles(id)/total_moles
 							if(gas_level > 0)
-								dat += "[GLOB.meta_gas_info[id][META_GAS_NAME]]: [round(gas_level*100, 0.01)]%<br>"
+								dat += "[GLOB.gas_data.names[id]]: [round(gas_level*100, 0.01)]%<br>"
 
 					dat += "Temperature: [round(environment.return_temperature()-T0C)]&deg;C<br>"
 				dat += "<br>"
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cartridge.generate_menu()
 
-  var/datum/browser/popup = new(user, "pda_ui", "<div align='center'>Personal Data Assistant</div>", 500, 600)
-  popup.set_content(dat)
-  popup.open(0)
+	var/datum/browser/popup = new(user, "pda_ui", "<div align='center'>Personal Data Assistant</div>", 500, 600)
+	popup.set_content(dat)
+	popup.open(0)
 
 /obj/item/pda/Topic(href, href_list)
 	..()
@@ -1107,8 +1107,8 @@ GLOBAL_LIST_EMPTY(PDAs)
 /obj/item/pda/emp_act(severity)
 	. = ..()
 	if (!(. & EMP_PROTECT_CONTENTS))
-		for(var/atom/A in src)
-			A.emp_act(severity)
+		for(var/atom/movable/AM as anything in src)
+			AM.emp_act(severity)
 	if (!(. & EMP_PROTECT_SELF))
 		emped++
 		addtimer(CALLBACK(src, .proc/emp_end), 200 * severity)

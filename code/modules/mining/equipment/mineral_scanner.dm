@@ -18,6 +18,7 @@
 		return
 	if(current_cooldown <= world.time)
 		current_cooldown = world.time + cooldown
+		playsound(src, 'sound/effects/ping.ogg', 20)
 		mineral_scan_pulse(get_turf(user))
 
 //Debug item to identify all ore spread quickly
@@ -40,6 +41,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	flags_1 = CONDUCT_1
 	slot_flags = ITEM_SLOT_BELT
+	custom_price = 800
 	var/cooldown = 35
 	var/current_cooldown = 0
 	var/range = 7
@@ -59,6 +61,7 @@
 		current_cooldown = world.time + cooldown
 		var/turf/t = get_turf(src)
 		mineral_scan_pulse(t, range)
+		playsound(src, 'sound/effects/ping.ogg', 20)
 
 /proc/mineral_scan_pulse(turf/T, range = world.view)
 	var/list/minerals = list()

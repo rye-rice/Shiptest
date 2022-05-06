@@ -18,6 +18,27 @@
 	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
 	tiled_dirt = FALSE
 
+/turf/open/floor/wood/icecropolis
+	baseturfs = /turf/open/indestructible/necropolis/air
+
+/turf/open/floor/wood/mahogany
+	color = WOOD_COLOR_RICH
+
+/turf/open/floor/wood/maple
+	color = WOOD_COLOR_PALE
+
+/turf/open/floor/wood/ebony
+	color = WOOD_COLOR_BLACK
+
+/turf/open/floor/wood/walnut
+	color = WOOD_COLOR_CHOCOLATE
+
+/turf/open/floor/wood/bamboo
+	color = WOOD_COLOR_PALE2
+
+/turf/open/floor/wood/yew
+	color = WOOD_COLOR_YELLOW
+
 /turf/open/floor/wood/examine(mob/user)
 	. = ..()
 	. += "<span class='notice'>There's a few <b>screws</b> and a <b>small crack</b> visible.</span>"
@@ -62,7 +83,7 @@
 	return make_plating()
 
 /turf/open/floor/wood/cold
-	temperature = 255.37
+	initial_temperature = 255.37
 
 /turf/open/floor/wood/airless
 	initial_gas_mix = AIRLESS_ATMOS
@@ -83,7 +104,7 @@
 	var/turfverb = "uproot"
 	tiled_dirt = FALSE
 
-/turf/open/floor/grass/Initialize()
+/turf/open/floor/grass/Initialize(mapload, inherited_virtual_z)
 	. = ..()
 	spawniconchange()
 
@@ -199,7 +220,7 @@
 	. = ..()
 	. += "<span class='notice'>There's a <b>small crack</b> on the edge of it.</span>"
 
-/turf/open/floor/carpet/Initialize()
+/turf/open/floor/carpet/Initialize(mapload, inherited_virtual_z)
 	. = ..()
 	update_icon()
 
@@ -217,6 +238,14 @@
 ///Carpet variant for mapping aid, functionally the same as parent after smoothing.
 /turf/open/floor/carpet/lone
 	icon_state = "carpet-0"
+
+/turf/open/floor/carpet/red_gold
+	icon = 'icons/turf/floors/carpet_red_gold.dmi'
+	icon_state = "carpet_red_gold-255"
+	base_icon_state = "carpet_red_gold"
+	floor_tile = /obj/item/stack/tile/carpet/red_gold
+	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_RED_GOLD)
+	canSmoothWith = list(SMOOTH_GROUP_CARPET_RED_GOLD)
 
 /turf/open/floor/carpet/black
 	icon = 'icons/turf/floors/carpet_black.dmi'
@@ -290,6 +319,33 @@
 	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_ROYAL_BLUE)
 	canSmoothWith = list(SMOOTH_GROUP_CARPET_ROYAL_BLUE)
 
+/turf/open/floor/carpet/executive
+	name = "executive carpet"
+	icon = 'icons/turf/floors/carpet_executive.dmi'
+	icon_state = "executive_carpet-255"
+	base_icon_state = "executive_carpet"
+	floor_tile = /obj/item/stack/tile/carpet/executive
+	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_EXECUTIVE)
+	canSmoothWith = list(SMOOTH_GROUP_CARPET_EXECUTIVE)
+
+/turf/open/floor/carpet/stellar
+	name = "stellar carpet"
+	icon = 'icons/turf/floors/carpet_stellar.dmi'
+	icon_state = "stellar_carpet-255"
+	base_icon_state = "stellar_carpet"
+	floor_tile = /obj/item/stack/tile/carpet/stellar
+	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_STELLAR)
+	canSmoothWith = list(SMOOTH_GROUP_CARPET_STELLAR)
+
+/turf/open/floor/carpet/donk
+	name = "Donk Co. carpet"
+	icon = 'icons/turf/floors/carpet_donk.dmi'
+	icon_state = "donk_carpet-255"
+	base_icon_state = "donk_carpet"
+	floor_tile = /obj/item/stack/tile/carpet/donk
+	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_DONK)
+	canSmoothWith = list(SMOOTH_GROUP_CARPET_DONK)
+
 //*****Airless versions of all of the above.*****
 /turf/open/floor/carpet/airless
 	initial_gas_mix = AIRLESS_ATMOS
@@ -322,13 +378,12 @@
 	initial_gas_mix = AIRLESS_ATMOS
 
 /turf/open/floor/carpet/narsie_act(force, ignore_mobs, probability = 20)
-	. = (prob(probability) || force)
-	for(var/I in src)
-		var/atom/A = I
-		if(ignore_mobs && ismob(A))
-			continue
-		if(ismob(A) || .)
-			A.narsie_act()
+	. = (force || prob(probability))
+	var/individual_chance
+	for(var/atom/movable/movable_contents as anything in src)
+		individual_chance = ismob(movable_contents) ? !ignore_mobs : .
+		if(individual_chance)
+			movable_contents.narsie_act()
 
 /turf/open/floor/carpet/break_tile()
 	broken = TRUE
@@ -365,7 +420,7 @@
 	plane = PLANE_SPACE
 	tiled_dirt = FALSE
 
-/turf/open/floor/fakespace/Initialize()
+/turf/open/floor/fakespace/Initialize(mapload, inherited_virtual_z)
 	. = ..()
 	icon_state = SPACE_ICON_STATE
 

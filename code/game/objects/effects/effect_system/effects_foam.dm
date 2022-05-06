@@ -1,6 +1,6 @@
 // Foam
 // Similar to smoke, but slower and mobs absorb its reagent through their exposed skin.
-#define ALUMINUM_FOAM 1
+#define ALUMINIUM_FOAM 1
 #define IRON_FOAM 2
 #define RESIN_FOAM 3
 
@@ -39,8 +39,8 @@
 	if(hotspot && istype(T) && T.air)
 		qdel(hotspot)
 		var/datum/gas_mixture/G = T.air
-		var/plas_amt = min(30,G.get_moles(/datum/gas/plasma)) //Absorb some plasma
-		G.adjust_moles(/datum/gas/plasma, -plas_amt)
+		var/plas_amt = min(30,G.get_moles(GAS_PLASMA)) //Absorb some plasma
+		G.adjust_moles(GAS_PLASMA, -plas_amt)
 		absorbed_plasma += plas_amt
 		if(G.return_temperature() > T20C)
 			G.set_temperature(max(G.return_temperature()/2,T20C))
@@ -69,7 +69,7 @@
 
 /obj/effect/particle_effect/foam/metal
 	name = "aluminium foam"
-	metal = ALUMINUM_FOAM
+	metal = ALUMINIUM_FOAM
 	icon_state = "mfoam"
 	slippery_foam = FALSE
 
@@ -106,7 +106,7 @@
 /obj/effect/particle_effect/foam/proc/kill_foam()
 	STOP_PROCESSING(SSfastprocess, src)
 	switch(metal)
-		if(ALUMINUM_FOAM)
+		if(ALUMINIUM_FOAM)
 			new /obj/structure/foamedmetal(get_turf(src))
 		if(IRON_FOAM)
 			new /obj/structure/foamedmetal/iron(get_turf(src))
@@ -314,7 +314,7 @@
 			for(var/obj/effect/hotspot/H in O)
 				qdel(H)
 			for(var/I in G.get_gases())
-				if(I == /datum/gas/oxygen || I == /datum/gas/nitrogen)
+				if(I == GAS_O2 || I == GAS_N2)
 					continue
 				G.set_moles(I, 0)
 			O.air_update_turf()
@@ -328,6 +328,6 @@
 		for(var/obj/item/Item in O)
 			Item.extinguish()
 
-#undef ALUMINUM_FOAM
+#undef ALUMINIUM_FOAM
 #undef IRON_FOAM
 #undef RESIN_FOAM

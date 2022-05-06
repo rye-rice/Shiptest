@@ -165,7 +165,6 @@
 			new /obj/item/assembly/signaler(src) // 0 tc
 			new /obj/item/storage/toolbox/syndicate(src) // 1 tc
 			new /obj/item/pen/edagger(src)
-			new /obj/item/gun/energy/wormhole_projector/core_inserted(src)
 			new /obj/item/gun/energy/decloner/unrestricted(src)
 
 		if("bee")
@@ -210,6 +209,10 @@
 			new /obj/item/reagent_containers/food/drinks/flask (src) // 1 TC, I can't believe I forgot about the booze flask AAAAAAA
 			new /obj/item/storage/secure/briefcase/syndie (src) // 1TC, for bribing the bartender to let you set up shop... amongst other actions.
 
+
+/obj/item/paper/fluff/bee_objectives
+	name = "Objectives of a Bee Liberation Front Operative"
+	info = "<b>Objective #1</b>. Liberate all bees on the NT transport vessel 2416/B. <b>Success!</b>  <br><b>Objective #2</b>. Escape alive. <b>Failed.</b>"
 
 
 

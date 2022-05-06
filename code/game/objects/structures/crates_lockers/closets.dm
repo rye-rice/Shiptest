@@ -1,7 +1,7 @@
 /obj/structure/closet
 	name = "closet"
 	desc = "It's a basic storage unit."
-	icon = 'goon/icons/obj/closet.dmi'
+	icon = 'icons/obj/closet.dmi'
 	icon_state = "generic"
 	density = TRUE
 	drag_slowdown = 1.5		// Same as a prone mob
@@ -37,6 +37,8 @@
 	var/delivery_icon = "deliverycloset" //which icon to use when packagewrapped. null to be unwrappable.
 	var/anchorable = TRUE
 	var/icon_welded = "welded"
+	/// Whether or not to populate items roundstart
+	var/populate = TRUE
 
 
 /obj/structure/closet/Initialize(mapload)
@@ -44,7 +46,8 @@
 		addtimer(CALLBACK(src, .proc/take_contents), 0)
 	. = ..()
 	update_icon()
-	PopulateContents()
+	if(populate)
+		PopulateContents()
 
 	RegisterSignal(src, COMSIG_ATOM_CANREACH, .proc/canreach_react)
 
@@ -142,7 +145,7 @@
 
 /obj/structure/closet/dump_contents()
 	var/atom/L = drop_location()
-	for(var/atom/movable/AM in src)
+	for(var/atom/movable/AM as anything in src)
 		AM.forceMove(L)
 		if(throwing) // you keep some momentum when getting out of a thrown closet
 			step(AM, dir)
@@ -328,14 +331,16 @@
 	var/turf/T = get_turf(src)
 	var/list/targets = list(O, src)
 	add_fingerprint(user)
-	user.visible_message("<span class='warning'>[user] [actuallyismob ? "tries to ":""]stuff [O] into [src].</span>", \
-				 	 	"<span class='warning'>You [actuallyismob ? "try to ":""]stuff [O] into [src].</span>", \
-				 	 	"<span class='hear'>You hear clanging.</span>")
+	user.visible_message(
+		"<span class='warning'>[user] [actuallyismob ? "tries to ":""]stuff [O] into [src].</span>", \
+		"<span class='warning'>You [actuallyismob ? "try to ":""]stuff [O] into [src].</span>", \
+		"<span class='hear'>You hear clanging.</span>")
 	if(actuallyismob)
 		if(do_after_mob(user, targets, 40))
-			user.visible_message("<span class='notice'>[user] stuffs [O] into [src].</span>", \
-							 	 "<span class='notice'>You stuff [O] into [src].</span>", \
-							 	 "<span class='hear'>You hear a loud metal bang.</span>")
+			user.visible_message(
+				"<span class='notice'>[user] stuffs [O] into [src].</span>", \
+				"<span class='notice'>You stuff [O] into [src].</span>", \
+				"<span class='hear'>You hear a loud metal bang.</span>")
 			var/mob/living/L = O
 			if(!issilicon(L))
 				L.Paralyze(40)
@@ -486,8 +491,8 @@
 	if(. & EMP_PROTECT_SELF)
 		return
 	if (!(. & EMP_PROTECT_CONTENTS))
-		for(var/obj/O in src)
-			O.emp_act(severity)
+		for(var/atom/movable/AM as anything in src)
+			AM.emp_act(severity)
 	if(secure && !broken && !(. & EMP_PROTECT_SELF))
 		if(prob(50 / severity))
 			locked = !locked
@@ -540,3 +545,15 @@
 		user.set_resting(FALSE)
 		togglelock(user)
 		T1.visible_message("<span class='warning'>[user] dives into [src]!</span>")
+
+/obj/structure/closet/on_object_saved(var/depth = 0)
+	if(depth >= 10)
+		return ""
+	var/dat = ""
+	for(var/obj/item in contents)
+		var/metadata = generate_tgm_metadata(item)
+		dat += "[dat ? ",\n" : ""][item.type][metadata]"
+		//Save the contents of things inside the things inside us, EG saving the contents of bags inside lockers
+		var/custom_data = item.on_object_saved(depth++)
+		dat += "[custom_data ? ",\n[custom_data]" : ""]"
+	return dat

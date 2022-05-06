@@ -38,6 +38,8 @@ require only minor tweaks.
 #define ZTRAIT_ICE_RUINS "Ice Ruins"
 #define ZTRAIT_ICE_RUINS_UNDERGROUND "Ice Ruins Underground"
 #define ZTRAIT_SAND_RUINS "Sand Ruins" //WS edit - Whitesands
+#define ZTRAIT_JUNGLE_RUINS "Jungle Ruins"
+#define ZTRAIT_ROCK_RUINS "Rock Ruins"
 
 // boolean - weather types that occur on the level
 #define ZTRAIT_SANDSTORM "Weather_Sandstorm"
@@ -58,12 +60,12 @@ require only minor tweaks.
 
 // enum - how space transitions should affect this level
 #define ZTRAIT_LINKAGE "Linkage"
-    // UNAFFECTED if absent - no space transitions
-    #define UNAFFECTED null
-    // SELFLOOPING - space transitions always self-loop
-    #define SELFLOOPING "Self"
-    // CROSSLINKED - mixed in with the cross-linked space pool
-    #define CROSSLINKED "Cross"
+	// UNAFFECTED if absent - no space transitions
+	#define UNAFFECTED null
+	// SELFLOOPING - space transitions always self-loop
+	#define SELFLOOPING "Self"
+	// CROSSLINKED - mixed in with the cross-linked space pool
+	#define CROSSLINKED "Cross"
 
 // string - type path of the z-level's baseturf (defaults to space)
 #define ZTRAIT_BASETURF "Baseturf"
@@ -72,48 +74,43 @@ require only minor tweaks.
 #define ZTRAITS_CENTCOM list(ZTRAIT_CENTCOM = TRUE)
 #define ZTRAITS_STATION list(ZTRAIT_LINKAGE = SELFLOOPING, ZTRAIT_STATION = TRUE)
 #define ZTRAITS_SPACE list(ZTRAIT_LINKAGE = SELFLOOPING, ZTRAIT_SPACE_RUINS = TRUE)
-#define ZTRAITS_LAVALAND list(\
-    ZTRAIT_MINING = TRUE, \
-    ZTRAIT_ASHSTORM = TRUE, \
-    ZTRAIT_LAVA_RUINS = TRUE, \
-    ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
-    ZTRAIT_BASETURF = /turf/open/lava/smooth/lava_land_surface)
-#define ZTRAITS_WHITESANDS list(\
-    ZTRAIT_MINING = TRUE, \
+#define ZTRAITS_LAVALAND list( \
+	ZTRAIT_MINING = TRUE, \
+	ZTRAIT_ASHSTORM = TRUE, \
+	ZTRAIT_LAVA_RUINS = TRUE, \
+	ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
+	ZTRAIT_BASETURF = /turf/open/lava/smooth/lava_land_surface)
+#define ZTRAITS_WHITESANDS list( \
+	ZTRAIT_MINING = TRUE, \
 	ZTRAIT_TEMPERATURE_GRADIENT = TRUE, \
-    ZTRAIT_SAND_RUINS = TRUE, \
-    ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
-    ZTRAIT_BASETURF = /turf/open/floor/plating/asteroid/whitesands)
-#define ZTRAITS_ICEMOON list(\
-    ZTRAIT_MINING = TRUE, \
-    ZTRAIT_SNOWSTORM = TRUE, \
-    ZTRAIT_ICE_RUINS = TRUE, \
-    ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
-    ZTRAIT_DOWN = -1, \
-    ZTRAIT_BASETURF = /turf/open/floor/plating/asteroid/snow/ice)
-#define ZTRAITS_ICEMOON_UNDERGROUND list(\
-    ZTRAIT_MINING = TRUE, \
-    ZTRAIT_ICE_RUINS_UNDERGROUND = TRUE, \
-    ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
-    ZTRAIT_UP = 1, \
-    ZTRAIT_BASETURF = /turf/open/lava/plasma/ice_moon)
+	ZTRAIT_SAND_RUINS = TRUE, \
+	ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
+	ZTRAIT_BASETURF = /turf/open/floor/plating/asteroid/whitesands)
+#define ZTRAITS_ICEMOON list( \
+	ZTRAIT_MINING = TRUE, \
+	ZTRAIT_SNOWSTORM = TRUE, \
+	ZTRAIT_ICE_RUINS = TRUE, \
+	ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
+	ZTRAIT_DOWN = -1, \
+	ZTRAIT_BASETURF = /turf/open/floor/plating/asteroid/snow/ice)
+#define ZTRAITS_ICEMOON_UNDERGROUND list( \
+	ZTRAIT_MINING = TRUE, \
+	ZTRAIT_ICE_RUINS_UNDERGROUND = TRUE, \
+	ZTRAIT_BOMBCAP_MULTIPLIER = 2, \
+	ZTRAIT_UP = 1, \
+	ZTRAIT_BASETURF = /turf/open/lava/plasma/ice_moon)
 
 #define DL_NAME "name"
 #define DL_TRAITS "traits"
 #define DECLARE_LEVEL(NAME, TRAITS) list(DL_NAME = NAME, DL_TRAITS = TRAITS)
 
 // must correspond to _basemap.dm for things to work correctly
-#define DEFAULT_MAP_TRAITS list(\
-    DECLARE_LEVEL("CentCom", ZTRAITS_CENTCOM),\
+#define DEFAULT_MAP_TRAITS list( \
+	DECLARE_LEVEL("CentCom", ZTRAITS_CENTCOM), \
 )
 
-// Camera lock flags
-#define CAMERA_LOCK_STATION 1
-#define CAMERA_LOCK_MINING 2
-#define CAMERA_LOCK_CENTCOM 4
-
 //Reserved turf type
-#define RESERVED_TURF_TYPE /turf/open/space/basic			//What the turf is when not being used
+#define RESERVED_TURF_TYPE /turf/open/space/basic //What the turf is when not being used
 
 //Ruin Generation
 
@@ -141,3 +138,15 @@ require only minor tweaks.
 #define BIOME_LOWMEDIUM_HUMIDITY "lowmedium_humidity"
 #define BIOME_HIGHMEDIUM_HUMIDITY "highmedium_humidity"
 #define BIOME_HIGH_HUMIDITY "high_humidity"
+
+#define ALLOCATION_FREE 1
+#define ALLOCATION_QUADRANT 2
+
+#define QUADRANT_MAP_SIZE 127
+
+#define QUADRANT_SIZE_BORDER 3
+#define TRANSIT_SIZE_BORDER 3
+
+#define DEFAULT_ALLOC_JUMP 5
+
+#define MAP_EDGE_PAD 5

@@ -32,7 +32,7 @@ GLOBAL_LIST_INIT(high_priority_sentience, typecacheof(list(
 /datum/round_event/ghost_role/sentience/announce(fake)
 	var/sentience_report = ""
 
-	var/data = pick("scans from our long-range sensors", "our sophisticated probabilistic models", "our omnipotence", "the communications traffic on your station", "energy emissions we detected", "\[REDACTED\]")
+	var/data = pick("scans from our long-range sensors", "our sophisticated probabilistic models", "our omnipotence", "the communications traffic in your sector", "energy emissions we detected", "\[REDACTED\]")
 	var/pets = pick("animals/bots", "bots/animals", "pets", "simple animals", "lesser lifeforms", "\[REDACTED\]")
 	var/strength = pick("human", "moderate", "lizard", "security", "command", "clown", "low", "very low", "\[REDACTED\]")
 
@@ -55,9 +55,6 @@ GLOBAL_LIST_INIT(high_priority_sentience, typecacheof(list(
 	var/list/low_pri = list()
 
 	for(var/mob/living/simple_animal/L in GLOB.alive_mob_list)
-		var/turf/T = get_turf(L)
-		if(!T || !is_station_level(T.z))
-			continue
 		if((L in GLOB.player_list) || L.mind || (L.flags_1 & HOLOGRAM_1))
 			continue
 		if(is_type_in_typecache(L, GLOB.high_priority_sentience))
@@ -102,7 +99,7 @@ GLOBAL_LIST_INIT(high_priority_sentience, typecacheof(list(
 	return SUCCESSFUL_SPAWN
 
 /datum/round_event_control/sentience/all
-	name = "Station-wide Human-level Intelligence"
+	name ="Sector-wide Human-level Intelligence"
 	typepath = /datum/round_event/ghost_role/sentience/all
 	weight = 0
 

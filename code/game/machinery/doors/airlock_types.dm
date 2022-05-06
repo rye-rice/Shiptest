@@ -272,7 +272,7 @@
 	DA.update_name()
 	qdel(src)
 
-/obj/machinery/door/airlock/plasma/BlockSuperconductivity() //we don't stop the heat~
+/obj/machinery/door/airlock/plasma/BlockThermalConductivity() //we don't stop the heat~
 	return 0
 
 /obj/machinery/door/airlock/plasma/attackby(obj/item/C, mob/user, params)
@@ -543,7 +543,7 @@
 			SEND_SOUND(L, sound(pick('sound/hallucinations/turn_around1.ogg','sound/hallucinations/turn_around2.ogg'),0,1,50))
 			flash_color(L, flash_color="#960000", flash_time=20)
 			L.Paralyze(40)
-			L.throw_at(throwtarget, 5, 1,src)
+			L.throw_at(throwtarget, 5, 1)
 		return 0
 
 /obj/machinery/door/airlock/cult/proc/conceal()

@@ -44,6 +44,13 @@
 			M.add_fingerprint(user)
 			qdel(src)
 
+	else if(istype(W, /obj/item/pickaxe/drill/jackhammer))
+		to_chat(user, "<span class='notice'>You smash through the girder!</span>")
+		new /obj/item/stack/sheet/metal(get_turf(src))
+		W.play_tool_sound(src)
+		qdel(src)
+
+
 	else if(istype(W, /obj/item/stack))
 		if(iswallturf(loc))
 			to_chat(user, "<span class='warning'>There is already a wall present!</span>")
@@ -221,9 +228,11 @@
 
 	. = FALSE
 	if(state == GIRDER_DISPLACED)
-		user.visible_message("<span class='warning'>[user] disassembles the girder.</span>",
-							 "<span class='notice'>You start to disassemble the girder...</span>",
-							 "<span class='hear'>You hear clanking and banging noises.</span>")
+		user.visible_message(
+			"<span class='warning'>[user] disassembles the girder.</span>",
+			"<span class='notice'>You start to disassemble the girder...</span>",
+			"<span class='hear'>You hear clanking and banging noises.</span>"
+		)
 		if(tool.use_tool(src, user, 40, volume=100))
 			if(state != GIRDER_DISPLACED)
 				return
@@ -352,6 +361,13 @@
 			transfer_fingerprints_to(R)
 			qdel(src)
 
+	else if(istype(W, /obj/item/pickaxe/drill/jackhammer))
+		to_chat(user, "<span class='notice'>Your jackhammer smashes through the girder!</span>")
+		var/obj/item/stack/sheet/runed_metal/R = new(drop_location(), 2)
+		transfer_fingerprints_to(R)
+		W.play_tool_sound(src)
+		qdel(src)
+
 	else if(istype(W, /obj/item/stack/sheet/runed_metal))
 		var/obj/item/stack/sheet/runed_metal/R = W
 		if(R.get_amount() < 1)
@@ -419,6 +435,13 @@
 			transfer_fingerprints_to(B)
 			qdel(src)
 
+	else if(istype(W, /obj/item/pickaxe/drill/jackhammer))
+		to_chat(user, "<span class='notice'>Your jackhammer smashes through the girder!</span>")
+		var/obj/item/stack/tile/bronze/B = new(drop_location(), 2)
+		transfer_fingerprints_to(B)
+		W.play_tool_sound(src)
+		qdel(src)
+
 	else if(istype(W, /obj/item/stack/tile/bronze))
 		var/obj/item/stack/tile/bronze/B = W
 		if(B.get_amount() < 2)
@@ -436,3 +459,4 @@
 
 	else
 		return ..()
+

@@ -127,7 +127,7 @@ GLOBAL_LIST_EMPTY(bodycontainers) //Let them act as spawnpoints for revenants an
 	playsound(src, 'sound/effects/roll.ogg', 5, TRUE)
 	var/turf/T = get_step(src, dir)
 	connected.setDir(dir)
-	for(var/atom/movable/AM in src)
+	for(var/atom/movable/AM as anything in src)
 		AM.forceMove(T)
 	update_icon()
 
@@ -229,8 +229,8 @@ GLOBAL_LIST_EMPTY(crematoriums)
 	connected = new /obj/structure/tray/c_tray(src)
 	connected.connected = src
 
-/obj/structure/bodycontainer/crematorium/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock, idnum, override=FALSE)
-	id = "[idnum][id]"
+/obj/structure/bodycontainer/crematorium/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
+	id = "[REF(port)][id]"
 
 /obj/structure/bodycontainer/crematorium/update_icon()
 	if(!connected || connected.loc != src)

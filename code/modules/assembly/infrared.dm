@@ -152,10 +152,8 @@
 		return FALSE
 	pulse(FALSE)
 	audible_message("[icon2html(src, hearers(src))] *beep* *beep* *beep*", null, hearing_range)
-	for(var/CHM in get_hearers_in_view(hearing_range, src))
-		if(ismob(CHM))
-			var/mob/LM = CHM
-			LM.playsound_local(get_turf(src), 'sound/machines/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
+	for(var/mob/hearing_mob in get_hearers_in_view(hearing_range, src))
+		hearing_mob.playsound_local(get_turf(src), 'sound/machines/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
 	next_activate =  world.time + 30
 
 /obj/item/assembly/infra/proc/switchListener(turf/newloc)
@@ -167,7 +165,7 @@
 	listeningTo = newloc
 
 /obj/item/assembly/infra/proc/check_exit(datum/source, atom/movable/offender)
-	SIGNAL_HANDLER_DOES_SLEEP
+	SIGNAL_HANDLER
 
 	if(QDELETED(src))
 		return
@@ -177,7 +175,7 @@
 		var/obj/item/I = offender
 		if (I.item_flags & ABSTRACT)
 			return
-	return refreshBeam()
+	INVOKE_ASYNC(src, .proc/refreshBeam)
 
 /obj/item/assembly/infra/setDir()
 	. = ..()
@@ -228,12 +226,19 @@
 	pass_flags_self = LETPASSTHROW
 	var/obj/item/assembly/infra/master
 
-/obj/effect/beam/i_beam/Crossed(atom/movable/AM as mob|obj)
+/obj/effect/beam/i_beam/Initialize()
 	. = ..()
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
+/obj/effect/beam/i_beam/proc/on_entered(datum/source, atom/movable/AM as mob|obj)
+	SIGNAL_HANDLER
 	if(istype(AM, /obj/effect/beam))
 		return
 	if (isitem(AM))
 		var/obj/item/I = AM
 		if (I.item_flags & ABSTRACT)
 			return
-	master.trigger_beam(AM, get_turf(src))
+	INVOKE_ASYNC(master, /obj/item/assembly/infra/proc/trigger_beam, AM, get_turf(src))

@@ -60,7 +60,7 @@
 	lose_text = ""
 	var/paralysis_type
 	var/list/paralysis_traits = list()
-	 //for descriptions
+	//for descriptions
 
 /datum/brain_trauma/severe/paralysis/New(specific_type)
 	if(specific_type)
@@ -179,7 +179,7 @@
 		return
 
 	var/high_stress = (stress > 60) //things get psychosomatic from here on
-	switch(rand(1,6))
+	switch(rand(1,5))
 		if(1)
 			if(!high_stress)
 				to_chat(owner, "<span class='warning'>You feel sick...</span>")

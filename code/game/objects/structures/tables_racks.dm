@@ -36,10 +36,16 @@
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = list(SMOOTH_GROUP_TABLES)
 	canSmoothWith = list(SMOOTH_GROUP_TABLES)
+	/// The type created when this table is flipped
+	var/flipped_table_type = /obj/structure/flippedtable
+	/// Whether or not this table can actually be flipped. TODO: Make setting flipped_table_type to null do this instead and remove this var
+	var/can_flip = TRUE
 
 /obj/structure/table/examine(mob/user)
 	. = ..()
 	. += deconstruction_hints(user)
+	if(can_flip)
+		. += "<span class='notice'>You can flip it by control shift-clicking the table.</span>"
 
 /obj/structure/table/proc/deconstruction_hints(mob/user)
 	return "<span class='notice'>The top is <b>screwed</b> on, but the main <b>bolts</b> are also visible.</span>"
@@ -221,6 +227,28 @@
 /obj/structure/table/proc/AfterPutItemOnTable(obj/item/I, mob/living/user)
 	return
 
+/obj/structure/table/CtrlShiftClick(mob/living/user) // table flipping
+	. = ..()
+	if(!istype(user) || !user.can_interact_with(src))
+		return
+	if(can_flip)
+		user.visible_message("<span class='danger'>[user] starts flipping [src]!</span>", "<span class='notice'>You start flipping over the [src]!</span>")
+		if(do_after(user, max_integrity/4))
+			var/obj/structure/flippedtable/flipped = new flipped_table_type(src.loc)
+			flipped.name = "flipped [src.name]"
+			flipped.desc = "[src.desc] It is flipped!"
+			flipped.icon_state = src.base_icon_state
+			var/new_dir = get_dir(user, flipped)
+			flipped.dir = new_dir
+			if(new_dir == NORTH)
+				flipped.layer = BELOW_MOB_LAYER
+			flipped.max_integrity = src.max_integrity
+			flipped.obj_integrity = src.obj_integrity
+			flipped.table_type = src.type
+			user.visible_message("<span class='danger'>[user] flips over the [src]!</span>", "<span class='notice'>You flip over the [src]!</span>")
+			playsound(src, 'sound/items/trayhit2.ogg', 100)
+			qdel(src)
+
 /obj/structure/table/deconstruct(disassembled = TRUE, wrench_disassembly = 0)
 	if(!(flags_1 & NODECONSTRUCT_1))
 		var/turf/T = get_turf(src)
@@ -254,6 +282,7 @@
 	canSmoothWith = null
 	icon = 'icons/obj/smooth_structures/rollingtable.dmi'
 	icon_state = "rollingtable"
+	can_flip = FALSE
 	var/list/attached_items = list()
 
 /obj/structure/table/rolling/AfterPutItemOnTable(obj/item/I, mob/living/user)
@@ -300,12 +329,17 @@
 	debris += new frame
 	debris += new /obj/item/shard
 
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 /obj/structure/table/glass/Destroy()
 	QDEL_LIST(debris)
 	. = ..()
 
-/obj/structure/table/glass/Crossed(atom/movable/AM)
-	. = ..()
+/obj/structure/table/glass/proc/on_entered(datum/source, atom/movable/AM)
+	SIGNAL_HANDLER
 	if(flags_1 & NODECONSTRUCT_1)
 		return
 	if(!isliving(AM))
@@ -465,6 +499,12 @@
 	buildstack = /obj/item/stack/tile/carpet/royalblue
 	smooth_icon = 'icons/obj/smooth_structures/fancy_table_royalblue.dmi'
 
+/obj/structure/table/wood/fancy/red_gold
+	icon_state = "fancy_table_red"
+	base_icon_state = "fancy_table_red"
+	buildstack = /obj/item/stack/tile/carpet/red_gold
+	smooth_icon = 'icons/obj/smooth_structures/fancy_table_red.dmi'
+
 /*
  * Reinforced tables
  */
@@ -479,6 +519,7 @@
 	max_integrity = 200
 	integrity_failure = 0.25
 	armor = list("melee" = 10, "bullet" = 30, "laser" = 30, "energy" = 100, "bomb" = 20, "bio" = 0, "rad" = 0, "fire" = 80, "acid" = 70)
+	can_flip = FALSE //It's bolted to the ground mate
 
 /obj/structure/table/reinforced/deconstruction_hints(mob/user)
 	if(deconstruction_ready)
@@ -526,8 +567,8 @@
 /obj/structure/table/optable
 	name = "operating table"
 	desc = "Used for advanced medical procedures."
-	icon = 'icons/obj/surgery.dmi'
-	icon_state = "optable"
+	icon = 'goon/icons/obj/surgery.dmi'
+	icon_state = "table1"
 	buildstack = /obj/item/stack/sheet/mineral/silver
 	smoothing_flags = NONE
 	smoothing_groups = null
@@ -535,6 +576,7 @@
 	can_buckle = 1
 	buckle_lying = NO_BUCKLE_LYING
 	buckle_requires_restraints = TRUE
+	can_flip = FALSE
 	var/mob/living/carbon/human/patient = null
 	var/obj/machinery/computer/operating/computer = null
 

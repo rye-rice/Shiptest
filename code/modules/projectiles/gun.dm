@@ -18,6 +18,7 @@
 	force = 5
 	item_flags = NEEDS_PERMIT
 	attack_verb = list("struck", "hit", "bashed")
+	pickup_sound =  'sound/items/handling/gun_pickup.ogg'
 
 	var/fire_sound = 'sound/weapons/gun/pistol/shot.ogg'
 	var/vary_fire_sound = TRUE
@@ -44,6 +45,8 @@
 	var/spread = 0						//Spread induced by the gun itself.
 	var/randomspread = 1				//Set to 0 for shotguns. This is used for weapons that don't fire all their bullets at once.
 
+	var/projectile_damage_multiplier = 1 //Alters projectile damage multiplicatively based on this value. Use it for "better" or "worse" weapons that use the same ammo.
+
 	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
 
@@ -51,13 +54,11 @@
 
 	var/can_flashlight = FALSE //if a flashlight can be added or removed if it already has one.
 	var/obj/item/flashlight/seclite/gun_light
-	var/mutable_appearance/flashlight_overlay
 	var/datum/action/item_action/toggle_gunlight/alight
 	var/gunlight_state = "flight"
 
 	var/can_bayonet = FALSE //if a bayonet can be added or removed if it already has one.
 	var/obj/item/kitchen/knife/bayonet
-	var/mutable_appearance/knife_overlay
 	var/knife_x_offset = 0
 	var/knife_y_offset = 0
 
@@ -400,14 +401,8 @@
 			return
 		to_chat(user, "<span class='notice'>You attach [K] to [src]'s bayonet lug.</span>")
 		bayonet = K
-		var/state = "bayonet"							//Generic state.
-		if(bayonet.icon_state in icon_states('icons/obj/guns/bayonets.dmi'))		//Snowflake state?
-			state = bayonet.icon_state
-		var/icon/bayonet_icons = 'icons/obj/guns/bayonets.dmi'
-		knife_overlay = mutable_appearance(bayonet_icons, state)
-		knife_overlay.pixel_x = knife_x_offset
-		knife_overlay.pixel_y = knife_y_offset
-		add_overlay(knife_overlay, TRUE)
+		update_icon()
+
 	else
 		return ..()
 
@@ -496,9 +491,7 @@
 	if(!bayonet)
 		return
 	bayonet = null
-	if(knife_overlay)
-		cut_overlay(knife_overlay, TRUE)
-		knife_overlay = null
+	update_icon()
 	return TRUE
 
 /obj/item/gun/proc/clear_gunlight()
@@ -574,6 +567,29 @@
 		azoom.Remove(user)
 	if(zoomed)
 		zoom(user, user.dir)
+
+/obj/item/gun/update_overlays()
+	. = ..()
+	if(gun_light)
+		var/mutable_appearance/flashlight_overlay
+		var/state = "[gunlight_state][gun_light.on? "_on":""]"	//Generic state.
+		if(gun_light.icon_state in icon_states('icons/obj/guns/flashlights.dmi'))	//Snowflake state?
+			state = gun_light.icon_state
+		flashlight_overlay = mutable_appearance('icons/obj/guns/flashlights.dmi', state)
+		flashlight_overlay.pixel_x = flight_x_offset
+		flashlight_overlay.pixel_y = flight_y_offset
+		. += flashlight_overlay
+
+	if(bayonet)
+		var/mutable_appearance/knife_overlay
+		var/state = "bayonet"							//Generic state.
+		if(bayonet.icon_state in icon_states('icons/obj/guns/bayonets.dmi'))		//Snowflake state?
+			state = bayonet.icon_state
+		var/icon/bayonet_icons = 'icons/obj/guns/bayonets.dmi'
+		knife_overlay = mutable_appearance(bayonet_icons, state)
+		knife_overlay.pixel_x = knife_x_offset
+		knife_overlay.pixel_y = knife_y_offset
+		. += knife_overlay
 
 /obj/item/gun/proc/handle_suicide(mob/living/carbon/human/user, mob/living/carbon/human/target, params, bypass_timer)
 	if(!ishuman(user) || !ishuman(target))

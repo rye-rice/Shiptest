@@ -18,6 +18,8 @@
 	light_power = 0.8
 	light_on = FALSE
 	var/on = FALSE
+	var/toggle_on_sound = 'sound/items/flashlight_on.ogg'
+	var/toggle_off_sound = 'sound/items/flashlight_off.ogg'
 
 
 /obj/item/flashlight/Initialize()
@@ -38,7 +40,7 @@
 
 /obj/item/flashlight/attack_self(mob/user)
 	on = !on
-	playsound(user, on ? 'sound/weapons/magin.ogg' : 'sound/weapons/magout.ogg', 40, TRUE)
+	playsound(user, on ? toggle_on_sound : toggle_off_sound, 40, TRUE)
 	update_brightness(user)
 	for(var/X in actions)
 		var/datum/action/A = X
@@ -88,8 +90,10 @@
 					else
 						M.visible_message("<span class='notice'>[M] directs [src] to [M.p_their()] eyes.</span>", "<span class='notice'>You wave the light in front of your eyes.</span>")
 				else
-					user.visible_message("<span class='warning'>[user] directs [src] to [M]'s eyes.</span>", \
-										 "<span class='danger'>You direct [src] to [M]'s eyes.</span>")
+					user.visible_message(
+						"<span class='warning'>[user] directs [src] to [M]'s eyes.</span>",
+						"<span class='danger'>You direct [src] to [M]'s eyes.</span>"
+					)
 					if(M.stat == DEAD || (M.is_blind()) || !M.flash_act(visual = 1)) //mob is dead or fully blind
 						to_chat(user, "<span class='warning'>[M]'s pupils don't react to the light!</span>")
 					else if(M.dna && M.dna.check_mutation(XRAY))	//mob has X-ray vision
@@ -153,8 +157,10 @@
 						to_chat(user, "<span class='notice'>You have [pill_count] implanted pill[pill_count > 1 ? "s" : ""].</span>")
 
 				else
-					user.visible_message("<span class='notice'>[user] directs [src] to [M]'s mouth.</span>",\
-										 "<span class='notice'>You direct [src] to [M]'s mouth.</span>")
+					user.visible_message(
+						"<span class='notice'>[user] directs [src] to [M]'s mouth.</span>",
+						"<span class='notice'>You direct [src] to [M]'s mouth.</span>"
+					)
 					if(organ_count)
 						to_chat(user, "<span class='notice'>Inside [their] mouth [organ_count > 1 ? "are" : "is"] [organ_list].</span>")
 					else
@@ -365,7 +371,7 @@
 /obj/item/flashlight/lantern/syndicate //WS edit - LepiCorp stuff
 	desc = "A mining lantern with an extra-bright bulb. Manufactured by LepiCorp."
 	light_range = 10 //End WS edit
-	
+
 /obj/item/flashlight/slime
 	gender = PLURAL
 	name = "glowing slime extract"
@@ -446,6 +452,8 @@
 	item_state = "glowstick"
 	grind_results = list(/datum/reagent/phenol = 15, /datum/reagent/hydrogen = 10, /datum/reagent/oxygen = 5) //Meth-in-a-stick
 	var/fuel = 0
+	toggle_on_sound = 'sound/effects/glowstick.ogg'
+	toggle_off_sound = 'sound/effects/glowstick.ogg'
 
 
 /obj/item/flashlight/glowstick/Initialize()

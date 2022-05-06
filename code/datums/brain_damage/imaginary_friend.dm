@@ -105,7 +105,7 @@
 	var/gender = pick(MALE, FEMALE)
 	real_name = random_unique_name(gender)
 	name = real_name
-	human_image = get_flat_human_icon(null, pick(SSjob.occupations))
+	human_image = get_flat_human_icon(null, outfit_override = pick(subtypesof(/datum/outfit/job)))
 
 /mob/camera/imaginary_friend/proc/Show()
 	if(!client) //nobody home
@@ -186,18 +186,17 @@
 		recall()
 		move_delay = world.time + 10
 		return FALSE
-	forceMove(NewLoc)
+	abstract_move(NewLoc)
 	move_delay = world.time + 1
 
-/mob/camera/imaginary_friend/forceMove(atom/destination)
-	dir = get_dir(get_turf(src), destination)
-	loc = destination
+/mob/camera/imaginary_friend/abstract_move(atom/destination)
+	. = ..()
 	Show()
 
 /mob/camera/imaginary_friend/proc/recall()
 	if(!owner || loc == owner)
 		return FALSE
-	forceMove(owner)
+	abstract_move(owner)
 
 /datum/action/innate/imaginary_join
 	name = "Join"

@@ -1,6 +1,6 @@
 /obj/machinery/computer/security
 	name = "security camera console"
-	desc = "Used to access the various cameras on the station."
+	desc = "Used to access the various cameras connected to a local network."
 	icon_screen = "cameras"
 	icon_keyboard = "security_key"
 	circuit = /obj/item/circuitboard/computer/security
@@ -48,10 +48,10 @@
 	qdel(cam_background)
 	return ..()
 
-/obj/machinery/computer/security/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock, idnum, override=FALSE)
+/obj/machinery/computer/security/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	for(var/i in network)
 		network -= i
-		network += "[idnum][i]"
+		network += "[REF(port)][i]"
 
 /obj/machinery/computer/security/ui_interact(mob/user, datum/tgui/ui)
 	// Update UI
@@ -167,7 +167,7 @@
 /obj/machinery/computer/security/proc/get_available_cameras()
 	var/list/L = list()
 	for (var/obj/machinery/camera/C in GLOB.cameranet.cameras)
-		if((is_away_level(z) || is_away_level(C.z)) && (C.get_virtual_z_level() != get_virtual_z_level()))//if on away mission, can only receive feed from same z_level cameras
+		if((is_away_level(src) || is_away_level(C)) && (C.virtual_z() != virtual_z()))//if on away mission, can only receive feed from same z_level cameras
 			continue
 		L.Add(C)
 	var/list/D = list()
@@ -187,7 +187,7 @@
 
 /obj/machinery/computer/security/wooden_tv
 	name = "security camera monitor"
-	desc = "An old TV hooked into the station's camera network."
+	desc = "An old TV hooked into a local camera network."
 	icon_state = "television"
 	icon_keyboard = null
 	icon_screen = "detective_tv"

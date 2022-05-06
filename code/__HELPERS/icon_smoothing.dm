@@ -25,14 +25,14 @@
 */
 
 //Redefinitions of the diagonal directions so they can be stored in one var without conflicts
-#define NORTH_JUNCTION		NORTH //(1<<0)
-#define SOUTH_JUNCTION		SOUTH //(1<<1)
-#define EAST_JUNCTION		EAST  //(1<<2)
-#define WEST_JUNCTION		WEST  //(1<<3)
-#define NORTHEAST_JUNCTION	(1<<4)
-#define SOUTHEAST_JUNCTION	(1<<5)
-#define SOUTHWEST_JUNCTION	(1<<6)
-#define NORTHWEST_JUNCTION	(1<<7)
+#define NORTH_JUNCTION NORTH //(1<<0)
+#define SOUTH_JUNCTION SOUTH //(1<<1)
+#define EAST_JUNCTION EAST  //(1<<2)
+#define WEST_JUNCTION WEST  //(1<<3)
+#define NORTHEAST_JUNCTION (1<<4)
+#define SOUTHEAST_JUNCTION (1<<5)
+#define SOUTHWEST_JUNCTION (1<<6)
+#define NORTHWEST_JUNCTION (1<<7)
 
 DEFINE_BITFIELD(smoothing_junction, list(
 	"NORTH_JUNCTION" = NORTH_JUNCTION,
@@ -50,8 +50,8 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define ADJ_FOUND 1
 #define NULLTURF_BORDER 2
 
-#define DEFAULT_UNDERLAY_ICON 			'icons/turf/floors.dmi'
-#define DEFAULT_UNDERLAY_ICON_STATE 	"plating"
+#define DEFAULT_UNDERLAY_ICON 'icons/turf/floors.dmi'
+#define DEFAULT_UNDERLAY_ICON_STATE "plating"
 
 
 #define SET_ADJ_IN_DIR(source, junction, direction, direction_flag) \
@@ -367,9 +367,13 @@ DEFINE_BITFIELD(smoothing_junction, list(
 					var/junction_dir = reverse_ndir(smoothing_junction)
 					var/turned_adjacency = REVERSE_DIR(junction_dir)
 					var/turf/neighbor_turf = get_step(src, turned_adjacency & (NORTH|SOUTH))
+					if(!neighbor_turf) //You can step out of map boundaries
+						return
 					var/mutable_appearance/underlay_appearance = mutable_appearance(layer = TURF_LAYER, plane = FLOOR_PLANE)
 					if(!neighbor_turf.get_smooth_underlay_icon(underlay_appearance, src, turned_adjacency))
 						neighbor_turf = get_step(src, turned_adjacency & (EAST|WEST))
+						if(!neighbor_turf) //You can step out of map boundaries
+							return
 						if(!neighbor_turf.get_smooth_underlay_icon(underlay_appearance, src, turned_adjacency))
 							neighbor_turf = get_step(src, turned_adjacency)
 							if(!neighbor_turf.get_smooth_underlay_icon(underlay_appearance, src, turned_adjacency))

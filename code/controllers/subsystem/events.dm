@@ -3,6 +3,8 @@ SUBSYSTEM_DEF(events)
 	init_order = INIT_ORDER_EVENTS
 	runlevels = RUNLEVEL_GAME
 
+	can_fire = FALSE
+
 	var/list/control = list()	//list of all datum/round_event_control. Used for selecting events based on weight and occurrences.
 	var/list/running = list()	//list of all existing /datum/round_event
 	var/list/currentrun = list()
@@ -100,7 +102,7 @@ SUBSYSTEM_DEF(events)
 // Why the heck is this here! Took me so damn long to find!
 /client/proc/forceEvent()
 	set name = "Trigger Event"
-	set category = "Admin - Events"
+	set category = "Admin.Events"
 
 	if(!holder ||!check_rights(R_FUN))
 		return

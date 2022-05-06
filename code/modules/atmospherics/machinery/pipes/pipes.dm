@@ -1,4 +1,5 @@
 /obj/machinery/atmospherics/pipe
+	plane = FLOOR_PLANE
 	damage_deflection = 12
 	var/datum/gas_mixture/air_temporary //used when reconstructing a pipeline that broke
 	var/volume = 0
@@ -15,7 +16,7 @@
 /obj/machinery/atmospherics/pipe/New()
 	add_atom_colour(pipe_color, FIXED_COLOUR_PRIORITY)
 	volume = 35 * device_type
-	..()
+	return ..()
 
 ///I have no idea why there's a new and at this point I'm too afraid to ask
 /obj/machinery/atmospherics/pipe/Initialize(mapload)
@@ -33,10 +34,11 @@
 /obj/machinery/atmospherics/pipe/destroy_network()
 	QDEL_NULL(parent)
 
-/obj/machinery/atmospherics/pipe/build_network()
-	if(QDELETED(parent))
-		parent = new
-		parent.build_pipeline(src)
+/obj/machinery/atmospherics/pipe/get_rebuild_targets()
+	if(!QDELETED(parent))
+		return
+	parent = new
+	return list(parent)
 
 /obj/machinery/atmospherics/pipe/proc/releaseAirToTurf()
 	if(air_temporary)
@@ -45,13 +47,26 @@
 		air_update_turf()
 
 /obj/machinery/atmospherics/pipe/return_air()
+	if(air_temporary)
+		return air_temporary
+	if(!parent)
+		rebuild_pipes()
 	return parent.air
 
 /obj/machinery/atmospherics/pipe/return_analyzable_air()
+	if(air_temporary)
+		return air_temporary
 	return parent.air
 
 /obj/machinery/atmospherics/pipe/remove_air(amount)
+	if(air_temporary)
+		return air_temporary.remove(amount)
 	return parent.air.remove(amount)
+
+/obj/machinery/atmospherics/pipe/remove_air_ratio(ratio)
+	if(air_temporary)
+		return air_temporary.remove_ratio(ratio)
+	return parent.air.remove_ratio(ratio)
 
 /obj/machinery/atmospherics/pipe/attackby(obj/item/W, mob/user, params)
 	if(istype(W, /obj/item/pipe_meter))

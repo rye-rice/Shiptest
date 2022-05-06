@@ -1,13 +1,13 @@
 //MEDBOT
 //MEDBOT PATHFINDING
 //MEDBOT ASSEMBLY
-#define MEDBOT_PANIC_NONE	0
-#define MEDBOT_PANIC_LOW	15
-#define MEDBOT_PANIC_MED	35
-#define MEDBOT_PANIC_HIGH	55
-#define MEDBOT_PANIC_FUCK	70
-#define MEDBOT_PANIC_ENDING	90
-#define MEDBOT_PANIC_END	100
+#define MEDBOT_PANIC_NONE 0
+#define MEDBOT_PANIC_LOW 15
+#define MEDBOT_PANIC_MED 35
+#define MEDBOT_PANIC_HIGH 55
+#define MEDBOT_PANIC_FUCK 70
+#define MEDBOT_PANIC_ENDING 90
+#define MEDBOT_PANIC_END 100
 
 /mob/living/simple_animal/bot/medbot
 	name = "\improper Medibot"
@@ -74,6 +74,15 @@
 	skin = "bezerk"
 	heal_amount = 10
 
+/mob/living/simple_animal/bot/medbot/rockplanet
+	name = "\improper Abandoned Medibot"
+	desc = "A little medical robot. They look like they have some sort of bloodlust in their eyes."
+	skin = "evil"
+	emagged = 2
+	remote_disabled = 1
+	locked = TRUE
+	faction = list("mining", "silicon" , "turret")
+
 /mob/living/simple_animal/bot/medbot/derelict
 	name = "\improper Old Medibot"
 	desc = "Looks like it hasn't been modified since the late 2080s."
@@ -106,10 +115,13 @@
 	access_card.access += J.get_access()
 	prev_access = access_card.access
 	qdel(J)
-	skin = new_skin
+	if(new_skin)
+		skin = new_skin
 	update_icon()
-	linked_techweb = SSresearch.science_tech
 
+/mob/living/simple_animal/bot/medbot/Destroy()
+	linked_techweb = null
+	. = ..()
 
 /mob/living/simple_animal/bot/medbot/bot_reset()
 	..()
@@ -184,6 +196,10 @@
 		update_icon()
 
 	else if(href_list["hptech"])
+		if(!linked_techweb)
+			speak("Warning: no linked server.")
+			return
+
 		var/oldheal_amount = heal_amount
 		var/tech_boosters
 		for(var/i in linked_techweb.researched_designs)
@@ -199,6 +215,14 @@
 	return
 
 /mob/living/simple_animal/bot/medbot/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(istype(W, /obj/item/multitool))
+		var/obj/item/multitool/multi = W
+		if(istype(multi.buffer, /obj/machinery/rnd/server))
+			var/obj/machinery/rnd/server/serv = multi.buffer
+			linked_techweb = serv.stored_research
+			visible_message("Linked to Server!")
+		return
+
 	var/current_health = health
 	..()
 	if(health < current_health) //if medbot took some damage
@@ -405,7 +429,7 @@
 	var/can_inject = FALSE
 	for(var/X in C.bodyparts)
 		var/obj/item/bodypart/part = X
-		if(part.status == BODYPART_ORGANIC)
+		if(IS_ORGANIC_LIMB(part))
 			can_inject = TRUE
 	if(!can_inject)
 		return 0

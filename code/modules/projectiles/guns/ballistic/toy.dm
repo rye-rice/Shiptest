@@ -1,7 +1,6 @@
 /obj/item/gun/ballistic/automatic/toy
 	name = "foam force SMG"
 	desc = "A prototype three-round burst toy submachine gun. Ages 8 and up."
-	icon = 'whitesands/icons/obj/guns/projectile.dmi' //WS edit: spritebase maintenance
 	icon_state = "saber"
 	item_state = "gun"
 	mag_type = /obj/item/ammo_box/magazine/toy/smg
@@ -25,7 +24,8 @@
 /obj/item/gun/ballistic/automatic/toy/pistol
 	name = "foam force pistol"
 	desc = "A small, easily concealable toy handgun. Ages 8 and up."
-	icon_state = "derringer" // WS edit - Fix various startup runtimes
+	icon = 'icons/obj/guns/projectile.dmi'
+	icon_state = "pistol" // WS edit - Fix various startup runtimes
 	bolt_type = BOLT_TYPE_LOCKING
 	w_class = WEIGHT_CLASS_SMALL
 	mag_type = /obj/item/ammo_box/magazine/toy/pistol

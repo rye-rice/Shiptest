@@ -12,7 +12,7 @@
 	var/name = "space wind"
 	/// description of weather
 	var/desc = "Heavy gusts of wind blanket the area, periodically knocking down anyone caught in the open."
-    /// The message displayed in chat to foreshadow the weather's beginning
+	/// The message displayed in chat to foreshadow the weather's beginning
 	var/telegraph_message = "<span class='warning'>The wind begins to pick up.</span>"
 	/// In deciseconds, how long from the beginning of the telegraph until the weather begins
 	var/telegraph_duration = 300
@@ -56,7 +56,7 @@
 	/// The list of z-levels that this weather is actively affecting
 	var/impacted_z_levels
 
-    /// Since it's above everything else, this is the layer used by default. TURF_LAYER is below mobs and walls if you need to use that.
+	/// Since it's above everything else, this is the layer used by default. TURF_LAYER is below mobs and walls if you need to use that.
 	var/overlay_layer = AREA_LAYER
 	/// Plane for the overlay
 	var/overlay_plane = BLACKNESS_PLANE
@@ -65,22 +65,35 @@
 	/// Used by mobs to prevent them from being affected by the weather
 	var/immunity_type = "storm"
 
-    /// The stage of the weather, from 1-4
+	/// The stage of the weather, from 1-4
 	var/stage = END_STAGE
-
-	/// Weight amongst other eligible weather. If zero, will never happen randomly.
-	var/probability = 0
-	/// The z-level trait to affect when run randomly or when not overridden.
-	var/target_trait = ZTRAIT_STATION
 
 	/// Whether a barometer can predict when the weather will happen
 	var/barometer_predictable = FALSE
-	/// For barometers to know when the next storm will hit
-	var/next_hit_time = 0
+	/// Whether the weather affects underground areas
+	var/affects_underground = TRUE
+	/// Whether the weather affects above ground areas
+	var/affects_aboveground = TRUE
+	/// Reference to the weather controller
+	var/datum/weather_controller/my_controller
 
-/datum/weather/New(z_levels)
+/datum/weather/New(datum/weather_controller/passed_controller)
 	..()
-	impacted_z_levels = z_levels
+	my_controller = passed_controller
+	my_controller.current_weathers[type] = src
+
+/datum/weather/Destroy()
+	LAZYREMOVE(my_controller.current_weathers, type)
+	my_controller = null
+	return ..()
+
+/datum/weather/process()
+	if(aesthetic || stage != MAIN_STAGE)
+		return
+	for(var/i in GLOB.mob_living_list)
+		var/mob/living/L = i
+		if(can_weather_act(L))
+			weather_act(L)
 
 /**
   * Telegraphs the beginning of the weather on the impacted z levels
@@ -102,14 +115,17 @@
 		var/area/A = V
 		if(protect_indoors && !A.outdoors)
 			continue
-		if(A.z in impacted_z_levels)
+		if(A.underground && !affects_underground)
+			continue
+		if(!A.underground && !affects_aboveground)
+			continue
+		if(!(my_controller.mapzone.is_in_bounds(A)))
 			impacted_areas |= A
 	weather_duration = rand(weather_duration_lower, weather_duration_upper)
-	START_PROCESSING(SSweather, src)
 	update_areas()
 	for(var/M in GLOB.player_list)
 		var/turf/mob_turf = get_turf(M)
-		if(mob_turf && (mob_turf.z in impacted_z_levels))
+		if(mob_turf && my_controller.mapzone.is_in_bounds(mob_turf))
 			if(telegraph_message)
 				to_chat(M, telegraph_message)
 			if(telegraph_sound)
@@ -130,7 +146,7 @@
 	update_areas()
 	for(var/M in GLOB.player_list)
 		var/turf/mob_turf = get_turf(M)
-		if(mob_turf && (mob_turf.z in impacted_z_levels))
+		if(mob_turf && my_controller.mapzone.is_in_bounds(mob_turf))
 			if(weather_message)
 				to_chat(M, weather_message)
 			if(weather_sound)
@@ -151,7 +167,7 @@
 	update_areas()
 	for(var/M in GLOB.player_list)
 		var/turf/mob_turf = get_turf(M)
-		if(mob_turf && (mob_turf.z in impacted_z_levels))
+		if(mob_turf && my_controller.mapzone.is_in_bounds(mob_turf))
 			if(end_message)
 				to_chat(M, end_message)
 			if(end_sound)
@@ -169,8 +185,8 @@
 	if(stage == END_STAGE)
 		return 1
 	stage = END_STAGE
-	STOP_PROCESSING(SSweather, src)
 	update_areas()
+	qdel(src)
 
 /**
   * Returns TRUE if the living mob can be affected by the weather
@@ -178,7 +194,7 @@
   */
 /datum/weather/proc/can_weather_act(mob/living/L)
 	var/turf/mob_turf = get_turf(L)
-	if(mob_turf && !(mob_turf.z in impacted_z_levels))
+	if(mob_turf && !my_controller.mapzone.is_in_bounds(mob_turf))
 		return
 	if(immunity_type in L.weather_immunities)
 		return

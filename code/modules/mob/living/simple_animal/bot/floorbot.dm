@@ -33,18 +33,29 @@
 	var/toolbox = /obj/item/storage/toolbox/mechanical
 	var/toolbox_color = ""
 
-	#define HULL_BREACH		1
-	#define LINE_SPACE_MODE		2
-	#define FIX_TILE		3
-	#define AUTO_TILE		4
-	#define PLACE_TILE		5
-	#define REPLACE_TILE		6
-	#define TILE_EMAG		7
+	#define HULL_BREACH 1
+	#define LINE_SPACE_MODE 2
+	#define FIX_TILE 3
+	#define AUTO_TILE 4
+	#define PLACE_TILE 5
+	#define REPLACE_TILE 6
+	#define TILE_EMAG 7
+
+/mob/living/simple_animal/bot/floorbot/rockplanet
+	name = "\improper Abandoned Floorbot"
+	desc = "Many years of abandonment has made this bot into a floor destroying robot! They look so excited!"
+	toolbox = /obj/item/storage/toolbox/syndicate/empty
+	toolbox_color = "s"
+	emagged = 2
+	remote_disabled = 1
+	locked = TRUE
+	faction = list("mining", "silicon" , "turret")
 
 /mob/living/simple_animal/bot/floorbot/Initialize(mapload, new_toolbox_color)
 	. = ..()
 	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
-	toolbox_color = new_toolbox_color
+	if(new_toolbox_color)
+		toolbox_color = new_toolbox_color
 	update_icon()
 	var/datum/job/engineer/J = new/datum/job/engineer
 	access_card.access += J.get_access()
@@ -311,7 +322,7 @@
 /mob/living/simple_animal/bot/floorbot/proc/repair(turf/target_turf)
 
 	if(isspaceturf(target_turf))
-		 //Must be a hull breach or in line mode to continue.
+		//Must be a hull breach or in line mode to continue.
 		if(!is_hull_breach(target_turf) && !targetdirection)
 			target = null
 			return

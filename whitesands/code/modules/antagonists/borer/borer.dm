@@ -46,13 +46,13 @@
 	addtimer(CALLBACK(src, .proc/return_control, src.loc), delay)
 
 /mob/living/captive_brain/proc/return_control(mob/living/simple_animal/borer/B)
-    if(!B || !B.controlling)
-        return
+	if(!B || !B.controlling)
+		return
 
-    B.victim.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(5, 10))
-    to_chat(src, "<span class='danger'>With an immense exertion of will, you regain control of your body!</span>")
-    to_chat(B, "<span class='danger'>You feel control of the host brain ripped from your grasp, and retract your probosci before the wild neural impulses can damage you.</span>")
-    B.detatch()
+	B.victim.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(5, 10))
+	to_chat(src, "<span class='danger'>With an immense exertion of will, you regain control of your body!</span>")
+	to_chat(B, "<span class='danger'>You feel control of the host brain ripped from your grasp, and retract your probosci before the wild neural impulses can damage you.</span>")
+	B.detatch()
 
 GLOBAL_LIST_EMPTY(borers)
 GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
@@ -571,10 +571,10 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 	forceMove(get_turf(victim))
 
 	reset_perspective(null)
-	machine = null
+	unset_machine()
 
 	victim.reset_perspective(null)
-	victim.machine = null
+	victim.unset_machine()
 
 	var/mob/living/V = victim
 	V.verbs -= /mob/living/proc/borer_comm
@@ -986,7 +986,8 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 /mob/living/simple_animal/borer/proc/GrantControlActions()
 	talk_to_brain_action.Grant(victim)
 	give_back_control_action.Grant(victim)
-	make_larvae_action.Grant(victim)
+	if(is_team_borer) //The entire structure of this mob is fucking garbage.
+		make_larvae_action.Grant(victim)
 
 /mob/living/simple_animal/borer/proc/RemoveControlActions()
 	talk_to_brain_action.Remove(victim)
@@ -1174,7 +1175,7 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 			borertext += "<br><b>[B.controlling ? B.victim.key : B.key]</b> was <b>[B.truename]</b> and "
 			var/turf/location = get_turf(B)
 			if(B.stat != DEAD)
-				if(is_centcom_level(location.z) && B.victim)
+				if(is_centcom_level(location) && B.victim)
 					borertext += "<span class='greentext'>escaped with a host</span>"
 				else
 					borertext += "<span class='redtext'>failed to find a host</span>"
@@ -1239,7 +1240,7 @@ GLOBAL_VAR_INIT(total_borer_hosts_needed, 3)
 		for(var/mob/living/carbon/C in GLOB.mob_list)
 			var/mob/living/simple_animal/borer/D = C.has_brain_worms()
 			var/turf/location = get_turf(C)
-			if(is_centcom_level(location.z) && D && D.stat != DEAD)
+			if(is_centcom_level(location) && D && D.stat != DEAD)
 				total_borer_hosts++
 		if(total_borer_hosts >= target_amount)
 			return TRUE

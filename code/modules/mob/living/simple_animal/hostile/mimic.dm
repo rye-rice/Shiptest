@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile/mimic
 	name = "crate"
 	desc = "A rectangular steel crate."
-	icon = 'goon/icons/obj/crates.dmi'
+	icon = 'icons/obj/crates.dmi'
 	icon_state = "crate"
 	icon_living = "crate"
 
@@ -119,7 +119,7 @@ GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/ca
 		death()
 
 /mob/living/simple_animal/hostile/mimic/copy/death()
-	for(var/atom/movable/M in src)
+	for(var/atom/movable/M as anything in src)
 		M.forceMove(get_turf(src))
 	..()
 
@@ -183,8 +183,15 @@ GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/ca
 				"<span class='userdanger'>\The [src] knocks you down!</span>")
 
 /mob/living/simple_animal/hostile/mimic/copy/machine
-	speak = list("HUMANS ARE IMPERFECT!", "YOU SHALL BE ASSIMILATED!", "YOU ARE HARMING YOURSELF", "You have been deemed hazardous. Will you comply?", \
-				 "My logic is undeniable.", "One of us.", "FLESH IS WEAK", "THIS ISN'T WAR, THIS IS EXTERMINATION!")
+	speak = list(
+		"HUMANS ARE IMPERFECT!",
+		"YOU SHALL BE ASSIMILATED!",
+		"YOU ARE HARMING YOURSELF",
+		"You have been deemed hazardous. Will you comply?",
+		"My logic is undeniable.",
+		"One of us.",
+		"FLESH IS WEAK",
+		"THIS ISN'T WAR, THIS IS EXTERMINATION!")
 	speak_chance = 7
 
 /mob/living/simple_animal/hostile/mimic/copy/machine/CanAttack(atom/the_target)
@@ -304,7 +311,7 @@ GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/ca
 /mob/living/simple_animal/hostile/mimic/xenobio/death()
 	var/obj/structure/closet/crate/C = new(get_turf(src))
 	// Put loot in crate
-	for(var/atom/movable/AM in src)
+	for(var/atom/movable/AM as anything in src)
 		AM.forceMove(C)
 	return ..()
 
@@ -321,7 +328,7 @@ GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/ca
 		opened = TRUE
 		icon_state = "crateopen"
 		playsound(src, open_sound, 50, TRUE)
-		for(var/atom/movable/AM in src)
+		for(var/atom/movable/AM as anything in src)
 			AM.forceMove(loc)
 	else
 		density = TRUE

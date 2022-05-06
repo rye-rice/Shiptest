@@ -43,7 +43,7 @@
 	//can we sniff? is there miasma in the air?
 	var/datum/gas_mixture/air = user.loc.return_air()
 
-	if(air.get_moles(/datum/gas/miasma))
+	if(air.get_moles(GAS_MIASMA))
 		user.adjust_disgust(sensitivity * 45)
 		to_chat(user, "<span class='warning'>With your overly sensitive nose, you get a whiff of stench and feel sick! Try moving to a cleaner area!</span>")
 		return
@@ -85,10 +85,10 @@
 	if(tracking_target == user)
 		to_chat(user,"<span class='warning'>You smell out the trail to yourself. Yep, it's you.</span>")
 		return
-	if(usr.get_virtual_z_level() < tracking_target.get_virtual_z_level())
+	if(usr.virtual_z() < tracking_target.virtual_z())
 		to_chat(user,"<span class='warning'>The trail leads... way up above you? Huh. They must be really, really far away.</span>")
 		return
-	else if(usr.get_virtual_z_level() > tracking_target.get_virtual_z_level())
+	else if(usr.virtual_z() > tracking_target.virtual_z())
 		to_chat(user,"<span class='warning'>The trail leads... way down below you? Huh. They must be really, really far away.</span>")
 		return
 	var/direction_text = "[dir2text(get_dir(usr, tracking_target))]"
@@ -219,8 +219,7 @@
 		return
 
 	var/list/parts = list()
-	for(var/X in C.bodyparts)
-		var/obj/item/bodypart/BP = X
+	for(var/obj/item/bodypart/BP as anything in C.bodyparts)
 		if(BP.body_part != HEAD && BP.body_part != CHEST)
 			if(BP.dismemberable)
 				parts += BP

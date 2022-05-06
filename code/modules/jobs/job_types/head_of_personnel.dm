@@ -8,29 +8,31 @@
 	spawn_positions = 1
 	supervisors = "the captain"
 	selection_color = "#ddddff"
-	req_admin_notify = 1
 	minimal_player_age = 10
 	exp_requirements = 180
+	officer = TRUE
 	wiki_page = "Head_of_Personnel" //WS Edit - Wikilinks/Warning
 	exp_type = EXP_TYPE_CREW
 	exp_type_department = EXP_TYPE_SERVICE
 
 	outfit = /datum/outfit/job/head_of_personnel
 
-	access = list(ACCESS_SECURITY, ACCESS_SEC_DOORS, ACCESS_COURT, ACCESS_WEAPONS,
-			            ACCESS_MEDICAL, ACCESS_PSYCHOLOGY, ACCESS_ENGINE, ACCESS_CHANGE_IDS, ACCESS_AI_UPLOAD, ACCESS_EVA, ACCESS_HEADS,
-			            ACCESS_ALL_PERSONAL_LOCKERS, ACCESS_MAINT_TUNNELS, ACCESS_BAR, ACCESS_JANITOR, ACCESS_CONSTRUCTION, ACCESS_MORGUE,
-			            ACCESS_CREMATORIUM, ACCESS_KITCHEN, ACCESS_CARGO, ACCESS_MAILSORTING, ACCESS_QM, ACCESS_HYDROPONICS, ACCESS_LAWYER,
-			            ACCESS_THEATRE, ACCESS_CHAPEL_OFFICE, ACCESS_LIBRARY, ACCESS_RESEARCH, ACCESS_MINING, ACCESS_VAULT, ACCESS_MINING_STATION,
-						ACCESS_MECH_MINING, ACCESS_MECH_ENGINE, ACCESS_MECH_SCIENCE, ACCESS_MECH_SECURITY, ACCESS_MECH_MEDICAL,
-			            ACCESS_HOP, ACCESS_RC_ANNOUNCE, ACCESS_KEYCARD_AUTH, ACCESS_GATEWAY, ACCESS_MINERAL_STOREROOM)
-	minimal_access = list(ACCESS_SECURITY, ACCESS_SEC_DOORS, ACCESS_COURT, ACCESS_WEAPONS,
-			            ACCESS_MEDICAL, ACCESS_PSYCHOLOGY, ACCESS_ENGINE, ACCESS_CHANGE_IDS, ACCESS_AI_UPLOAD, ACCESS_EVA, ACCESS_HEADS,
-			            ACCESS_ALL_PERSONAL_LOCKERS, ACCESS_MAINT_TUNNELS, ACCESS_BAR, ACCESS_JANITOR, ACCESS_CONSTRUCTION, ACCESS_MORGUE,
-			            ACCESS_CREMATORIUM, ACCESS_KITCHEN, ACCESS_CARGO, ACCESS_MAILSORTING, ACCESS_QM, ACCESS_HYDROPONICS, ACCESS_LAWYER,
-						ACCESS_MECH_MINING, ACCESS_MECH_ENGINE, ACCESS_MECH_SCIENCE, ACCESS_MECH_SECURITY, ACCESS_MECH_MEDICAL,
-			            ACCESS_THEATRE, ACCESS_CHAPEL_OFFICE, ACCESS_LIBRARY, ACCESS_RESEARCH, ACCESS_MINING, ACCESS_VAULT, ACCESS_MINING_STATION,
-			            ACCESS_HOP, ACCESS_RC_ANNOUNCE, ACCESS_KEYCARD_AUTH, ACCESS_GATEWAY, ACCESS_MINERAL_STOREROOM)
+	access = list(
+		ACCESS_SECURITY, ACCESS_SEC_DOORS, ACCESS_COURT, ACCESS_WEAPONS,
+		ACCESS_MEDICAL, ACCESS_PSYCHOLOGY, ACCESS_ENGINE, ACCESS_CHANGE_IDS, ACCESS_AI_UPLOAD, ACCESS_EVA, ACCESS_HEADS,
+		ACCESS_ALL_PERSONAL_LOCKERS, ACCESS_MAINT_TUNNELS, ACCESS_BAR, ACCESS_JANITOR, ACCESS_CONSTRUCTION, ACCESS_MORGUE,
+		ACCESS_CREMATORIUM, ACCESS_KITCHEN, ACCESS_CARGO, ACCESS_MAILSORTING, ACCESS_QM, ACCESS_HYDROPONICS, ACCESS_LAWYER,
+		ACCESS_THEATRE, ACCESS_CHAPEL_OFFICE, ACCESS_LIBRARY, ACCESS_RESEARCH, ACCESS_MINING, ACCESS_VAULT, ACCESS_MINING_STATION,
+		ACCESS_MECH_MINING, ACCESS_MECH_ENGINE, ACCESS_MECH_SCIENCE, ACCESS_MECH_SECURITY, ACCESS_MECH_MEDICAL,
+		ACCESS_HOP, ACCESS_RC_ANNOUNCE, ACCESS_KEYCARD_AUTH, ACCESS_GATEWAY, ACCESS_MINERAL_STOREROOM)
+	minimal_access = list(
+		ACCESS_SECURITY, ACCESS_SEC_DOORS, ACCESS_COURT, ACCESS_WEAPONS,
+		ACCESS_MEDICAL, ACCESS_PSYCHOLOGY, ACCESS_ENGINE, ACCESS_CHANGE_IDS, ACCESS_AI_UPLOAD, ACCESS_EVA, ACCESS_HEADS,
+		ACCESS_ALL_PERSONAL_LOCKERS, ACCESS_MAINT_TUNNELS, ACCESS_BAR, ACCESS_JANITOR, ACCESS_CONSTRUCTION, ACCESS_MORGUE,
+		ACCESS_CREMATORIUM, ACCESS_KITCHEN, ACCESS_CARGO, ACCESS_MAILSORTING, ACCESS_QM, ACCESS_HYDROPONICS, ACCESS_LAWYER,
+		ACCESS_MECH_MINING, ACCESS_MECH_ENGINE, ACCESS_MECH_SCIENCE, ACCESS_MECH_SECURITY, ACCESS_MECH_MEDICAL,
+		ACCESS_THEATRE, ACCESS_CHAPEL_OFFICE, ACCESS_LIBRARY, ACCESS_RESEARCH, ACCESS_MINING, ACCESS_VAULT, ACCESS_MINING_STATION,
+		ACCESS_HOP, ACCESS_RC_ANNOUNCE, ACCESS_KEYCARD_AUTH, ACCESS_GATEWAY, ACCESS_MINERAL_STOREROOM)
 	paycheck = PAYCHECK_COMMAND
 	paycheck_department = ACCOUNT_SRV
 
@@ -64,3 +66,52 @@
 	if(locate(/datum/holiday/ianbirthday) in SSevents.holidays)
 		undershirt = /datum/sprite_accessory/undershirt/ian
 
+/datum/outfit/job/head_of_personnel/nt
+	name = "First Officer (Nanotrasen)"
+	uniform = /obj/item/clothing/under/rank/command/head_of_personnel/nt
+	alt_uniform = null
+	alt_suit = null
+	shoes = /obj/item/clothing/shoes/laceup
+	head = /obj/item/clothing/head/hopcap/nt
+
+/datum/outfit/job/head_of_personnel/solgov
+	name = "Executive Officer (SolGov)"
+	uniform = /obj/item/clothing/under/rank/command/lieutenant
+	head = /obj/item/clothing/head/solgov
+	shoes = /obj/item/clothing/shoes/laceup
+
+/datum/outfit/job/head_of_personnel/solgov/rebel
+	name = "Executive Officer (Deserter)"
+	head = /obj/item/clothing/head/solgov/terragov
+
+/datum/outfit/job/head_of_personnel/pirate
+	name = "First Mate (Pirate)"
+	uniform = /obj/item/clothing/under/costume/russian_officer
+	shoes = /obj/item/clothing/shoes/jackboots
+	head = /obj/item/clothing/head/pirate
+	suit = /obj/item/clothing/suit/pirate
+
+/datum/outfit/job/head_of_personnel/western
+	name = "First Mate (Western)"
+	uniform = /obj/item/clothing/under/rank/security/detective/grey
+	alt_uniform = null
+	suit = null
+	alt_suit = null
+	shoes = /obj/item/clothing/shoes/cowboy/black
+	accessory = /obj/item/clothing/accessory/waistcoat
+	head = /obj/item/clothing/head/HoS/cowboy
+
+/datum/outfit/job/head_of_personnel/minutemen
+	name = "Bridge Officer (Colonial Minutemen)"
+
+	ears = /obj/item/radio/headset/heads/hos/alt
+	uniform = /obj/item/clothing/under/rank/command/minutemen
+	alt_uniform = null
+	suit = /obj/item/clothing/suit/toggle/lawyer/minutemen
+	alt_suit = null
+
+	shoes = /obj/item/clothing/shoes/combat
+	head = /obj/item/clothing/head/cowboy/sec/minutemen
+	backpack = /obj/item/storage/backpack
+	backpack_contents = list(/obj/item/storage/box/ids=1,\
+		/obj/item/melee/classic_baton/telescopic=1, /obj/item/modular_computer/tablet/preset/advanced = 1)

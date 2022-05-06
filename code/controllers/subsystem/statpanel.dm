@@ -10,21 +10,22 @@ SUBSYSTEM_DEF(statpanels)
 
 /datum/controller/subsystem/statpanels/fire(resumed = FALSE)
 	if (!resumed)
-		var/datum/map_config/cached = SSmapping.next_map_config
-		var/round_time = world.time - SSticker.round_start_time
+		var/actual_round_time = world.timeofday - SSticker.round_start_timeofday
+		var/game_round_time = world.time - SSticker.round_start_time
 		var/list/global_data = list(
-			"Map: [SSmapping.config?.map_name || "Loading..."]",
-			cached ? "Next Map: [cached.map_name]" : null,
 			"Round ID: [GLOB.round_id ? GLOB.round_id : "NULL"]",
-			"Server Time: [time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")]",
-			"Round Time: [round_time > MIDNIGHT_ROLLOVER ? "[round(round_time/MIDNIGHT_ROLLOVER)]:[worldtime2text()]" : worldtime2text()]",
-			"Station Time: [station_time_timestamp()]",
 			"Time Dilation: [round(SStime_track.time_dilation_current,1)]% AVG:([round(SStime_track.time_dilation_avg_fast,1)]%, [round(SStime_track.time_dilation_avg,1)]%, [round(SStime_track.time_dilation_avg_slow,1)]%)",
+			"Server Time: [time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")]",
+			"Local Time: [station_time_timestamp()]",
+			"\n",
+			"Internal Round Timer: [SSticker.round_start_time ? time2text(game_round_time, "hh:mm:ss", 0) : "The round hasn't started yet!"]",
+			"Actual Round Timer: [SSticker.round_start_timeofday ? time2text(actual_round_time, "hh:mm:ss", 0) : "The round hasn't started yet!"]",
+			"\n",
 			"Playing/Connected: [get_active_player_count()]/[GLOB.clients.len]"
 		)
 
 		if(SSshuttle.jump_mode != BS_JUMP_IDLE)
-			global_data += "Jump: [SSshuttle.jump_mode] [round(timeleft(SSshuttle.jump_timer)/10)]"
+			global_data += "Jump: [round(timeleft(SSshuttle.jump_timer)/10)]s"
 		encoded_global_data = url_encode(json_encode(global_data))
 		src.currentrun = GLOB.clients.Copy()
 		mc_data_encoded = null
@@ -41,6 +42,7 @@ SUBSYSTEM_DEF(statpanels)
 		if(!target.holder)
 			target << output("", "statbrowser:remove_admin_tabs")
 		else
+			target << output("[!!(target.prefs.toggles & SPLIT_ADMIN_TABS)]", "statbrowser:update_split_admin_tabs")
 			if(!("MC" in target.panel_tabs) || !("Tickets" in target.panel_tabs))
 				target << output("[url_encode(target.holder.href_token)]", "statbrowser:add_admin_tabs")
 			if(target.stat_tab == "MC")
@@ -52,7 +54,6 @@ SUBSYSTEM_DEF(statpanels)
 			if(target.stat_tab == "Tickets")
 				var/list/ahelp_tickets = GLOB.ahelp_tickets.stat_entry()
 				target << output("[url_encode(json_encode(ahelp_tickets))];", "statbrowser:update_tickets")
-			if(target.stat_tab == "Interviews")
 				var/datum/interview_manager/m = GLOB.interviews
 
 				// get open interview count
@@ -197,4 +198,10 @@ SUBSYSTEM_DEF(statpanels)
 	set hidden = TRUE
 
 	statbrowser_ready = TRUE
+	init_verbs()
+
+/client/verb/update_verbs()
+	set name = "Update Verbs"
+	set hidden = TRUE
+
 	init_verbs()

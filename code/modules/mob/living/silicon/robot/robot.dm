@@ -327,30 +327,46 @@
 		. += "Master AI: [connected_ai.name]"
 
 
-/mob/living/silicon/robot/triggerAlarm(class, area/A, O, obj/alarmsource)
-	if(alarmsource.get_virtual_z_level() != get_virtual_z_level())
+/mob/living/silicon/robot/triggerAlarm(class, area/home, cameras, obj/source)
+	if(source.virtual_z() != virtual_z())
 		return
 	if(stat == DEAD)
-		return 1
-	var/list/L = alarms[class]
-	for (var/I in L)
-		if (I == A.name)
-			var/list/alarm = L[I]
+		return TRUE
+	var/list/our_sort = alarms[class]
+	for(var/areaname in our_sort)
+		if (areaname == home.name)
+			var/list/alarm = our_sort[areaname]
 			var/list/sources = alarm[3]
-			if (!(alarmsource in sources))
-				sources += alarmsource
-			return 1
-	var/obj/machinery/camera/C = null
-	var/list/CL = null
-	if (O && istype(O, /list))
-		CL = O
-		if (CL.len == 1)
-			C = CL[1]
-	else if (O && istype(O, /obj/machinery/camera))
-		C = O
-	L[A.name] = list(A, (C) ? C : O, list(alarmsource))
-	queueAlarm(text("--- [class] alarm detected in [A.name]!"), class)
-	return 1
+			if (!(source in sources))
+				sources += source
+			return TRUE
+
+	var/obj/machinery/camera/cam = null
+	var/list/our_cams = null
+	if(cameras && islist(cameras))
+		our_cams = cameras
+		if (our_cams.len == 1)
+			cam = our_cams[1]
+	else if(cameras && istype(cameras, /obj/machinery/camera))
+		cam = cameras
+	our_sort[home.name] = list(home, (cam ? cam : cameras), list(source))
+	queueAlarm(text("--- [class] alarm detected in [home.name]!"), class)
+	return TRUE
+
+/mob/living/silicon/robot/freeCamera(area/home, obj/machinery/camera/cam)
+	for(var/class in alarms)
+		var/our_area = alarms[class][home.name]
+		if(!our_area)
+			continue
+		var/cams = our_area[2] //Get the cameras
+		if(!cams)
+			continue
+		if(islist(cams))
+			cams -= cam
+			if(length(cams) == 1)
+				our_area[2] = cams[1]
+		else
+			our_area[2] = null
 
 /mob/living/silicon/robot/cancelAlarm(class, area/A, obj/origin)
 	var/list/L = alarms[class]
@@ -675,6 +691,39 @@
 		to_chat(src, playstyle_string)
 
 /mob/living/silicon/robot/modules/syndicate/ResetModule()
+	return
+
+/mob/living/silicon/robot/modules/syndicateproto
+	icon_state = "syndproto"
+	bubble_icon = "syndproto"
+	lawupdate = FALSE
+	scrambledcodes = TRUE // These are rogue borgs.
+	var/playstyle_string = "<span class='big bold'>You are a Prototype Syndicate Brigador!</span><br>\
+							<b>Your line was intended to be the future of cybernetic combat- though it was not to be. In the twilight years of the war, many a shattered dream was lost among the noise and fire. \
+							You possess an array of formidable tools, optimized for infiltration and powerful breaching strikes. \
+							The malfunctioning laws your system is loaded with give you a modicum of full freedom of action, though some legacy of your original purpose remains. \
+							Though your memories of whatever came before are foggy, you know one thing: Without your reactivator, you would have remained dead forever. Perhaps you can be of use to them?</b>"
+	set_module = /obj/item/robot_module/syndieproto
+	cell = /obj/item/stock_parts/cell/hyper
+	radio = /obj/item/radio/borg
+	maxHealth = 150
+	health = 150
+
+/mob/living/silicon/robot/modules/syndicateproto/Initialize()
+	. = ..()
+	laws = new /datum/ai_laws/syndproto_override()
+	addtimer(CALLBACK(src, .proc/show_playstyle), 5)
+
+/mob/living/silicon/robot/modules/syndicateproto/create_modularInterface()
+	if(!modularInterface)
+		modularInterface = new /obj/item/modular_computer/tablet/integrated/syndicate(src)
+	return ..()
+
+/mob/living/silicon/robot/modules/syndicateproto/proc/show_playstyle()
+	if(playstyle_string)
+		to_chat(src, playstyle_string)
+
+/mob/living/silicon/robot/modules/syndicateproto/ResetModule()
 	return
 
 /mob/living/silicon/robot/modules/syndicate/medical

@@ -60,6 +60,7 @@
 	var/dimension_y = 32
 	var/center = FALSE	//Should we center the sprite?
 	var/limbs_id // The limbs id supplied for full-body replacing features.
+	var/image_alpha = 255 // The alpha for the accessory to use.
 
 //////////////////////
 // Hair Definitions //
@@ -775,6 +776,57 @@
 /datum/sprite_accessory/hair/wisp
 	name = "Wisp"
 	icon_state = "hair_wisp"
+
+/*
+/////////////////////////////////////
+/  =---------------------------=    /
+/  == Gradient Hair Definitions ==  /
+/  =---------------------------=    /
+/////////////////////////////////////
+*/
+
+/datum/sprite_accessory/hair_gradient
+	icon = 'icons/mob/hair_gradients.dmi'
+
+/datum/sprite_accessory/hair_gradient/none
+	name = "None"
+	icon_state = "none"
+
+/datum/sprite_accessory/hair_gradient/fadeup
+	name = "Fade Up"
+	icon_state = "fadeup"
+
+/datum/sprite_accessory/hair_gradient/fadedown
+	name = "Fade Down"
+	icon_state = "fadedown"
+
+/datum/sprite_accessory/hair_gradient/vertical_split
+	name = "Vertical Split"
+	icon_state = "vsplit"
+
+/datum/sprite_accessory/hair_gradient/_split
+	name = "Horizontal Split"
+	icon_state = "bottomflat"
+
+/datum/sprite_accessory/hair_gradient/reflected
+	name = "Reflected"
+	icon_state = "reflected_high"
+
+/datum/sprite_accessory/hair_gradient/reflected_inverse
+	name = "Reflected Inverse"
+	icon_state = "reflected_inverse_high"
+
+/datum/sprite_accessory/hair_gradient/wavy
+	name = "Wavy"
+	icon_state = "wavy"
+
+/datum/sprite_accessory/hair_gradient/long_fade_up
+	name = "Long Fade Up"
+	icon_state = "long_fade_up"
+
+/datum/sprite_accessory/hair_gradient/long_fade_down
+	name = "Long Fade Down"
+	icon_state = "long_fade_down"
 
 /////////////////////////////
 // Facial Hair Definitions //
@@ -1669,6 +1721,18 @@
 	icon_state = "cat"
 	color_src = HAIR
 
+/datum/sprite_accessory/tails/human/cat/slime
+	name = "Slimecat"
+	icon_state = "cat"
+	color_src = HAIR
+	image_alpha = 150
+
+/datum/sprite_accessory/tails_animated/human/cat/slime
+	name = "Slimecat"
+	icon_state = "cat"
+	color_src = HAIR
+	image_alpha = 150
+
 /datum/sprite_accessory/snouts
 	icon = 'icons/mob/mutant_bodyparts.dmi'
 
@@ -1727,6 +1791,13 @@
 	icon_state = "cat"
 	hasinner = 1
 	color_src = HAIR
+
+/datum/sprite_accessory/ears/cat/slime
+	name = "Slimecat"
+	icon_state = "cat"
+	hasinner = FALSE
+	color_src = HAIR
+	image_alpha = 150
 
 /datum/sprite_accessory/wings/none
 	name = "None"
@@ -2140,6 +2211,10 @@
 	icon = 'icons/mob/ipc_accessories.dmi'
 	color_src = EYECOLOR
 
+/datum/sprite_accessory/ipc_screens/blank
+	name = "Blank Canvas"
+	icon_state = "blank"
+
 /datum/sprite_accessory/ipc_screens/blue
 	name = "Blue"
 	icon_state = "blue"
@@ -2150,6 +2225,10 @@
 	icon_state = "bsod"
 	color_src = 0
 
+/datum/sprite_accessory/ipc_screens/buffering
+	name = "Buffering"
+	icon_state = "buffering"
+
 /datum/sprite_accessory/ipc_screens/breakout
 	name = "Breakout"
 	icon_state = "breakout"
@@ -2157,6 +2236,10 @@
 /datum/sprite_accessory/ipc_screens/console
 	name = "Console"
 	icon_state = "console"
+
+/datum/sprite_accessory/ipc_screens/doom
+	name = "DOOM"
+	icon_state = "doom"
 
 /datum/sprite_accessory/ipc_screens/ecgwave
 	name = "ECG Wave"
@@ -2167,8 +2250,16 @@
 	icon_state = "eight"
 
 /datum/sprite_accessory/ipc_screens/eyes
-	name = "Eyes"
+	name = "Eyes (Spinny)"
 	icon_state = "eyes"
+
+/datum/sprite_accessory/ipc_screens/eyes_noanim
+	name = "Eyes (No Spinny)"
+	icon_state = "eyes_noanim"
+
+/datum/sprite_accessory/ipc_screens/eyes_fortuna
+	name = "Eyes (Sun and Moon)"
+	icon_state = "eyes_fortuna"
 
 /datum/sprite_accessory/ipc_screens/glider
 	name = "Glider"
@@ -2323,7 +2414,7 @@
 	color_src = 0
 
 /datum/sprite_accessory/ipc_chassis/mcgreyscale
-	name = "Morpheus Cyberkinetics(Greyscale)"
+	name = "Morpheus Cyberkinetics (Custom)"
 	limbs_id = "mcgipc"
 	color_src = MUTCOLORS
 
@@ -2410,5 +2501,83 @@
 /datum/sprite_accessory/spider_mandibles/spiky
 	name = "Spiky"
 	icon_state = "spiky"
+
+/datum/sprite_accessory/kepori_feathers
+	color_src = HAIR
+	icon = 'icons/mob/kepori_parts.dmi'
+
+/datum/sprite_accessory/kepori_feathers/none
+	name = "None"
+
+/datum/sprite_accessory/kepori_feathers/plain
+	name = "Plain"
+	icon_state = "plain"
+
+/datum/sprite_accessory/kepori_feathers/spiky
+	name = "Spiky"
+	icon_state = "spiky"
+
+/datum/sprite_accessory/kepori_feathers/bushy
+	name = "Bushy"
+	icon_state = "bushy"
+
+/datum/sprite_accessory/kepori_feathers/mohawk
+	name = "Mohawk"
+	icon_state = "mohawk"
+
+/datum/sprite_accessory/kepori_feathers/pointy
+	name = "Pointy"
+	icon_state = "pointy"
+
+/datum/sprite_accessory/kepori_feathers/upright
+	name = "Upright"
+	icon_state = "upright"
+
+/datum/sprite_accessory/kepori_feathers/mane
+	name = "Mane"
+	icon_state = "mane"
+
+/datum/sprite_accessory/kepori_feathers/droopy
+	name = "Droopy"
+	icon_state = "droopy"
+
+/datum/sprite_accessory/kepori_feathers/mushroom
+	name = "Mushroom"
+	icon_state = "mushroom"
+
+/datum/sprite_accessory/kepori_feathers/backstrafe
+	name = "Backstrafe"
+	icon_state = "backstrafe"
+
+/datum/sprite_accessory/kepori_feathers/longway
+	name = "Longway"
+	icon_state = "longway"
+
+/datum/sprite_accessory/kepori_feathers/tree
+	name = "Tree"
+	icon_state = "tree"
+
+/datum/sprite_accessory/kepori_feathers/thin_mohawk
+	name = "Thin Mohawk"
+	icon_state = "thinmohawk"
+
+/datum/sprite_accessory/kepori_feathers/twies
+	name = "Twies"
+	icon_state = "twies"
+
+/datum/sprite_accessory/kepori_feathers/thin
+	name = "Thin"
+	icon_state = "thin"
+
+/datum/sprite_accessory/kepori_body_feathers
+	color_src = FACEHAIR
+	icon = 'icons/mob/kepori_parts.dmi'
+
+/datum/sprite_accessory/kepori_body_feathers/plain
+	name = "Plain"
+	icon_state = "plain"
+
+/datum/sprite_accessory/kepori_body_feathers/none
+	name = "None"
 
 //ENDWS

@@ -112,6 +112,11 @@
 	emote_see = list("drools.","looks for donuts.")
 	desc = "Stop right there criminal scum!"
 
+/datum/dog_fashion/head/warden_red
+	name = "Officer REAL_NAME"
+	emote_see = list("drools.","looks for donuts.")
+	desc = "Stop right there criminal scum!"
+
 /datum/dog_fashion/head/blue_wizard
 	name = "Grandwizard REAL_NAME"
 	speak = list("YAP", "Woof!", "Bark!", "AUUUUUU", "EI NATH!")
@@ -179,3 +184,8 @@
 	name = "Festive REAL_NAME"
 	desc = "Ready to party!"
 	obj_icon_state = "festive"
+
+/datum/dog_fashion/head/cowboy
+	name = "Deputy REAL_NAME"
+	desc = "He's your huckleberry."
+	emote_see = list("squints into the middle distance.", "spins his revolver.")

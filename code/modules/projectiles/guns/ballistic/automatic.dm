@@ -11,11 +11,11 @@
 	suppressed_sound = 'sound/weapons/gun/smg/shot_suppressed.ogg'
 	automatic = 1
 	weapon_weight = WEAPON_MEDIUM
+	pickup_sound =  'sound/items/handling/rifle_pickup.ogg'
 
 /obj/item/gun/ballistic/automatic/proto
 	name = "\improper Nanotrasen Saber SMG"
 	desc = "A prototype full auto 9mm submachine gun, designated 'SABR'. Has a threaded barrel for suppressors and a folding stock."
-	icon = 'whitesands/icons/obj/guns/projectile.dmi'
 	icon_state = "saber"
 	mag_type = /obj/item/ammo_box/magazine/smgm9mm
 	pin = null
@@ -84,7 +84,6 @@
 /obj/item/gun/ballistic/automatic/wt550
 	name = "WT-550 Automatic Rifle"
 	desc = "An outdated personal defence weapon. Uses 4.6x30mm rounds and is designated the WT-550 Automatic Rifle."
-	icon = 'whitesands/icons/obj/guns/projectile.dmi'
 	icon_state = "wt550"
 	item_state = "arg"
 	mag_type = /obj/item/ammo_box/magazine/wt550m9
@@ -101,7 +100,7 @@
 /obj/item/gun/ballistic/automatic/mini_uzi
 	name = "\improper Type U3 Uzi"
 	desc = "A lightweight submachine gun, for when you really want someone dead. Uses 9mm rounds."
-	icon_state = "miniuzi"
+	icon_state = "uzi"
 	mag_type = /obj/item/ammo_box/magazine/uzim9mm
 	bolt_type = BOLT_TYPE_OPEN
 	mag_display = TRUE
@@ -121,7 +120,7 @@
 	pin = /obj/item/firing_pin/implant/pindicate
 	mag_display = TRUE
 	empty_indicator = TRUE
-	fire_sound = 'sound/weapons/gun/smg/shot.ogg'
+	fire_sound = 'sound/weapons/gun/rifle/shot_alt.ogg'
 
 /obj/item/gun/ballistic/automatic/m90/Initialize()
 	. = ..()
@@ -195,6 +194,7 @@
 /obj/item/gun/ballistic/automatic/ar
 	name = "\improper NT-ARG 'Boarder'"
 	desc = "A robust assault rifle used by Nanotrasen fighting forces."
+	fire_sound = 'sound/weapons/gun/rifle/shot_alt2.ogg'
 	icon_state = "arg"
 	item_state = "arg"
 	slot_flags = 0

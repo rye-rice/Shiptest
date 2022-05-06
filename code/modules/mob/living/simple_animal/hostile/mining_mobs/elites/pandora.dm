@@ -47,6 +47,10 @@
 
 	var/sing_shot_length = 8
 	var/cooldown_time = 20
+	var/dungeon = FALSE //if true then will open gates on death
+
+/mob/living/simple_animal/hostile/asteroid/elite/pandora/dungeon
+	dungeon = TRUE
 
 /datum/action/innate/elite_attack/singular_shot
 	name = "Singular Shot"
@@ -169,6 +173,15 @@
 			new /obj/effect/temp_visual/hierophant/blast/pandora(t, src)
 	addtimer(CALLBACK(src, .proc/aoe_squares_2, T, (ring + 1), max_size), 2)
 
+/mob/living/simple_animal/hostile/asteroid/elite/pandora/death()
+	//open all pandora gates
+	if(dungeon)
+		for(var/obj/machinery/door/poddoor/D in GLOB.machines)
+			if(D.id == "pandora_dead")
+				D.open()
+
+	..()
+
 //The specific version of hiero's squares pandora uses
 /obj/effect/temp_visual/hierophant/blast/pandora
 	damage = 20
@@ -181,6 +194,7 @@
 	icon = 'icons/obj/lavaland/elite_trophies.dmi'
 	icon_state = "hope"
 	resistance_flags = FIRE_PROOF
+	armor = list("melee" = 5, "bullet" = 5, "laser" = 5, "energy" = 5, "bomb" = 20, "bio" = 20, "rad" = 5, "fire" = 0, "acid" = 25)
 
 /obj/item/clothing/accessory/pandora_hope/on_uniform_equip(obj/item/clothing/under/U, user)
 	var/mob/living/L = user

@@ -331,12 +331,12 @@ Turf and target are separate in case you want to teleport some distance from a t
 //For example, using this on a disk, which is in a bag, on a mob, will return the mob because it's on the turf.
 //Optional arg 'type' to stop once it reaches a specific type instead of a turf.
 /proc/get_atom_on_turf(atom/movable/M, stop_type)
-	var/atom/loc = M
-	while(loc && loc.loc && !isturf(loc.loc))
-		loc = loc.loc
-		if(stop_type && istype(loc, stop_type))
+	var/atom/turf_to_check = M
+	while(turf_to_check?.loc && !isturf(turf_to_check.loc))
+		turf_to_check = turf_to_check.loc
+		if(stop_type && istype(turf_to_check, stop_type))
 			break
-	return loc
+	return turf_to_check
 
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
@@ -803,24 +803,24 @@ GLOBAL_LIST_INIT(WALLITEMS_INVERSE, typecacheof(list(
 
 
 /*
-rough example of the "cone" made by the 3 dirs checked
-
- B
-  \
-   \
-    >
-      <
-       \
-        \
-B --><-- A
-        /
-       /
-      <
-     >
-    /
-   /
- B
-
+* rough example of the "cone" made by the 3 dirs checked*
+*
+* B
+*  \
+*   \
+*    >
+*      <
+*       \
+*        \
+*B --><-- A
+*        /
+*       /
+*      <
+*     >
+*    /
+*   /
+* B
+*
 */
 
 
@@ -1054,6 +1054,15 @@ B --><-- A
 
 /datum/proc/stack_trace(msg)
 	CRASH(msg)
+
+/obj/item/bodypart/proc/limb_stacktrace(msg, bypass_cap) //yes yes this uses a magic number but fuck it.
+	var/static/mcount
+	if(mcount == 10)
+		message_debug("Kapu1178/LimbSystem: Limb Stack trace cap exceeded, further traces silenced.")
+		mcount++
+	if((mcount < 10) || bypass_cap)
+		mcount++
+		CRASH(msg)
 
 GLOBAL_REAL_VAR(list/stack_trace_storage)
 /proc/gib_stack_trace()
@@ -1344,8 +1353,8 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 	else
 		D.vars[var_name] = var_value
 
-#define	TRAIT_CALLBACK_ADD(target, trait, source) CALLBACK(GLOBAL_PROC, /proc/___TraitAdd, ##target, ##trait, ##source)
-#define	TRAIT_CALLBACK_REMOVE(target, trait, source) CALLBACK(GLOBAL_PROC, /proc/___TraitRemove, ##target, ##trait, ##source)
+#define TRAIT_CALLBACK_ADD(target, trait, source) CALLBACK(GLOBAL_PROC, /proc/___TraitAdd, ##target, ##trait, ##source)
+#define TRAIT_CALLBACK_REMOVE(target, trait, source) CALLBACK(GLOBAL_PROC, /proc/___TraitRemove, ##target, ##trait, ##source)
 
 ///DO NOT USE ___TraitAdd OR ___TraitRemove as a replacement for ADD_TRAIT / REMOVE_TRAIT defines. To be used explicitly for callback.
 /proc/___TraitAdd(target,trait,source)

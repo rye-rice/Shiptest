@@ -1,4 +1,4 @@
-#define PERF_BASE_DAMAGE		0.5
+#define PERF_BASE_DAMAGE 0.5
 
 //////////////////////////////////////////////////////////////////////////////////////////
 					// MEDICINE REAGENTS
@@ -264,7 +264,7 @@
 
 /datum/reagent/medicine/oxandrolone/overdose_process(mob/living/M)
 	if(M.getFireLoss()) //It only makes existing burns worse
-		M.adjustFireLoss(4.5*REM, FALSE, FALSE, BODYPART_ORGANIC) // it's going to be healing either 4 or 0.5
+		M.adjustFireLoss(4.5*REM, FALSE, FALSE, BODYTYPE_ORGANIC) // it's going to be healing either 4 or 0.5
 		. = 1
 	..()
 
@@ -337,8 +337,8 @@
 		holder.add_reagent(/datum/reagent/consumable/sugar, 1)
 		holder.remove_reagent(/datum/reagent/medicine/salglu_solution, 0.5)
 	if(prob(33))
-		M.adjustBruteLoss(0.5*REM, FALSE, FALSE, BODYPART_ORGANIC)
-		M.adjustFireLoss(0.5*REM, FALSE, FALSE, BODYPART_ORGANIC)
+		M.adjustBruteLoss(0.5*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
+		M.adjustFireLoss(0.5*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
 		. = TRUE
 	..()
 
@@ -476,8 +476,8 @@
 /datum/reagent/medicine/omnizine/overdose_process(mob/living/M)
 	M.adjustToxLoss(1.5*REM, 0)
 	M.adjustOxyLoss(1.5*REM, 0)
-	M.adjustBruteLoss(1.5*REM, FALSE, FALSE, BODYPART_ORGANIC)
-	M.adjustFireLoss(1.5*REM, FALSE, FALSE, BODYPART_ORGANIC)
+	M.adjustBruteLoss(1.5*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
+	M.adjustFireLoss(1.5*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
 	..()
 	. = 1
 
@@ -550,7 +550,7 @@
 
 /datum/reagent/medicine/sal_acid/overdose_process(mob/living/M)
 	if(M.getBruteLoss()) //It only makes existing bruises worse
-		M.adjustBruteLoss(4.5*REM, FALSE, FALSE, BODYPART_ORGANIC) // it's going to be healing either 4 or 0.5
+		M.adjustBruteLoss(4.5*REM, FALSE, FALSE, BODYTYPE_ORGANIC) // it's going to be healing either 4 or 0.5
 		. = 1
 	..()
 
@@ -588,8 +588,8 @@
 	return TRUE
 
 /datum/reagent/medicine/perfluorodecalin/overdose_process(mob/living/M)
-    metabolization_rate += 1
-    return ..()
+	metabolization_rate += 1
+	return ..()
 
 /datum/reagent/medicine/ephedrine
 	name = "Ephedrine"
@@ -1030,7 +1030,7 @@
 	. = 1
 
 /datum/reagent/medicine/bicaridine/overdose_process(mob/living/M)
-	M.adjustBruteLoss(2*REM, FALSE, FALSE, BODYPART_ORGANIC)
+	M.adjustBruteLoss(2*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
 	..()
 	. = 1
 
@@ -1050,7 +1050,7 @@
 	. = 1
 
 /datum/reagent/medicine/bicaridinep/overdose_process(mob/living/M)
-	M.adjustBruteLoss(6*REM, FALSE, FALSE, BODYPART_ORGANIC)
+	M.adjustBruteLoss(6*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
 	..()
 	. = 1
 
@@ -1105,7 +1105,7 @@
 	. = 1
 
 /datum/reagent/medicine/kelotane/overdose_process(mob/living/M)
-	M.adjustFireLoss(2*REM, FALSE, FALSE, BODYPART_ORGANIC)
+	M.adjustFireLoss(2*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
 	..()
 	. = 1
 
@@ -1122,7 +1122,7 @@
 	. = 1
 
 /datum/reagent/medicine/dermaline/overdose_process(mob/living/M)
-	M.adjustFireLoss(6*REM, FALSE, FALSE, BODYPART_ORGANIC)
+	M.adjustFireLoss(6*REM, FALSE, FALSE, BODYTYPE_ORGANIC)
 	..()
 	. = 1
 
@@ -1320,8 +1320,8 @@
 	return TRUE
 
 /datum/reagent/medicine/lavaland_extract/overdose_process(mob/living/M)
-	M.adjustBruteLoss(3*REM, 0, FALSE, BODYPART_ORGANIC)
-	M.adjustFireLoss(3*REM, 0, FALSE, BODYPART_ORGANIC)
+	M.adjustBruteLoss(3*REM, 0, FALSE, BODYTYPE_ORGANIC)
+	M.adjustFireLoss(3*REM, 0, FALSE, BODYTYPE_ORGANIC)
 	M.adjustToxLoss(3*REM, 0)
 	..()
 	return TRUE
@@ -1611,7 +1611,7 @@
 	..()
 	. = 1
 
-/* /datum/reagent/medicine/hepanephrodaxon    //WS edit: Temporary removal of overloaded chem
+/* /datum/reagent/medicine/hepanephrodaxon	//WS edit: Temporary removal of overloaded chem
 	name = "Hepanephrodaxon"
 	description = "Used to repair the common tissues involved in filtration."
 	taste_description = "glue"
@@ -1667,3 +1667,73 @@
 				O.damage = 0
 			holder.remove_reagent(/datum/reagent/medicine/bonefixingjuice, 10)
 	..()
+
+/datum/reagent/medicine/converbital
+	name = "Converbital"
+	description = "A substance capable of regenerating torn flesh, however, due to its extremely exothermic nature, use may result in burns"
+	reagent_state = LIQUID
+	taste_description = "burning"
+	color = "#7a1f13"
+	metabolization_rate = REM * 1
+	overdose_threshold = 25
+
+/datum/reagent/medicine/converbital/expose_mob(mob/living/M, method=TOUCH, reac_volume, show_message = 1)
+	if(iscarbon(M) && M.stat != DEAD)
+		if(method in list(INGEST, VAPOR, INJECT))
+			M.adjustFireLoss(0.5*reac_volume)
+			if(show_message)
+				to_chat(M, "<span class='warning'>You feel a slight burning sensation...</span>")
+		else if(M.getBruteLoss())
+			M.adjustBruteLoss(-reac_volume)
+			M.adjustFireLoss(reac_volume)
+			if(show_message)
+				to_chat(M, "<span class='danger'>You feel your skin bubble and burn as your flesh knits itself together!</span>")
+			M.emote("scream")
+			SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "painful_medicine", /datum/mood_event/painful_medicine)
+	..()
+
+/datum/reagent/medicine/converbital/on_mob_life(mob/living/carbon/M)
+	M.adjustFireLoss(0.25*REM, 0)
+	..()
+	. = 1
+
+/datum/reagent/medicine/converbital/overdose_process(mob/living/M)
+	M.adjustFireLoss(2.5*REM, 0)
+	M.adjustToxLoss(0.5, 0)
+	..()
+	. = 1
+
+/datum/reagent/medicine/convuri
+	name = "Convuri"
+	description = "A substance capable of regenerating burnt skin with ease, however, the speed at which it does this has been known to cause muscular tearing"
+	reagent_state = SOLID
+	taste_description = "white-hot pain"
+	color = "#b85505"
+	metabolization_rate = REM * 1
+	overdose_threshold = 25
+
+/datum/reagent/medicine/convuri/expose_mob(mob/living/M, method=TOUCH, reac_volume, show_message = 1)
+	if(iscarbon(M) && M.stat != DEAD)
+		if(method in list(INGEST, VAPOR, INJECT))
+			M.adjustBruteLoss(0.5*reac_volume)
+			if(show_message)
+				to_chat(M, "<span class='warning'>You feel a slight tearing sensation...</span>")
+		else if(M.getBruteLoss())
+			M.adjustFireLoss(-reac_volume)
+			M.adjustBruteLoss(reac_volume)
+			if(show_message)
+				to_chat(M, "<span class='danger'>You feel your flesh tear as your skin rapidly regenerates!</span>")
+			M.emote("scream")
+			SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "painful_medicine", /datum/mood_event/painful_medicine)
+	..()
+
+/datum/reagent/medicine/convuri/on_mob_life(mob/living/carbon/M)
+	M.adjustBruteLoss(0.25*REM, 0)
+	..()
+	. = 1
+
+/datum/reagent/medicine/convuri/overdose_process(mob/living/M)
+	M.adjustBruteLoss(2.5*REM, 0)
+	M.adjustToxLoss(0.5, 0)
+	..()
+	. = 1

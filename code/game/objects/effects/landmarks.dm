@@ -41,20 +41,18 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	if(delete_after_roundstart)
 		qdel(src)
 
-/obj/effect/landmark/start/New()
+/obj/effect/landmark/start/Initialize()
+	. = ..()
 	GLOB.start_landmarks_list += src
 	if(jobspawn_override)
-		if(!GLOB.jobspawn_overrides[name])
-			GLOB.jobspawn_overrides[name] = list()
-		GLOB.jobspawn_overrides[name] += src
-	..()
+		LAZYADDASSOC(GLOB.jobspawn_overrides, name, src)
 	if(name != "start")
 		tag = "start*[name]"
 
 /obj/effect/landmark/start/Destroy()
 	GLOB.start_landmarks_list -= src
 	if(jobspawn_override)
-		GLOB.jobspawn_overrides[name] -= src
+		LAZYREMOVEASSOC(GLOB.jobspawn_overrides, name, src)
 	return ..()
 
 // START LANDMARKS FOLLOW. Don't change the names unless
@@ -295,14 +293,6 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 	GLOB.newplayer_start += loc
 	return INITIALIZE_HINT_QDEL
 
-/obj/effect/landmark/latejoin
-	name = "JoinLate"
-
-/obj/effect/landmark/latejoin/Initialize(mapload)
-	..()
-	SSjob.latejoin_trackers += loc
-	return INITIALIZE_HINT_QDEL
-
 //space carps, magicarps, lone ops, slaughter demons, possibly revenants spawn here
 /obj/effect/landmark/carpspawn
 	name = "carpspawn"
@@ -323,7 +313,6 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 	GLOB.xeno_spawn += loc
 	return INITIALIZE_HINT_QDEL
 
-//objects with the stationloving component (nuke disk) respawn here.
 //also blobs that have their spawn forcemoved (running out of time when picking their spawn spot), santa and respawning devils
 /obj/effect/landmark/blobstart
 	name = "blobstart"

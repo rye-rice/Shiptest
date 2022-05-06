@@ -1,6 +1,6 @@
-#define HEATER_MODE_STANDBY	"standby"
-#define HEATER_MODE_HEAT	"heat"
-#define HEATER_MODE_COOL	"cool"
+#define HEATER_MODE_STANDBY "standby"
+#define HEATER_MODE_HEAT "heat"
+#define HEATER_MODE_COOL "cool"
 
 /obj/machinery/space_heater
 	anchored = FALSE
@@ -9,12 +9,13 @@
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "sheater-off"
 	name = "space heater"
-	desc = "Made by Space Amish using traditional space techniques, this heater/cooler is guaranteed not to set the station on fire. Warranty void if used in engines."
+	desc = "Made by Space Amish using traditional space techniques, this heater/cooler is guaranteed* not to set the air on fire. Warranty void if used in engines."
 	max_integrity = 250
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 100, "rad" = 100, "fire" = 80, "acid" = 10)
 	circuit = /obj/item/circuitboard/machine/space_heater
 	/// We don't use area power, we always use the cell
 	use_power = NO_POWER_USE
+	interacts_with_air = TRUE
 	var/obj/item/stock_parts/cell/cell
 	var/on = FALSE
 	var/mode = HEATER_MODE_STANDBY
@@ -69,7 +70,7 @@
 	if(panel_open)
 		. += "sheater-open"
 
-/obj/machinery/space_heater/process()
+/obj/machinery/space_heater/process_atmos() //TODO figure out delta_time
 	if(!on || !is_operational())
 		if (on) // If it's broken, turn it off too
 			on = FALSE
@@ -212,7 +213,7 @@
 			usr.visible_message("<span class='notice'>[usr] switches [on ? "on" : "off"] \the [src].</span>", "<span class='notice'>You switch [on ? "on" : "off"] \the [src].</span>")
 			update_icon()
 			if (on)
-				START_PROCESSING(SSmachines, src)
+				SSair.start_processing_machine(src)
 			. = TRUE
 		if("mode")
 			setMode = params["mode"]

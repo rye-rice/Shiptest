@@ -388,6 +388,7 @@
 	name = "boxed tracking implant kit"
 	desc = "For finding those who have died on the accursed lavaworld."
 	illustration = "implant"
+	custom_price = 600
 
 /obj/item/storage/box/minertracker/PopulateContents()
 	var/static/items_inside = list(
@@ -474,8 +475,8 @@
 	var/donktype = /obj/item/reagent_containers/food/snacks/donkpocket
 
 /obj/item/storage/box/donkpockets/PopulateContents()
-    for(var/i in 1 to 6)
-        new donktype(src)
+	for(var/i in 1 to 6)
+		new donktype(src)
 
 /obj/item/storage/box/donkpockets/ComponentInitialize()
 	. = ..()
@@ -1011,20 +1012,21 @@
 
 /obj/item/storage/box/ingredients/wildcard/PopulateContents()
 	for(var/i in 1 to 7)
-		var/randomFood = pick(/obj/item/reagent_containers/food/snacks/grown/chili,
-							  /obj/item/reagent_containers/food/snacks/grown/tomato,
-							  /obj/item/reagent_containers/food/snacks/grown/carrot,
-							  /obj/item/reagent_containers/food/snacks/grown/potato,
-							  /obj/item/reagent_containers/food/snacks/grown/potato/sweet,
-							  /obj/item/reagent_containers/food/snacks/grown/apple,
-							  /obj/item/reagent_containers/food/snacks/chocolatebar,
-							  /obj/item/reagent_containers/food/snacks/grown/cherries,
-							  /obj/item/reagent_containers/food/snacks/grown/banana,
-							  /obj/item/reagent_containers/food/snacks/grown/cabbage,
-							  /obj/item/reagent_containers/food/snacks/grown/soybeans,
-							  /obj/item/reagent_containers/food/snacks/grown/corn,
-							  /obj/item/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
-							  /obj/item/reagent_containers/food/snacks/grown/mushroom/chanterelle)
+		var/randomFood = pick(
+			/obj/item/reagent_containers/food/snacks/grown/chili,
+			/obj/item/reagent_containers/food/snacks/grown/tomato,
+			/obj/item/reagent_containers/food/snacks/grown/carrot,
+			/obj/item/reagent_containers/food/snacks/grown/potato,
+			/obj/item/reagent_containers/food/snacks/grown/potato/sweet,
+			/obj/item/reagent_containers/food/snacks/grown/apple,
+			/obj/item/reagent_containers/food/snacks/chocolatebar,
+			/obj/item/reagent_containers/food/snacks/grown/cherries,
+			/obj/item/reagent_containers/food/snacks/grown/banana,
+			/obj/item/reagent_containers/food/snacks/grown/cabbage,
+			/obj/item/reagent_containers/food/snacks/grown/soybeans,
+			/obj/item/reagent_containers/food/snacks/grown/corn,
+			/obj/item/reagent_containers/food/snacks/grown/mushroom/plumphelmet,
+			/obj/item/reagent_containers/food/snacks/grown/mushroom/chanterelle)
 		new randomFood(src)
 
 /obj/item/storage/box/ingredients/fiesta
@@ -1146,6 +1148,7 @@
 	name = "\proper the liberator's legacy"
 	desc = "A box containing a gift for worthy golems."
 	illustration = "scicircuit"
+	custom_price = 2000
 
 /obj/item/storage/box/rndboards/PopulateContents()
 	new /obj/item/circuitboard/machine/protolathe(src)
@@ -1192,6 +1195,32 @@
 		/obj/item/stock_parts/matter_bin = 3)
 	generate_items_inside(items_inside,src)
 
+/obj/item/storage/box/stockparts/t2
+	name = "box of T2 stock parts"
+	desc = "Contains a variety of advanced stock parts."
+
+/obj/item/storage/box/stockparts/t2/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/stock_parts/capacitor/adv = 3,
+		/obj/item/stock_parts/scanning_module/adv = 3,
+		/obj/item/stock_parts/manipulator/nano = 3,
+		/obj/item/stock_parts/micro_laser/high = 3,
+		/obj/item/stock_parts/matter_bin/adv = 3)
+	generate_items_inside(items_inside,src)
+
+/obj/item/storage/box/stockparts/t3
+	name = "box of T3 stock parts"
+	desc = "Contains a variety of super stock parts."
+
+/obj/item/storage/box/stockparts/t3/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/stock_parts/capacitor/super = 3,
+		/obj/item/stock_parts/scanning_module/phasic = 3,
+		/obj/item/stock_parts/manipulator/pico = 3,
+		/obj/item/stock_parts/micro_laser/ultra = 3,
+		/obj/item/stock_parts/matter_bin/super = 3)
+	generate_items_inside(items_inside,src)
+
 /obj/item/storage/box/stockparts/deluxe
 	name = "box of deluxe stock parts"
 	desc = "Contains a variety of deluxe stock parts."
@@ -1220,6 +1249,42 @@
 		/obj/item/stock_parts/manipulator = 1,
 		/obj/item/stock_parts/matter_bin = 2,
 		/obj/item/screwdriver = 1)
+	generate_items_inside(items_inside,src)
+
+//It's a maid costume from the IRMG and Syndicate, what else.
+/obj/item/storage/box/inteqmaid
+	name = "IRMG non standard issue maid outfit"
+	desc = "A box containing a 'tactical' and 'practical' maid outfit from the IRMG."
+
+/obj/item/storage/box/inteqmaid/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/clothing/head/maidheadband/inteq = 1,
+		/obj/item/clothing/under/syndicate/inteq/skirt/maid = 1,
+		/obj/item/clothing/gloves/combat/maid/inteq = 1,)
+	generate_items_inside(items_inside,src)
+
+/obj/item/storage/box/syndimaid
+	name = "Syndicate maid outfit"
+	desc = "A box containing a 'tactical' and 'practical' maid outfit."
+	icon_state = "syndiebox"
+
+/obj/item/storage/box/syndimaid/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/clothing/head/maidheadband/syndicate = 1,
+		/obj/item/clothing/under/syndicate/skirt/maid = 1,
+		/obj/item/clothing/gloves/combat/maid = 1,)
+
+// because i have no idea where the fuck to put this
+/obj/item/storage/box/maid
+	name = "Maid box"
+	desc = "Contains a maid outfit"
+
+/obj/item/storage/box/maid/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/clothing/head/maidheadband = 1,
+		/obj/item/clothing/under/costume/maid = 1,
+		/obj/item/clothing/gloves/maid = 1,
+		/obj/item/clothing/neck/maid = 1,)
 	generate_items_inside(items_inside,src)
 
 /obj/item/storage/box/material

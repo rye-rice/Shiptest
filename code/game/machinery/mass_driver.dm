@@ -1,6 +1,6 @@
 /obj/machinery/mass_driver
 	name = "mass driver"
-	desc = "The finest in spring-loaded piston toy technology, now on a space station near you."
+	desc = "The finest in spring-loaded piston toy technology, now launching prisoners into hyperspace near you."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mass_driver"
 	use_power = IDLE_POWER_USE
@@ -17,8 +17,8 @@
 			control.connected = null
 	return ..()
 
-/obj/machinery/mass_driver/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock, idnum, override=FALSE)
-	id = "[idnum][id]"
+/obj/machinery/mass_driver/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
+	id = "[REF(port)][id]"
 
 /obj/machinery/mass_driver/proc/drive(amount)
 	if(machine_stat & (BROKEN|NOPOWER))

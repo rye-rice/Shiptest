@@ -5,10 +5,9 @@
 // effectout: effect to show right after teleportation
 // asoundin: soundfile to play before teleportation
 // asoundout: soundfile to play after teleportation
-// forceMove: if false, teleport will use Move() proc (dense objects will prevent teleportation)
 // no_effects: disable the default effectin/effectout of sparks
 // forced: whether or not to ignore no_teleport
-/proc/do_teleport(atom/movable/teleatom, atom/destination, precision=null, forceMove = TRUE, datum/effect_system/effectin=null, datum/effect_system/effectout=null, asoundin=null, asoundout=null, no_effects=FALSE, channel=TELEPORT_CHANNEL_BLUESPACE, forced = FALSE)
+/proc/do_teleport(atom/movable/teleatom, atom/destination, precision=null, datum/effect_system/effectin=null, datum/effect_system/effectout=null, asoundin=null, asoundout=null, no_effects=FALSE, channel=TELEPORT_CHANNEL_BLUESPACE, forced = FALSE, restrain_vlevel = TRUE)
 	// teleporting most effects just deletes them
 	var/static/list/delete_atoms = typecacheof(list(
 		/obj/effect,
@@ -59,9 +58,9 @@
 
 	// perform the teleport
 	var/turf/curturf = get_turf(teleatom)
-	var/turf/destturf = get_teleport_turf(get_turf(destination), precision)
+	var/turf/destturf = get_teleport_turf(curturf, get_turf(destination), precision, restrain_vlevel)
 
-	if(!destturf || !curturf || destturf.is_transition_turf())
+	if(!destturf || !curturf)
 		return FALSE
 
 	var/area/A = get_area(curturf)
@@ -72,8 +71,12 @@
 	if(SEND_SIGNAL(destturf, COMSIG_ATOM_INTERCEPT_TELEPORT, channel, curturf, destturf))
 		return FALSE
 
+	if(isobserver(teleatom))
+		teleatom.abstract_move(destturf)
+		return TRUE
+
 	tele_play_specials(teleatom, curturf, effectin, asoundin)
-	var/success = forceMove ? teleatom.forceMove(destturf) : teleatom.Move(destturf)
+	var/success = teleatom.forceMove(destturf)
 	if (success)
 		log_game("[key_name(teleatom)] has teleported from [loc_name(curturf)] to [loc_name(destturf)]")
 		tele_play_specials(teleatom, destturf, effectout, asoundout)
@@ -95,76 +98,89 @@
 			effect.start()
 
 // Safe location finder
-/proc/find_safe_turf(zlevel, list/zlevels, extended_safety_checks = FALSE)
-	if(!zlevels)
-		if (zlevel)
-			zlevels = list(zlevel)
-		else
-			zlevels = SSmapping.levels_by_trait(ZTRAIT_STATION)
-	var/cycles = 1000
-	for(var/cycle in 1 to cycles)
-		// DRUNK DIALLING WOOOOOOOOO
-		var/x = rand(1, world.maxx)
-		var/y = rand(1, world.maxy)
-		var/z = pick(zlevels)
-		var/random_location = locate(x,y,z)
-
-		if(!isfloorturf(random_location))
+/proc/find_safe_turf(list/zlevels, extended_safety_checks = FALSE)
+	var/list/potential_targets = list()
+	for(var/datum/overmap/ship/controlled/possible_ship as anything in SSovermap.controlled_ships)
+		if(!zlevels)
+			potential_targets += possible_ship.shuttle_port
 			continue
-		var/turf/open/floor/F = random_location
-		if(!F.air)
-			continue
+		if((possible_ship.shuttle_port.z in zlevels) || (possible_ship.shuttle_port.virtual_z() in zlevels))
+			potential_targets += possible_ship.shuttle_port.shuttle_areas
 
-		var/datum/gas_mixture/A = F.air
-		var/trace_gases
-		for(var/id in A.get_gases())
-			if(id in GLOB.hardcoded_gases)
+	if(!length(potential_targets))
+		CRASH("No safe ship turfs found!")
+
+	for(var/cycle in 1 to length(potential_targets))
+		var/obj/docking_port/mobile/selected_ship = pick_n_take(potential_targets)
+		for(var/turf/potential_turf in pick(selected_ship.shuttle_areas))
+			if(!isfloorturf(potential_turf))
 				continue
-			trace_gases = TRUE
-			break
+			var/turf/open/floor/potential_floor = potential_turf
+			if(!potential_floor.air)
+				continue
 
-		// Can most things breathe?
-		if(trace_gases)
-			continue
-		if(A.get_moles(/datum/gas/oxygen) < 16)
-			continue
-		if(A.get_moles(/datum/gas/plasma))
-			continue
-		if(A.get_moles(/datum/gas/carbon_dioxide) >= 10)
-			continue
-
-		// Aim for goldilocks temperatures and pressure
-		if((A.return_temperature() <= 270) || (A.return_temperature() >= 360))
-			continue
-		var/pressure = A.return_pressure()
-		if((pressure <= 20) || (pressure >= 550))
-			continue
-
-		if(extended_safety_checks)
-			if(islava(F)) //chasms aren't /floor, and so are pre-filtered
-				var/turf/open/lava/L = F
-				if(!L.is_safe())
+			var/datum/gas_mixture/floor_gas_mix = potential_floor.air
+			var/trace_gases
+			for(var/id in floor_gas_mix.get_gases())
+				if(id in GLOB.hardcoded_gases)
 					continue
+				trace_gases = TRUE
+				break
 
-		// DING! You have passed the gauntlet, and are "probably" safe.
-		return F
+			// Can most things breathe?
+			if(trace_gases)
+				continue
+			if(floor_gas_mix.get_moles(GAS_O2) < 16)
+				continue
+			if(floor_gas_mix.get_moles(GAS_PLASMA))
+				continue
+			if(floor_gas_mix.get_moles(GAS_CO2) >= 10)
+				continue
 
-/proc/get_teleport_turfs(turf/center, precision = 0)
+			// Aim for goldilocks temperatures and pressure
+			if((floor_gas_mix.return_temperature() <= 270) || (floor_gas_mix.return_temperature() >= 360))
+				continue
+			var/pressure = floor_gas_mix.return_pressure()
+			if((pressure <= 20) || (pressure >= 550))
+				continue
+
+			if(extended_safety_checks)
+				if(islava(potential_floor)) //chasms aren't /floor, and so are pre-filtered
+					var/turf/open/lava/potential_lava_floor = potential_floor
+					if(!potential_lava_floor.is_safe())
+						continue
+
+			// DING! You have passed the gauntlet, and are "probably" safe.
+			return potential_floor
+
+/proc/get_teleport_turfs(turf/current, turf/center, precision = 0, restrain_vlevel = TRUE)
+	if(!center)
+		CRASH("Teleport proc passed without a destination")
+	var/datum/virtual_level/center_vlevel = center.get_virtual_level()
+	// Trying to teleport into unallocated space
+	if(!center_vlevel)
+		return
+	if(restrain_vlevel)
+		var/datum/virtual_level/current_vlevel = current.get_virtual_level()
+		// We restrain the teleport to a single virtual level
+		if(current_vlevel != center_vlevel)
+			return
 	if(!precision)
+		if(center.is_transition_turf())
+			return
 		return list(center)
 	var/list/posturfs = list()
-	var/current_z_level = center.get_virtual_z_level()
 	for(var/turf/T in range(precision,center))
 		if(T.is_transition_turf())
 			continue // Avoid picking these.
-		if(T.get_virtual_z_level() != current_z_level)
-			continue
+		if(!center_vlevel.is_in_bounds(T))
+			continue // Out of bounds of our vlevel. Can happen if the precision is low that it may wanted to pick a level adjacent to this one
 		var/area/A = T.loc
 		if(!(A.area_flags & NOTELEPORT))
 			posturfs.Add(T)
 	return posturfs
 
-/proc/get_teleport_turf(turf/center, precision = 0)
-	var/list/turfs = get_teleport_turfs(center, precision)
+/proc/get_teleport_turf(turf/current, turf/destination, precision = 0, restrain_vlevel = TRUE)
+	var/list/turfs = get_teleport_turfs(current, destination, precision)
 	if (length(turfs))
 		return pick(turfs)

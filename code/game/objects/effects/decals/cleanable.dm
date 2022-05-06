@@ -26,16 +26,18 @@
 		if(LAZYLEN(diseases_to_add))
 			AddComponent(/datum/component/infective, diseases_to_add)
 
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+		COMSIG_ATOM_EXITED = .proc/on_uncrossed,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 	addtimer(CALLBACK(src, /datum.proc/_AddComponent, list(/datum/component/beauty, beauty)), 0)
 
-	var/turf/T = get_turf(src)
-	if(T && is_station_level(T.z))
-		SSblackbox.record_feedback("tally", "station_mess_created", 1, name)
+	SSblackbox.record_feedback("tally", "station_mess_created", 1, name)
 
 /obj/effect/decal/cleanable/Destroy()
-	var/turf/T = get_turf(src)
-	if(T && is_station_level(T.z))
-		SSblackbox.record_feedback("tally", "station_mess_destroyed", 1, name)
+	SSblackbox.record_feedback("tally", "station_mess_destroyed", 1, name)
 	return ..()
 
 /obj/effect/decal/cleanable/proc/replace_decal(obj/effect/decal/cleanable/C) // Returns true if we should give up in favor of the pre-existing decal
@@ -78,11 +80,14 @@
 		reagents.expose_temperature(exposed_temperature)
 	..()
 
+/obj/effect/decal/cleanable/proc/on_uncrossed(datum/source, atom/movable/O)
+	SIGNAL_HANDLER
+	return
 
 //Add "bloodiness" of this blood's type, to the human's shoes
 //This is on /cleanable because fuck this ancient mess
-/obj/effect/decal/cleanable/Crossed(atom/movable/O)
-	..()
+/obj/effect/decal/cleanable/proc/on_entered(datum/source, atom/movable/O)
+	SIGNAL_HANDLER
 	if(ishuman(O))
 		var/mob/living/carbon/human/H = O
 		if(H.shoes && blood_state && bloodiness)

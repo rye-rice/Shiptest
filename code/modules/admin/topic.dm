@@ -201,51 +201,6 @@
 			return
 		SSticker.mode.admin_panel()
 
-	else if(href_list["call_shuttle"])
-		if(!check_rights(R_ADMIN))
-			return
-
-
-		switch(href_list["call_shuttle"])
-			if("1")
-				if(EMERGENCY_AT_LEAST_DOCKED)
-					return
-				SSshuttle.emergency.request()
-				log_admin("[key_name(usr)] called the Emergency Shuttle.")
-				message_admins("<span class='adminnotice'>[key_name_admin(usr)] called the Emergency Shuttle to the station.</span>")
-
-			if("2")
-				if(EMERGENCY_AT_LEAST_DOCKED)
-					return
-				switch(SSshuttle.emergency.mode)
-					if(SHUTTLE_CALL)
-						SSshuttle.emergency.cancel()
-						log_admin("[key_name(usr)] sent the Emergency Shuttle back.")
-						message_admins("<span class='adminnotice'>[key_name_admin(usr)] sent the Emergency Shuttle back.</span>")
-					else
-						SSshuttle.emergency.cancel()
-						log_admin("[key_name(usr)] called the Emergency Shuttle.")
-						message_admins("<span class='adminnotice'>[key_name_admin(usr)] called the Emergency Shuttle to the station.</span>")
-
-
-
-	else if(href_list["edit_shuttle_time"])
-		if(!check_rights(R_SERVER))
-			return
-
-		var/timer = input("Enter new shuttle duration (seconds):","Edit Shuttle Timeleft", SSshuttle.emergency.timeLeft() ) as num|null
-		if(!timer)
-			return
-		SSshuttle.emergency.setTimer(timer*10)
-		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [timer] seconds.")
-		minor_announce("The emergency shuttle will reach its destination in [round(SSshuttle.emergency.timeLeft(600))] minutes.")
-		message_admins("<span class='adminnotice'>[key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [timer] seconds.</span>")
-	else if(href_list["trigger_centcom_recall"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		usr.client.trigger_centcom_recall()
-
 	else if(href_list["toggle_continuous"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -383,6 +338,10 @@
 					newmob.equipOutfit(posttransformoutfit)
 			if("slime")
 				M.change_mob_type( /mob/living/simple_animal/slime , null, null, delmob )
+			if("adultslime")
+				var/mob/living/simple_animal/slime/baby_slime = M.change_mob_type( /mob/living/simple_animal/slime , null, null, delmob )
+				baby_slime.amount_grown = SLIME_EVOLUTION_THRESHOLD
+				baby_slime.Evolve()
 			if("monkey")
 				M.change_mob_type( /mob/living/carbon/monkey , null, null, delmob )
 			if("robot")
@@ -1272,78 +1231,6 @@
 		to_chat(src.owner, "[special_role_description]", confidential = TRUE)
 		to_chat(src.owner, ADMIN_FULLMONTY_NONAME(M), confidential = TRUE)
 
-	else if(href_list["addjobslot"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/Add = href_list["addjobslot"]
-
-		for(var/datum/job/job in SSjob.occupations)
-			if(job.title == Add)
-				job.total_positions += 1
-				break
-
-		src.manage_free_slots()
-
-
-	else if(href_list["customjobslot"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/Add = href_list["customjobslot"]
-
-		for(var/datum/job/job in SSjob.occupations)
-			if(job.title == Add)
-				var/newtime = null
-				newtime = input(usr, "How many jebs do you want?", "Add wanted posters", "[newtime]") as num|null
-				if(!newtime)
-					to_chat(src.owner, "Setting to amount of positions filled for the job", confidential = TRUE)
-					job.total_positions = job.current_positions
-					break
-				job.total_positions = newtime
-
-		src.manage_free_slots()
-
-	else if(href_list["removejobslot"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/Remove = href_list["removejobslot"]
-
-		for(var/datum/job/job in SSjob.occupations)
-			if(job.title == Remove && job.total_positions - job.current_positions > 0)
-				job.total_positions -= 1
-				break
-
-		src.manage_free_slots()
-
-	else if(href_list["unlimitjobslot"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/Unlimit = href_list["unlimitjobslot"]
-
-		for(var/datum/job/job in SSjob.occupations)
-			if(job.title == Unlimit)
-				job.total_positions = -1
-				break
-
-		src.manage_free_slots()
-
-	else if(href_list["limitjobslot"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/Limit = href_list["limitjobslot"]
-
-		for(var/datum/job/job in SSjob.occupations)
-			if(job.title == Limit)
-				job.total_positions = job.current_positions
-				break
-
-		src.manage_free_slots()
-
-
 	else if(href_list["adminspawncookie"])
 		if(!check_rights(R_ADMIN|R_FUN))
 			return
@@ -1412,7 +1299,7 @@
 	else if(href_list["reject_custom_name"])
 		if(!check_rights(R_ADMIN))
 			return
-		var/obj/item/station_charter/charter = locate(href_list["reject_custom_name"])
+		var/obj/item/sector_charter/charter = locate(href_list["reject_custom_name"])
 		if(istype(charter))
 			charter.reject_proposed(usr)
 	else if(href_list["jumpto"])
@@ -1565,7 +1452,7 @@
 			return
 		return DuplicateObject(marked_datum, perfectcopy=1, newloc=get_turf(usr))
 
-	else if(href_list["object_list"])			//this is the laggiest thing ever
+	else if(href_list["object_list"]) //this is the laggiest thing ever
 		if(!check_rights(R_SPAWN))
 			return
 
@@ -1955,28 +1842,6 @@
 		else
 			to_chat(usr, "You may only use this when the game is running.", confidential = TRUE)
 
-	else if(href_list["create_outfit_finalize"])
-		if(!check_rights(R_ADMIN))
-			return
-		create_outfit_finalize(usr,href_list)
-	else if(href_list["load_outfit"])
-		if(!check_rights(R_ADMIN))
-			return
-		load_outfit(usr)
-	else if(href_list["create_outfit_menu"])
-		if(!check_rights(R_ADMIN))
-			return
-		create_outfit(usr)
-	else if(href_list["delete_outfit"])
-		if(!check_rights(R_ADMIN))
-			return
-		var/datum/outfit/O = locate(href_list["chosen_outfit"]) in GLOB.custom_outfits
-		delete_outfit(usr,O)
-	else if(href_list["save_outfit"])
-		if(!check_rights(R_ADMIN))
-			return
-		var/datum/outfit/O = locate(href_list["chosen_outfit"]) in GLOB.custom_outfits
-		save_outfit(usr,O)
 	else if(href_list["set_selfdestruct_code"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2038,60 +1903,6 @@
 		var/datum/browser/popup = new(usr, "related_[C]", "Related accounts by [uppertext(href_list["showrelatedacc"])]:", 425, 300)
 		popup.set_content(dat.Join("<br>"))
 		popup.open()
-
-	else if(href_list["centcomlookup"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		if(!CONFIG_GET(string/centcom_ban_db))
-			to_chat(usr, "<span class='warning'>Centcom Galactic Ban DB is disabled!</span>")
-			return
-
-		var/ckey = href_list["centcomlookup"]
-
-		// Make the request
-		var/datum/http_request/request = new()
-		request.prepare(RUSTG_HTTP_METHOD_GET, "[CONFIG_GET(string/centcom_ban_db)]/[ckey]", "", "")
-		request.begin_async()
-		UNTIL(request.is_complete() || !usr)
-		if (!usr)
-			return
-		var/datum/http_response/response = request.into_response()
-
-		var/list/bans
-
-		var/list/dat = list("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'><body>")
-
-		if(response.errored)
-			dat += "<br>Failed to connect to CentCom."
-		else if(response.status_code != 200)
-			dat += "<br>Failed to connect to CentCom. Status code: [response.status_code]"
-		else
-			if(response.body == "[]")
-				dat += "<center><b>0 bans detected for [ckey]</b></center>"
-			else
-				bans = json_decode(response["body"])
-				dat += "<center><b>[bans.len] ban\s detected for [ckey]</b></center>"
-				for(var/list/ban in bans)
-					dat += "<b>Server: </b> [sanitize(ban["sourceName"])]<br>"
-					dat += "<b>RP Level: </b> [sanitize(ban["sourceRoleplayLevel"])]<br>"
-					dat += "<b>Type: </b> [sanitize(ban["type"])]<br>"
-					dat += "<b>Banned By: </b> [sanitize(ban["bannedBy"])]<br>"
-					dat += "<b>Reason: </b> [sanitize(ban["reason"])]<br>"
-					dat += "<b>Datetime: </b> [sanitize(ban["bannedOn"])]<br>"
-					var/expiration = ban["expires"]
-					dat += "<b>Expires: </b> [expiration ? "[sanitize(expiration)]" : "Permanent"]<br>"
-					if(ban["type"] == "job")
-						dat += "<b>Jobs: </b> "
-						var/list/jobs = ban["jobs"]
-						dat += sanitize(jobs.Join(", "))
-						dat += "<br>"
-					dat += "<hr>"
-
-		dat += "<br></body>"
-		var/datum/browser/popup = new(usr, "centcomlookup-[ckey]", "<div align='center'>Central Command Galactic Ban Database</div>", 700, 600)
-		popup.set_content(dat.Join())
-		popup.open(0)
 
 	else if(href_list["centcomlookup"])
 		if(!check_rights(R_ADMIN))
@@ -2411,7 +2222,7 @@
 		else
 			for(var/thing in GLOB.allfaxes)
 				var/obj/machinery/photocopier/faxmachine/F = thing
-				if(F.z in SSmapping.levels_by_trait(ZTRAIT_STATION))
+				if(F.z in SSmapping.virtual_levels_by_trait(ZTRAIT_STATION))
 					addtimer(CALLBACK(src, .proc/handle_sendall, F, P), 0)
 
 		var/datum/fax/admin/A = new /datum/fax/admin()

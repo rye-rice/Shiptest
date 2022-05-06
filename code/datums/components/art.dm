@@ -15,8 +15,10 @@
 /datum/component/art/proc/apply_moodlet(mob/M, impress)
 	SIGNAL_HANDLER
 
-	M.visible_message("<span class='notice'>[M] stops and looks intently at [parent].</span>", \
-						 "<span class='notice'>You stop to take in [parent].</span>")
+	M.visible_message(
+		"<span class='notice'>[M] stops and looks intently at [parent].</span>",
+		"<span class='notice'>You stop to take in [parent].</span>"
+	)
 	switch(impress)
 		if (0 to BAD_ART)
 			SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "artbad", /datum/mood_event/artbad)
@@ -40,7 +42,10 @@
 	apply_moodlet(M, impressiveness *(O.obj_integrity/O.max_integrity))
 
 /datum/component/art/proc/on_attack_hand(datum/source, mob/M)
-	SIGNAL_HANDLER_DOES_SLEEP
+	SIGNAL_HANDLER
+	INVOKE_ASYNC(src, .proc/examine, source, M)
+
+/datum/component/art/proc/examine(datum/source, mob/M)
 
 	to_chat(M, "<span class='notice'>You start examining [parent]...</span>")
 	if(!do_after(M, 20, target = parent))
@@ -50,8 +55,10 @@
 /datum/component/art/rev
 
 /datum/component/art/rev/apply_moodlet(mob/M, impress)
-	M.visible_message("<span class='notice'>[M] stops to inspect [parent].</span>", \
-						 "<span class='notice'>You take in [parent], inspecting the fine craftsmanship of the proletariat.</span>")
+	M.visible_message(
+		"<span class='notice'>[M] stops to inspect [parent].</span>",
+		"<span class='notice'>You take in [parent], inspecting the fine craftsmanship of the proletariat.</span>"
+	)
 
 	if(M.mind && M.mind.has_antag_datum(/datum/antagonist/rev))
 		SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "artgreat", /datum/mood_event/artgreat)

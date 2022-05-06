@@ -12,10 +12,10 @@ GENE SCANNER
 */
 
 // Describes the two modes of scanning available for health analyzers
-#define SCANMODE_HEALTH		0
-#define SCANMODE_CHEMICAL 	1
-#define SCANNER_CONDENSED 	0
-#define SCANNER_VERBOSE 	1
+#define SCANMODE_HEALTH 0
+#define SCANMODE_CHEMICAL 1
+#define SCANNER_CONDENSED 0
+#define SCANNER_VERBOSE 1
 
 /obj/item/t_scanner
 	name = "\improper T-ray scanner"
@@ -107,15 +107,16 @@ GENE SCANNER
 
 /obj/item/healthanalyzer/attack(mob/living/M, mob/living/carbon/human/user)
 	flick("[icon_state]-scan", src)	//makes it so that it plays the scan animation upon scanning, including clumsy scanning
+	playsound(src, 'sound/effects/fastbeep.ogg', 10)
 
 	// Clumsiness/brain damage check
 	if ((HAS_TRAIT(user, TRAIT_CLUMSY) || HAS_TRAIT(user, TRAIT_DUMB)) && prob(50))
 		user.visible_message("<span class='warning'>[user] analyzes the floor's vitals!</span>", \
 							"<span class='notice'>You stupidly try to analyze the floor's vitals!</span>")
 		to_chat(user, "<span class='info'>Analyzing results for The floor:\n\tOverall status: <b>Healthy</b></span>\
-					 \n<span class='info'>Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FF8000'>Burn</font>/<font color='red'>Brute</font></span>\
-					 \n<span class='info'>\tDamage specifics: <font color='blue'>0</font>-<font color='green'>0</font>-<font color='#FF8000'>0</font>-<font color='red'>0</font></span>\
-					 \n<span class='info'>Body temperature: ???</span>")
+					\n<span class='info'>Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FF8000'>Burn</font>/<font color='red'>Brute</font></span>\
+					\n<span class='info'>\tDamage specifics: <font color='blue'>0</font>-<font color='green'>0</font>-<font color='#FF8000'>0</font>-<font color='red'>0</font></span>\
+					\n<span class='info'>Body temperature: ???</span>")
 		return
 
 	user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", \
@@ -230,7 +231,7 @@ GENE SCANNER
 
 			for(var/o in damaged)
 				var/obj/item/bodypart/org = o //head, left arm, right arm, etc.
-				dmgreport += "<tr><td><font color='#0000CC'>[capitalize(org.name)]:</font></td>\
+				dmgreport += "<tr><td><font color='#0000CC'>[capitalize(parse_zone(org.body_zone))]:</font></td>\
 								<td><font color='red'>[(org.brute_dam > 0) ? "[CEILING(org.brute_dam,1)]" : "0"]</font></td>\
 								<td><font color='orange'>[(org.burn_dam > 0) ? "[CEILING(org.burn_dam,1)]" : "0"]</font></td></tr>"
 			dmgreport += "</font></table>"
@@ -454,12 +455,12 @@ GENE SCANNER
 	var/total_moles = environment.total_moles()
 
 	render_list += "<span class='info'><B>Results:</B></span>\
-				 \n<span class='[abs(pressure - ONE_ATMOSPHERE) < 10 ? "info" : "alert"]'>Pressure: [round(pressure, 0.01)] kPa</span>\n"
+		\n<span class='[abs(pressure - ONE_ATMOSPHERE) < 10 ? "info" : "alert"]'>Pressure: [round(pressure, 0.01)] kPa</span>\n"
 	if(total_moles)
-		var/o2_concentration = environment.get_moles(/datum/gas/oxygen)/total_moles
-		var/n2_concentration = environment.get_moles(/datum/gas/nitrogen)/total_moles
-		var/co2_concentration = environment.get_moles(/datum/gas/carbon_dioxide)/total_moles
-		var/plasma_concentration = environment.get_moles(/datum/gas/plasma)/total_moles
+		var/o2_concentration = environment.get_moles(GAS_O2)/total_moles
+		var/n2_concentration = environment.get_moles(GAS_N2)/total_moles
+		var/co2_concentration = environment.get_moles(GAS_CO2)/total_moles
+		var/plasma_concentration = environment.get_moles(GAS_PLASMA)/total_moles
 
 		//WS Start -- Atmos Analyzer Reformat (Issue #419)
 		to_chat(user, "<span class='boldnotice'>Results of analysis.</span>")
@@ -468,30 +469,30 @@ GENE SCANNER
 		//WS End
 
 		if(abs(n2_concentration - N2STANDARD) < 20)
-			to_chat(user, "<span class='info'>Nitrogen: [round(n2_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/nitrogen), 0.01)] mol)</span>")
+			to_chat(user, "<span class='info'>Nitrogen: [round(n2_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_N2), 0.01)] mol)</span>")
 		else
-			to_chat(user, "<span class='alert'>Nitrogen: [round(n2_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/nitrogen), 0.01)] mol)</span>")
+			to_chat(user, "<span class='alert'>Nitrogen: [round(n2_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_N2), 0.01)] mol)</span>")
 
 		if(abs(o2_concentration - O2STANDARD) < 2)
-			to_chat(user, "<span class='info'>Oxygen: [round(o2_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/oxygen), 0.01)] mol)</span>")
+			to_chat(user, "<span class='info'>Oxygen: [round(o2_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_O2), 0.01)] mol)</span>")
 		else
-			to_chat(user, "<span class='alert'>Oxygen: [round(o2_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/oxygen), 0.01)] mol)</span>")
+			to_chat(user, "<span class='alert'>Oxygen: [round(o2_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_O2), 0.01)] mol)</span>")
 
 		if(co2_concentration > 0.01)
-			to_chat(user, "<span class='alert'>CO2: [round(co2_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/carbon_dioxide), 0.01)] mol)</span>")
+			to_chat(user, "<span class='alert'>CO2: [round(co2_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_CO2), 0.01)] mol)</span>")
 		else
-			to_chat(user, "<span class='info'>CO2: [round(co2_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/carbon_dioxide), 0.01)] mol)</span>")
+			to_chat(user, "<span class='info'>CO2: [round(co2_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_CO2), 0.01)] mol)</span>")
 
 		if(plasma_concentration > 0.005)
-			to_chat(user, "<span class='alert'>Plasma: [round(plasma_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/plasma), 0.01)] mol)</span>")
+			to_chat(user, "<span class='alert'>Plasma: [round(plasma_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_PLASMA), 0.01)] mol)</span>")
 		else
-			to_chat(user, "<span class='info'>Plasma: [round(plasma_concentration*100, 0.01)] % ([round(environment.get_moles(/datum/gas/plasma), 0.01)] mol)</span>")
+			to_chat(user, "<span class='info'>Plasma: [round(plasma_concentration*100, 0.01)] % ([round(environment.get_moles(GAS_PLASMA), 0.01)] mol)</span>")
 
 		for(var/id in environment.get_gases())
 			if(id in GLOB.hardcoded_gases)
 				continue
 			var/gas_concentration = environment.get_moles(id)/total_moles
-			to_chat(user, "<span class='alert'>[GLOB.meta_gas_info[id][META_GAS_NAME]]: [round(gas_concentration*100, 0.01)] % ([round(environment.get_moles(id), 0.01)] mol)</span>")
+			to_chat(user, "<span class='alert'>[GLOB.gas_data.names[id]]: [round(gas_concentration*100, 0.01)] % ([round(environment.get_moles(id), 0.01)] mol)</span>")
 
 /obj/item/analyzer/AltClick(mob/user) //Barometer output for measuring when the next storm happens
 	..()
@@ -505,6 +506,7 @@ GENE SCANNER
 		if(!T)
 			return
 
+		var/datum/weather_controller/weather_controller = SSmapping.get_map_zone_weather_controller(T)
 		playsound(src, 'sound/effects/pop.ogg', 100)
 		var/area/user_area = T.loc
 		var/datum/weather/ongoing_weather = null
@@ -513,22 +515,21 @@ GENE SCANNER
 			to_chat(user, "<span class='warning'>[src]'s barometer function won't work indoors!</span>")
 			return
 
-		for(var/V in SSweather.processing)
-			var/datum/weather/W = V
-			if(W.barometer_predictable && (T.z in W.impacted_z_levels) && W.area_type == user_area.type && !(W.stage == END_STAGE))
-				ongoing_weather = W
-				break
+		if(weather_controller.current_weathers)
+			for(var/datum/weather/W as anything in weather_controller.current_weathers)
+				if(W.barometer_predictable && W.my_controller.mapzone.is_in_bounds(T) && W.area_type == user_area.type && !(W.stage == END_STAGE))
+					ongoing_weather = W
+					break
 
 		if(ongoing_weather)
 			if((ongoing_weather.stage == MAIN_STAGE) || (ongoing_weather.stage == WIND_DOWN_STAGE))
 				to_chat(user, "<span class='warning'>[src]'s barometer function can't trace anything while the storm is [ongoing_weather.stage == MAIN_STAGE ? "already here!" : "winding down."]</span>")
 				return
 
-			to_chat(user, "<span class='notice'>The next [ongoing_weather] will hit in [butchertime(ongoing_weather.next_hit_time - world.time)].</span>")
 			if(ongoing_weather.aesthetic)
 				to_chat(user, "<span class='warning'>[src]'s barometer function says that the next storm will breeze on by.</span>")
 		else
-			var/next_hit = SSweather.next_hit_by_zlevel["[T.z]"]
+			var/next_hit = weather_controller.next_weather
 			var/fixed = next_hit ? timeleft(next_hit) : -1
 			if(fixed < 0)
 				to_chat(user, "<span class='warning'>[src]'s barometer function was unable to trace any weather patterns.</span>")
@@ -588,7 +589,7 @@ GENE SCANNER
 
 			for(var/id in air_contents.get_gases())
 				var/gas_concentration = air_contents.get_moles(id)/total_moles
-				render_list += "<span class='notice'>[GLOB.meta_gas_info[id][META_GAS_NAME]]: [round(gas_concentration*100, 0.01)] % ([round(air_contents.get_moles(id), 0.01)] mol)</span>"  //WS Edit -- Atmos Analyzer Reformat (Issue #419)
+				render_list += "<span class='notice'>[GLOB.gas_data.names[id]]: [round(gas_concentration*100, 0.01)] % ([round(air_contents.get_moles(id), 0.01)] mol)</span>"  //WS Edit -- Atmos Analyzer Reformat (Issue #419)
 
 		else
 			render_list += airs.len > 1 ? "<span class='notice'>This node is empty!</span>" : "<span class='notice'>[target] is empty!</span>"
@@ -712,6 +713,7 @@ GENE SCANNER
 		user.visible_message("<span class='notice'>[user] analyzes [M]'s genetic sequence.</span>", \
 							"<span class='notice'>You analyze [M]'s genetic sequence.</span>")
 		gene_scan(M, user)
+		playsound(src, 'sound/effects/fastbeep.ogg', 20)
 
 	else
 		user.visible_message("<span class='notice'>[user] fails to analyze [M]'s genetic sequence.</span>", "<span class='warning'>[M] has no readable genetic sequence!</span>")
@@ -825,6 +827,42 @@ GENE SCANNER
 /obj/item/scanner_wand/proc/return_patient()
 	var/returned_target = selected_target
 	return returned_target
+
+/obj/item/reagent_scanner //essentially just the code from the PDA reagent scanner, but shoved into this object, and specifies amount
+	name = "reagent scanner"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "reagent"
+	item_state = "reagentanalyzer"
+	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
+	desc = "A hand-held item capable of analyzing the reagents in a container, including complex, meat-based containers such as humans."
+	flags_1 = CONDUCT_1
+	item_flags = NOBLUDGEON
+	slot_flags = ITEM_SLOT_BELT
+	throwforce = 3
+	w_class = WEIGHT_CLASS_TINY
+	throw_speed = 3
+	throw_range = 7
+	custom_materials = list(/datum/material/iron=200)
+
+/obj/item/reagent_scanner/afterattack(atom/A as mob|obj|turf|area, mob/user, proximity)
+	. = ..()
+	flick("[icon_state]-scan", src)
+	if(!proximity)
+		return
+	playsound(src, 'sound/effects/fastbeep.ogg', 10)
+	if(!isnull(A.reagents))
+		if(A.reagents.reagent_list.len > 0)
+			var/reagents_length = A.reagents.reagent_list.len
+			to_chat(user, "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.</span>")
+			for (var/re in A.reagents.reagent_list)
+				var/datum/reagent/R = re
+				var/amount = R.volume
+				to_chat(user, "<span class='notice'>\t [amount] units of [re].</span>")
+		else
+			to_chat(user, "<span class='notice'>No active chemical agents found in [A].</span>")
+	else
+		to_chat(user, "<span class='notice'>No significant chemical agents found in [A].</span>")
 
 #undef SCANMODE_HEALTH
 #undef SCANMODE_CHEMICAL

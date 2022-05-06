@@ -44,6 +44,7 @@ Difficulty: Very Hard
 	move_to_delay = 10
 	ranged = TRUE
 	pixel_x = -32
+	base_pixel_x = -32
 	del_on_death = TRUE
 	gps_name = "Angelic Signal"
 	achievement_type = /datum/award/achievement/boss/colossus_kill
@@ -53,10 +54,11 @@ Difficulty: Very Hard
 	loot = list(/obj/structure/closet/crate/necropolis/colossus)
 	deathmessage = "disintegrates, leaving a glowing core in its wake."
 	deathsound = 'sound/magic/demon_dies.ogg'
-	attack_action_types = list(/datum/action/innate/megafauna_attack/spiral_attack,
-							   /datum/action/innate/megafauna_attack/aoe_attack,
-							   /datum/action/innate/megafauna_attack/shotgun,
-							   /datum/action/innate/megafauna_attack/alternating_cardinals)
+	attack_action_types = list(
+		/datum/action/innate/megafauna_attack/spiral_attack,
+		/datum/action/innate/megafauna_attack/aoe_attack,
+		/datum/action/innate/megafauna_attack/shotgun,
+		/datum/action/innate/megafauna_attack/alternating_cardinals)
 	small_sprite_type = /datum/action/small_sprite/megafauna/colossus
 
 /datum/action/innate/megafauna_attack/spiral_attack
@@ -762,6 +764,7 @@ Difficulty: Very Hard
 	START_PROCESSING(SSobj, src)
 
 /obj/structure/closet/stasis/Entered(atom/A)
+	. = ..()
 	if(isliving(A) && holder_animal)
 		var/mob/living/L = A
 		L.notransform = 1

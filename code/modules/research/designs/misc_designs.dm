@@ -298,7 +298,7 @@
 
 /datum/design/id
 	name = "Identification Card"
-	desc = "A card used to provide ID and determine access across the station."
+	desc = "A card used to provide ID and determine access across known space."
 	id = "idcard"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron=200, /datum/material/glass = 100)
@@ -478,7 +478,7 @@
 	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE | DEPARTMENTAL_FLAG_ENGINEERING
 
 /datum/design/knight_armour
-	name = "Knight Armour"
+	name = "Heavy Plate Armour"
 	desc = "A royal knight's favorite garments. Can be trimmed by any friendly person."
 	id = "knight_armour"
 	build_type = AUTOLATHE
@@ -487,7 +487,7 @@
 	category = list("Imported")
 
 /datum/design/knight_helmet
-	name = "Knight Helmet"
+	name = "Heavy Plate Helmet"
 	desc = "A royal knight's favorite hat. If you hold it upside down it's actually a bucket."
 	id = "knight_helmet"
 	build_type = AUTOLATHE
@@ -576,23 +576,23 @@
 /////////////////Tape////////////////////
 /////////////////////////////////////////
 
-/datum/design/super_sticky_tape
-	name = "Super Sticky Tape"
-	id = "super_sticky_tape"
+/datum/design/electric_tape
+	name = "Electrical Tape"
+	id = "electric_tape"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/plastic = 3000)
-	build_path = /obj/item/stack/sticky_tape/super
+	build_path = /obj/item/stack/tape/industrial/electrical
 	category = list("Equipment")
-	departmental_flags = DEPARTMENTAL_FLAG_SERVICE
+	departmental_flags = DEPARTMENTAL_FLAG_ENGINEERING
 
-/datum/design/pointy_tape
-	name = "Pointy Tape"
-	id = "pointy_tape"
+/datum/design/super_tape
+	name = "Professional Duct Tape"
+	id = "super_tape"
 	build_type = PROTOLATHE
 	materials = list(/datum/material/iron = 1500, /datum/material/plastic = 1000)
-	build_path = /obj/item/stack/sticky_tape/pointy
+	build_path = /obj/item/stack/tape/industrial/pro
 	category = list("Equipment")
-	departmental_flags = DEPARTMENTAL_FLAG_SERVICE
+	departmental_flags = DEPARTMENTAL_FLAG_ENGINEERING
 
 
 

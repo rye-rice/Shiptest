@@ -100,6 +100,18 @@
 	minimize_when_attached = FALSE
 	attachment_slot = null
 
+/obj/item/clothing/accessory/maidapron/syndicate
+	name = "syndicate maid apron"
+	desc = "Practical? No. Tactical? Also no. Cute? Most definitely yes."
+	icon_state = "maidapronsynd"
+	item_state = "maidapronsynd"
+
+/obj/item/clothing/accessory/maidapron/inteq
+	name = "inteq maid apron"
+	desc = "A 'tactical' apron to protect you from all sorts of spills, from dough to blood!"
+	icon_state = "inteqmaidapron"
+	item_state = "inteqmaidapron"
+
 //////////
 //Medals//
 //////////
@@ -128,8 +140,9 @@
 			if(user == M)
 				delay = 0
 			else
-				user.visible_message("<span class='notice'>[user] is trying to pin [src] on [M]'s chest.</span>", \
-									 "<span class='notice'>You try to pin [src] on [M]'s chest.</span>")
+				user.visible_message(
+					"<span class='notice'>[user] is trying to pin [src] on [M]'s chest.</span>", \
+					"<span class='notice'>You try to pin [src] on [M]'s chest.</span>")
 			var/input
 			if(!commended && user != M)
 				input = stripped_input(user,"Please input a reason for this commendation, it will be recorded by Nanotrasen.", ,"", 140)
@@ -138,8 +151,9 @@
 					if(user == M)
 						to_chat(user, "<span class='notice'>You attach [src] to [U].</span>")
 					else
-						user.visible_message("<span class='notice'>[user] pins \the [src] on [M]'s chest.</span>", \
-											 "<span class='notice'>You pin \the [src] on [M]'s chest.</span>")
+						user.visible_message(
+							"<span class='notice'>[user] pins \the [src] on [M]'s chest.</span>", \
+							"<span class='notice'>You pin \the [src] on [M]'s chest.</span>")
 						if(input)
 							SSblackbox.record_feedback("associative", "commendation", 1, list("commender" = "[user.real_name]", "commendee" = "[M.real_name]", "medal" = "[src]", "reason" = input))
 							GLOB.commendations += "[user.real_name] awarded <b>[M.real_name]</b> the <span class='medaltext'>[name]</span>! \n- [input]"
@@ -243,36 +257,36 @@
 
 /obj/item/clothing/accessory/armband/deputy
 	name = "security deputy armband"
-	desc = "An armband, worn by personnel authorized to act as a deputy of station security."
+	desc = "An armband, worn by personnel authorized to act as a deputy of corporate security."
 
 /obj/item/clothing/accessory/armband/cargo
 	name = "cargo bay guard armband"
-	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is brown."
+	desc = "An armband, worn by the private security forces to display which department they're assigned to. This one is brown."
 	icon_state = "cargoband"
 
 /obj/item/clothing/accessory/armband/engine
 	name = "engineering guard armband"
-	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is orange with a reflective strip!"
+	desc = "An armband, worn by the private security forces to display which department they're assigned to. This one is orange with a reflective strip!"
 	icon_state = "engieband"
 
 /obj/item/clothing/accessory/armband/science
 	name = "science guard armband"
-	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is purple."
+	desc = "An armband, worn by the private security forces to display which department they're assigned to. This one is purple."
 	icon_state = "rndband"
 
 /obj/item/clothing/accessory/armband/hydro
 	name = "hydroponics guard armband"
-	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is green and blue."
+	desc = "An armband, worn by the private security forces to display which department they're assigned to. This one is green and blue."
 	icon_state = "hydroband"
 
 /obj/item/clothing/accessory/armband/med
 	name = "medical guard armband"
-	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is white."
+	desc = "An armband, worn by the private security forces to display which department they're assigned to. This one is white."
 	icon_state = "medband"
 
 /obj/item/clothing/accessory/armband/medblue
 	name = "medical guard armband"
-	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is white and blue."
+	desc = "An armband, worn by the private security forces to display which department they're assigned to. This one is white and blue."
 	icon_state = "medblueband"
 
 //////////////
@@ -368,14 +382,23 @@
 	desc = "A hunter's talisman, some say the old gods smile on those who wear it."
 	icon_state = "talisman"
 	armor = list("melee" = 5, "bullet" = 5, "laser" = 5, "energy" = 5, "bomb" = 20, "bio" = 20, "rad" = 5, "fire" = 0, "acid" = 25)
-	attachment_slot = null
+	attachment_slot = ARMS
+	above_suit = TRUE
+
+/obj/item/clothing/accessory/wolftalisman
+	name = "hunter's necklace"
+	desc = "A thick necklace woven from sinew and bits of wolfhide, adorned with a carved fang. Slaying such beasts is rumoured to elate the gods of old, and such an item proves your worth."
+	icon_state = "wolf_talisman"
+	armor = list("melee" = 15	, "bullet" = 15, "laser" = 10, "energy" = 10, "bomb" = 20, "bio" = 20, "rad" = 5, "fire" = 25, "acid" = 25)
+	attachment_slot = CHEST
+	above_suit = TRUE
 
 /obj/item/clothing/accessory/skullcodpiece
 	name = "skull codpiece"
-	desc = "A skull shaped ornament, intended to protect the important things in life."
+	desc = "A legion skull fitted to a codpiece, intended to protect the important things in life."
 	icon_state = "skull"
 	above_suit = TRUE
-	armor = list("melee" = 5, "bullet" = 5, "laser" = 5, "energy" = 5, "bomb" = 20, "bio" = 20, "rad" = 5, "fire" = 0, "acid" = 25)
+	armor = list("melee" = 10, "bullet" = 10, "laser" = 5, "energy" = 5, "bomb" = 20, "bio" = 20, "rad" = 5, "fire" = 40, "acid" = 40)
 	attachment_slot = GROIN
 
 /obj/item/clothing/accessory/skilt

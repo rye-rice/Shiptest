@@ -51,6 +51,8 @@
 	set_stat(DEAD)
 	unset_machine()
 	timeofdeath = world.time
+	if(ckey)
+		GLOB.respawn_timers[client?.ckey] = world.timeofday
 	tod = station_time_timestamp()
 	var/turf/T = get_turf(src)
 	for(var/obj/item/I in contents)
@@ -73,6 +75,9 @@
 	med_hud_set_health()
 	med_hud_set_status()
 	stop_pulling()
+
+	if(typing_indicator)
+		set_typing_indicator(FALSE)
 
 	. = ..()
 

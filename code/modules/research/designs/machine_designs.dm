@@ -274,20 +274,13 @@
 	category = list("Research Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
 
-/datum/design/board/rdservercontrol
-	name = "Computer Design (R&D Server Control Console Board)"
-	desc = "The circuit board for an R&D Server Control Console."
-	id = "rdservercontrol"
-	build_path = /obj/item/circuitboard/computer/rdservercontrol
-	category = list("Research Machinery")
-	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
-
 /datum/design/board/rdserver
 	name = "Machine Design (R&D Server Board)"
 	desc = "The circuit board for an R&D Server."
 	id = "rdserver"
+	build_type = AUTOLATHE | IMPRINTER
 	build_path = /obj/item/circuitboard/machine/rdserver
-	category = list("Research Machinery")
+	category = list("Research Machinery", "initial", "Equipment", "Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
 
 /datum/design/board/mechfab
@@ -311,6 +304,14 @@
 	desc = "The circuit board for a Mechbay Recharger."
 	id = "mech_recharger"
 	build_path = /obj/item/circuitboard/machine/mech_recharger
+	category = list("Research Machinery")
+	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
+
+/datum/design/board/augmanipulator
+	name = "Machine Design (Augment Manipulator Board)"
+	desc = "The circuit board for an Augment Manipulator."
+	id = "augmanipulator"
+	build_path = /obj/item/circuitboard/machine/aug_manipulator
 	category = list("Research Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE
 
@@ -479,7 +480,7 @@
 	name = "Machine Design (Mining Rewards Vendor Board)"
 	desc = "The circuit board for a Mining Rewards Vendor."
 	id = "mining_equipment_vendor"
-	build_path = /obj/item/circuitboard/machine/mining_equipment_vendor
+	build_path = /obj/item/circuitboard/machine/vending/mining_equipment
 	category = list ("Misc. Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE | DEPARTMENTAL_FLAG_CARGO
 
@@ -587,6 +588,14 @@
 	category = list ("Research Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_CARGO
 
+/datum/design/board/selling_pad
+	name = "Machine Design (Cargo Hold Pad)"
+	desc = "The circuit board for a Cargo Hold Pad."
+	id = "selling_pad"
+	build_path = /obj/item/circuitboard/machine/selling_pad
+	category = list ("Misc. Machinery")
+	departmental_flags = DEPARTMENTAL_FLAG_CARGO
+
 /datum/design/board/paystand
 	name = "Machine Design (Pay Stand)"
 	desc = "The circuit board for a paystand."
@@ -611,22 +620,6 @@
 	category = list("Medical Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_MEDICAL
 
-/datum/design/board/autodoc
-	name = "Machine Design (Autodoc)"
-	desc = "The circuit board for an Autodoc."
-	id = "autodoc"
-	build_path = /obj/item/circuitboard/machine/autodoc
-	category = list("Medical Machinery")
-	departmental_flags = DEPARTMENTAL_FLAG_MEDICAL
-
-/datum/design/board/spaceship_navigation_beacon
-	name = "Machine Design (Bluespace Navigation Gigabeacon)"
-	desc = "The circuit board for a Bluespace Navigation Gigabeacon."
-	id = "spaceship_navigation_beacon"
-	build_path = /obj/item/circuitboard/machine/spaceship_navigation_beacon
-	category = list ("Teleportation Machinery")
-	departmental_flags = DEPARTMENTAL_FLAG_ENGINEERING | DEPARTMENTAL_FLAG_SCIENCE
-
 /datum/design/board/medical_kiosk
 	name = "Machine Design (Medical Kiosk)"
 	desc = "The circuit board for a Medical Kiosk."
@@ -650,3 +643,16 @@
 	build_path = /obj/item/circuitboard/machine/sheetifier
 	category = list ("Misc. Machinery")
 
+/datum/design/board/shieldwallgen
+	name = "Machine Design (Shield Wall Generator)"
+	desc = "A shield generator commonly used in xenobiology research."
+	id = "shieldwallgen"
+	build_path = /obj/item/circuitboard/machine/shieldwallgen
+	category = list("Misc. Machinery")
+
+/datum/design/board/shieldwallgen/atmos
+	name = "Machine Design (Holofield Generator)"
+	desc = "A specialized shield generator used to block airflow."
+	id = "shieldwallgen_atmos"
+	build_path = /obj/item/circuitboard/machine/shieldwallgen/atmos
+	category = list("Misc. Machinery")

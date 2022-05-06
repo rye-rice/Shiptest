@@ -1,8 +1,8 @@
 //defines the drill hat's yelling setting
-#define DRILL_DEFAULT	"default"
-#define DRILL_SHOUTING	"shouting"
-#define DRILL_YELLING	"yelling"
-#define DRILL_CANADIAN	"canadian"
+#define DRILL_DEFAULT "default"
+#define DRILL_SHOUTING "shouting"
+#define DRILL_YELLING "yelling"
+#define DRILL_CANADIAN "canadian"
 
 //Chef
 /obj/item/clothing/head/chefhat
@@ -28,8 +28,6 @@
 /obj/item/clothing/head/caphat
 	name = "captain's peaked cap"
 	desc = "It's good being the king."
-	icon = 'whitesands/icons/obj/clothing/hats.dmi'
-	mob_overlay_icon = 'whitesands/icons/mob/clothing/head.dmi'
 	icon_state = "captain"
 	item_state = "that"
 	flags_inv = 0
@@ -49,11 +47,13 @@
 //Head of Personnel
 /obj/item/clothing/head/hopcap
 	name = "head of personnel's cap"
-	icon = 'whitesands/icons/obj/clothing/hats.dmi'
-	mob_overlay_icon = 'whitesands/icons/mob/clothing/head.dmi'
 	icon_state = "hopcap"
 	desc = "The symbol of true bureaucratic micromanagement."
 	armor = list("melee" = 25, "bullet" = 15, "laser" = 25, "energy" = 35, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	dog_fashion = /datum/dog_fashion/head/head_of_personnel
+
+/obj/item/clothing/head/hopcap/nt
+	icon_state = "hopcap_nt"
 	dog_fashion = /datum/dog_fashion/head/head_of_personnel
 
 //Chaplain
@@ -172,7 +172,8 @@ WS End */
 /obj/item/clothing/head/HoS/beret/syndicate
 	name = "syndicate beret"
 	desc = "A black beret with thick armor padding inside. Stylish and robust."
-	icon_state = "hosberetblack"
+	icon_state = "beret_officer"
+	item_state = "beret_officer"
 
 /obj/item/clothing/head/warden
 	name = "warden's police hat"
@@ -181,6 +182,14 @@ WS End */
 	armor = list("melee" = 40, "bullet" = 30, "laser" = 30, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 30, "acid" = 60)
 	strip_delay = 60
 	dog_fashion = /datum/dog_fashion/head/warden
+
+/obj/item/clothing/head/warden/red
+	name = "warden's red hat"
+	desc = "A warden's red hat. Looking at it gives you the feeling of wanting to keep people in cells for as long as possible."
+	icon_state = "wardenhat"
+	armor = list("melee" = 40, "bullet" = 30, "laser" = 30, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 30, "acid" = 60)
+	strip_delay = 60
+	dog_fashion = /datum/dog_fashion/head/warden_red
 
 /obj/item/clothing/head/warden/drill
 	name = "warden's campaign hat"

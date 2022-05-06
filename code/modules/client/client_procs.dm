@@ -1,7 +1,7 @@
 	////////////
 	//SECURITY//
 	////////////
-#define UPLOAD_LIMIT		1048576	//Restricts client uploads to the server to 1MB //Could probably do with being lower.
+#define UPLOAD_LIMIT 1048576	//Restricts client uploads to the server to 1MB //Could probably do with being lower.
 
 GLOBAL_LIST_INIT(blacklisted_builds, list(
 	"1407" = "bug preventing client display overrides from working leads to clients being able to see things/mobs they shouldn't be able to see",
@@ -10,12 +10,12 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 
 	))
 
-#define LIMITER_SIZE	5
-#define CURRENT_SECOND	1
-#define SECOND_COUNT	2
-#define CURRENT_MINUTE	3
-#define MINUTE_COUNT	4
-#define ADMINSWARNED_AT	5
+#define LIMITER_SIZE 5
+#define CURRENT_SECOND 1
+#define SECOND_COUNT 2
+#define CURRENT_MINUTE 3
+#define MINUTE_COUNT 4
+#define ADMINSWARNED_AT 5
 	/*
 	When somebody clicks a link in game, this Topic is called first.
 	It does the stuff in this proc and  then is redirected to the Topic() proc for the src=[0xWhatever]
@@ -250,11 +250,9 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 			new /datum/admins(localhost_rank, ckey, 1, 1)
 
 	//Mentor Authorisation
-	var/mentor = GLOB.mentor_datums[ckey]
+	var/datum/mentors/mentor = GLOB.mentor_datums[ckey]
 	if(mentor)
-		verbs += /client/proc/cmd_mentor_say
-		verbs += /client/proc/show_mentor_memo
-		GLOB.mentors += src
+		mentor.associate(src)
 
 	//preferences datum - also holds some persistent data for the client (because we may as well keep these datums to a minimum)
 	prefs = GLOB.preferences_datums[ckey]
@@ -511,8 +509,7 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 			send2tgs("Server", "[cheesy_message] (No admins online)")
 	QDEL_LIST_ASSOC_VAL(char_render_holders)
 	if(movingmob != null)
-		movingmob.client_mobs_in_contents -= mob
-		UNSETEMPTY(movingmob.client_mobs_in_contents)
+		LAZYREMOVE(movingmob.client_mobs_in_contents, mob)
 	seen_messages = null
 	Master.UpdateTickRate()
 	. = ..() //Even though we're going to be hard deleted there are still some things that want to know the destroy is happening
@@ -561,7 +558,7 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 		return
 
 	//If we aren't an admin, and the flag is set
-	if(CONFIG_GET(flag/panic_bunker) && !holder && !GLOB.deadmins[ckey])
+	if(CONFIG_GET(flag/panic_bunker) && !holder && !GLOB.deadmins[ckey] && !(ckey in GLOB.bunker_passthrough))
 		var/living_recs = CONFIG_GET(number/panic_bunker_living)
 		//Relies on pref existing, but this proc is only called after that occurs, so we're fine.
 		var/minutes = get_exp_living(pure_numeric = TRUE)
@@ -598,6 +595,8 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 		if(!account_join_date)
 			account_join_date = "Error"
 			account_age = -1
+		else if(ckey in GLOB.bunker_passthrough)
+			GLOB.bunker_passthrough -= ckey
 	qdel(query_client_in_db)
 	var/datum/DBQuery/query_get_client_age = SSdbcore.NewQuery(
 		"SELECT firstseen, DATEDIFF(Now(),firstseen), accountjoindate, DATEDIFF(Now(),accountjoindate) FROM [format_table_name("player")] WHERE ckey = :ckey",
@@ -729,7 +728,7 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 
 			sleep(15 SECONDS) //Longer sleep here since this would trigger if a client tries to reconnect manually because the inital reconnect failed
 
-			 //we sleep after telling the client to reconnect, so if we still exist something is up
+			//we sleep after telling the client to reconnect, so if we still exist something is up
 			log_access("Forced disconnect: [key] [computer_id] [address] - CID randomizer check")
 
 			qdel(src)
@@ -875,9 +874,6 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 		// so that the visual focus indicator matches reality.
 		winset(src, null, "input.background-color=[COLOR_INPUT_DISABLED]")
 
-	else
-		winset(src, null, "input.focus=true input.background-color=[COLOR_INPUT_ENABLED]")
-
 	..()
 
 /client/proc/add_verbs_from_config()
@@ -980,6 +976,8 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=looc")
 				if("Me")
 					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=me")
+				if("Whisper")
+					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=whisper")
 
 /client/proc/change_view(new_size)
 	if (isnull(new_size))

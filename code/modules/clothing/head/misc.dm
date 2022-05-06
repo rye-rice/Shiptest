@@ -1,8 +1,6 @@
 
 /obj/item/clothing/head/centhat
 	name = "\improper CentCom hat"
-	icon = 'whitesands/icons/obj/clothing/hats.dmi'
-	mob_overlay_icon = 'whitesands/icons/mob/clothing/head.dmi'
 	icon_state = "centcom"
 	desc = "It's good to be emperor."
 	item_state = "that"
@@ -429,7 +427,7 @@
 
 /obj/item/clothing/head/medievaljewhat
 	name = "medieval Jewish hat"
-	desc = "A silly looking hat, intended to be placed on the heads of the station's oppressed religious minorities."
+	desc = "A silly looking hat, intended to be placed on the heads of oppressed religious minorities."
 	icon_state = "medievaljewhat"
 
 /obj/item/clothing/head/taqiyahwhite
@@ -516,3 +514,28 @@
 	icon_state = "JackFrostHat"
 	item_state = "JackFrostHat"
 
+/obj/item/clothing/head/aclfcap
+	name = "2nd Battlegroup peaked cap"
+	desc = "A cap worn by officers of the Gorlex Marauders 2nd Battlegroup, or as they say, the ACLF."
+	icon_state = "aclfcap"
+	item_state = "aclfcap"
+	flags_inv = 0
+	armor = list("melee" = 25, "bullet" = 15, "laser" = 25, "energy" = 35, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	strip_delay = 60
+
+/obj/item/clothing/head/maidheadband/syndicate
+	name = "tactical maid headband"
+	desc = "Tacticute."
+	icon_state = "syndieheadband"
+	item_state = "syndieheadband"
+
+/obj/item/clothing/head/maidheadband/inteq
+	name = "inteq maid headband"
+	desc = "Tacticute."
+	icon_state = "inteqheadband"
+	item_state = "inteqheadband"
+
+/obj/item/clothing/head/maidheadband
+	name = "maid headband"
+	desc = "Just like from one of those chinese cartoons!"
+	icon_state = "maid_headband"

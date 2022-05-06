@@ -17,27 +17,27 @@
 
 // Wires for the airlock are located in the datum folder, inside the wires datum folder.
 
-#define AIRLOCK_CLOSED	1
-#define AIRLOCK_CLOSING	2
-#define AIRLOCK_OPEN	3
-#define AIRLOCK_OPENING	4
-#define AIRLOCK_DENY	5
-#define AIRLOCK_EMAG	6
+#define AIRLOCK_CLOSED 1
+#define AIRLOCK_CLOSING 2
+#define AIRLOCK_OPEN 3
+#define AIRLOCK_OPENING 4
+#define AIRLOCK_DENY 5
+#define AIRLOCK_EMAG 6
 
-#define AIRLOCK_SECURITY_NONE			0 //Normal airlock				//Wires are not secured
-#define AIRLOCK_SECURITY_METAL			1 //Medium security airlock		//There is a simple metal over wires (use welder)
-#define AIRLOCK_SECURITY_PLASTEEL_I_S	2 								//Sliced inner plating (use crowbar), jumps to 0
-#define AIRLOCK_SECURITY_PLASTEEL_I		3 								//Removed outer plating, second layer here (use welder)
-#define AIRLOCK_SECURITY_PLASTEEL_O_S	4 								//Sliced outer plating (use crowbar)
-#define AIRLOCK_SECURITY_PLASTEEL_O		5 								//There is first layer of plasteel (use welder)
-#define AIRLOCK_SECURITY_PLASTEEL		6 //Max security airlock		//Fully secured wires (use wirecutters to remove grille, that is electrified)
+#define AIRLOCK_SECURITY_NONE 0 //Normal airlock				//Wires are not secured
+#define AIRLOCK_SECURITY_METAL 1 //Medium security airlock		//There is a simple metal over wires (use welder)
+#define AIRLOCK_SECURITY_PLASTEEL_I_S 2 								//Sliced inner plating (use crowbar), jumps to 0
+#define AIRLOCK_SECURITY_PLASTEEL_I 3 								//Removed outer plating, second layer here (use welder)
+#define AIRLOCK_SECURITY_PLASTEEL_O_S 4 								//Sliced outer plating (use crowbar)
+#define AIRLOCK_SECURITY_PLASTEEL_O 5 								//There is first layer of plasteel (use welder)
+#define AIRLOCK_SECURITY_PLASTEEL 6 //Max security airlock		//Fully secured wires (use wirecutters to remove grille, that is electrified)
 
-#define AIRLOCK_INTEGRITY_N			 300 // Normal airlock integrity
+#define AIRLOCK_INTEGRITY_N 300 // Normal airlock integrity
 #define AIRLOCK_INTEGRITY_MULTIPLIER 1.5 // How much reinforced doors health increases
 /// How much extra health airlocks get when braced with a seal
-#define AIRLOCK_SEAL_MULTIPLIER		 2
-#define AIRLOCK_DAMAGE_DEFLECTION_N  21  // Normal airlock damage deflection
-#define AIRLOCK_DAMAGE_DEFLECTION_R  30  // Reinforced airlock damage deflection
+#define AIRLOCK_SEAL_MULTIPLIER 2
+#define AIRLOCK_DAMAGE_DEFLECTION_N 21  // Normal airlock damage deflection
+#define AIRLOCK_DAMAGE_DEFLECTION_R 30  // Reinforced airlock damage deflection
 
 /obj/machinery/door/airlock
 	name = "airlock"
@@ -139,6 +139,12 @@
 
 	update_icon()
 
+	var/static/list/connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+		COMSIG_ATOM_EXITED = .proc/on_exited
+	)
+	AddElement(/datum/element/connect_loc, connections)
+
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/machinery/door/airlock/LateInitialize()
@@ -175,17 +181,17 @@
 	. = ..()
 	AddComponent(/datum/component/ntnet_interface)
 
-/obj/machinery/door/airlock/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock, idnum, override=FALSE)
+/obj/machinery/door/airlock/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	if(id_tag)
-		id_tag = "[idnum][id_tag]"
+		id_tag = "[REF(port)][id_tag]"
 
 /obj/machinery/door/airlock/CanPass(atom/movable/mover, turf/target)
 	. = ..()
 	if(density && has_hatch && (mover.pass_flags & PASSDOORHATCH))
 		return TRUE //If this airlock is closed, has hatches, and this creature can go through hatches, then we let it through without opening the airlock
 
-/obj/machinery/door/airlock/Crossed(atom/movable/mover)
-	. = ..()
+/obj/machinery/door/airlock/proc/on_entered(datum/source, atom/movable/mover)
+	SIGNAL_HANDLER
 	if(density && has_hatch && (mover.pass_flags & PASSDOORHATCH) && !hatchstate)
 		hatchstate = 1
 		update_icon()
@@ -194,8 +200,8 @@
 			return
 		mover.layer = UNDERDOOR
 
-/obj/machinery/door/airlock/Uncrossed(atom/movable/mover)
-	. = ..()
+/obj/machinery/door/airlock/proc/on_exited(datum/source, atom/movable/mover)
+	SIGNAL_HANDLER
 	if(density && has_hatch && (mover.pass_flags & PASSDOORHATCH))
 		mover.layer = initial(mover.layer)
 		close_hatch()
@@ -340,7 +346,7 @@
 		return
 	locked = TRUE
 	playsound(src, boltDown, 30, FALSE, 3, mono_adj = TRUE)
-	audible_message("<span class='hear'>You hear a click from the bottom of the door.</span>", null,  1)
+	audible_message("<span class='hear'>You hear a click from the bottom of the door.</span>", null, 1)
 	update_icon()
 
 /obj/machinery/door/airlock/unlock()
@@ -351,7 +357,7 @@
 		return
 	locked = FALSE
 	playsound(src, boltUp, 30, FALSE, 3, mono_adj = TRUE)
-	audible_message("<span class='hear'>You hear a click from the bottom of the door.</span>", null,  1)
+	audible_message("<span class='hear'>You hear a click from the bottom of the door.</span>", null, 1)
 	update_icon()
 
 /obj/machinery/door/airlock/narsie_act()
@@ -1181,8 +1187,10 @@
 	if(I)
 		var/beingcrowbarred = (I.tool_behaviour == TOOL_CROWBAR)
 		if(!security_level && (beingcrowbarred && panel_open && ((obj_flags & EMAGGED) || (density && welded && !operating && !hasPower() && !locked))))
-			user.visible_message("<span class='notice'>[user] removes the electronics from the airlock assembly.</span>", \
-							 	"<span class='notice'>You start to remove electronics from the airlock assembly...</span>")
+			user.visible_message(
+				"<span class='notice'>[user] removes the electronics from the airlock assembly.</span>",
+				"<span class='notice'>You start to remove electronics from the airlock assembly...</span>"
+			)
 			if(I.use_tool(src, user, 40, volume=100))
 				deconstruct(TRUE, user)
 				return
@@ -1236,7 +1244,7 @@
 		if(obj_flags & EMAGGED)
 			return FALSE
 		use_power(50)
-		playsound(src, doorOpen, 30, TRUE, mono_adj = TRUE)
+		playsound(src, doorOpen, 30, FALSE, mono_adj = TRUE)
 		if(closeOther != null && istype(closeOther, /obj/machinery/door/airlock/) && !closeOther.density)
 			closeOther.close()
 	else
@@ -1284,7 +1292,7 @@
 		if(obj_flags & EMAGGED)
 			return
 		use_power(50)
-		playsound(src, doorClose, 30, TRUE, mono_adj = TRUE)
+		playsound(src, doorClose, 30, FALSE, mono_adj = TRUE)
 	else
 		playsound(src, 'sound/machines/airlockforced.ogg', 30, TRUE, mono_adj = TRUE)
 

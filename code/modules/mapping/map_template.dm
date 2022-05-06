@@ -31,13 +31,20 @@
 	var/list/atom/atoms = list()
 	var/list/area/areas = list()
 
-	var/list/turfs = block(	locate(bounds[MAP_MINX], bounds[MAP_MINY], bounds[MAP_MINZ]),
-							locate(bounds[MAP_MAXX], bounds[MAP_MAXY], bounds[MAP_MAXZ]))
-	var/list/border = block(locate(max(bounds[MAP_MINX]-1, 1),			max(bounds[MAP_MINY]-1, 1),			 bounds[MAP_MINZ]),
-							locate(min(bounds[MAP_MAXX]+1, world.maxx),	min(bounds[MAP_MAXY]+1, world.maxy), bounds[MAP_MAXZ])) - turfs
+	var/list/turfs = block(
+		locate(
+			bounds[MAP_MINX],
+			bounds[MAP_MINY],
+			bounds[MAP_MINZ]
+			),
+		locate(
+			bounds[MAP_MAXX],
+			bounds[MAP_MAXY],
+			bounds[MAP_MAXZ]
+			)
+		)
 	for(var/L in turfs)
 		var/turf/B = L
-		atoms += B
 		areas |= B.loc
 		for(var/A in B)
 			atoms += A
@@ -46,21 +53,50 @@
 				continue
 			if(istype(A, /obj/machinery/atmospherics))
 				atmos_machines += A
-	for(var/L in border)
-		var/turf/T = L
-		T.air_update_turf(TRUE) //calculate adjacent turfs along the border to prevent runtimes
 
 	SSmapping.reg_in_areas_in_z(areas)
+	SSatoms.InitializeAtoms(turfs)
 	SSatoms.InitializeAtoms(atoms)
 	SSmachines.setup_template_powernets(cables)
 	SSair.setup_template_machinery(atmos_machines)
 
-/datum/map_template/proc/load_new_z()
-	var/x = round((world.maxx - width)/2)
-	var/y = round((world.maxy - height)/2)
+	//calculate all turfs inside the border
+	var/list/template_and_bordering_turfs = block(
+		locate(
+			max(bounds[MAP_MINX]-1, 1),
+			max(bounds[MAP_MINY]-1, 1),
+			bounds[MAP_MINZ]
+			),
+		locate(
+			min(bounds[MAP_MAXX]+1, world.maxx),
+			min(bounds[MAP_MAXY]+1, world.maxy),
+			bounds[MAP_MAXZ]
+			)
+		)
+	for(var/t in template_and_bordering_turfs)
+		var/turf/affected_turf = t
+		affected_turf.air_update_turf(TRUE)
+		affected_turf.levelupdate()
 
-	var/datum/space_level/level = SSmapping.add_new_zlevel(name, list(ZTRAIT_AWAY = TRUE))
-	var/datum/parsed_map/parsed = load_map(file(mappath), x, y, level.z_value, no_changeturf=(SSatoms.initialized == INITIALIZATION_INSSATOMS), placeOnTop=TRUE)
+/datum/map_template/proc/load_new_z()
+	var/x = round((world.maxx - width) * 0.5) + 1
+	var/y = round((world.maxy - height) * 0.5) + 1
+
+	/// Map templates which reach the boundaries of the world dont get reservation margin.
+	var/reservation_margin = 1
+	if(world.maxx == width && world.maxy == height)
+		reservation_margin = 0
+
+	var/r_width = width + reservation_margin
+	var/r_height = height + reservation_margin
+
+	var/datum/map_zone/mapzone = SSmapping.create_map_zone(name)
+	var/datum/virtual_level/vlevel = SSmapping.create_virtual_level(name, list(), mapzone, r_width, r_height, ALLOCATION_FREE)
+
+	if(reservation_margin)
+		vlevel.reserve_margin(reservation_margin)
+
+	var/datum/parsed_map/parsed = load_map(file(mappath), vlevel.low_x + reservation_margin + x, vlevel.low_y + reservation_margin + y, vlevel.z_value, no_changeturf=(SSatoms.initialized == INITIALIZATION_INSSATOMS), placeOnTop=TRUE)
 	var/list/bounds = parsed.bounds
 	if(!bounds)
 		return FALSE
@@ -72,7 +108,7 @@
 	smooth_zlevel(world.maxz)
 	log_game("Z-level [name] loaded at [x],[y],[world.maxz]")
 
-	return level
+	return mapzone
 
 /datum/map_template/proc/load(turf/T, centered = FALSE)
 	if(centered)
@@ -88,8 +124,7 @@
 							locate(min(T.x+width+1, world.maxx),	min(T.y+height+1, world.maxy), T.z))
 	for(var/L in border)
 		var/turf/turf_to_disable = L
-		SSair.remove_from_active(turf_to_disable) //stop processing turfs along the border to prevent runtimes, we return it in initTemplateBounds()
-		turf_to_disable.atmos_adjacent_turfs?.Cut()
+		turf_to_disable.set_sleeping(TRUE)
 
 	// Accept cached maps, but don't save them automatically - we don't want
 	// ruins clogging up memory for the whole round.

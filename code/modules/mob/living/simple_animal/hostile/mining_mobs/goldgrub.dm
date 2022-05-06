@@ -29,8 +29,11 @@
 	status_flags = CANPUSH
 	gold_core_spawnable = HOSTILE_SPAWN
 	search_objects = 1
-	wanted_objects = list(/obj/item/stack/ore/diamond, /obj/item/stack/ore/gold, /obj/item/stack/ore/silver,
-						  /obj/item/stack/ore/uranium)
+	wanted_objects = list(
+		/obj/item/stack/ore/diamond,
+		/obj/item/stack/ore/gold,
+		/obj/item/stack/ore/silver,
+		/obj/item/stack/ore/uranium)
 
 	var/chase_time = 100
 	var/will_burrow = TRUE
@@ -115,7 +118,7 @@
 		G.is_burrowed = TRUE
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/GiveTarget(new_target)
-	target = new_target
+	add_target(new_target)
 	if(target != null)
 		if(istype(target, /obj/item/stack/ore))
 			visible_message("<span class='notice'>The [name] looks at [target.name] with hungry eyes.</span>")
@@ -146,7 +149,7 @@
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/barf_contents()
 	visible_message("<span class='danger'>[src] spits out its consumed ores!</span>")
 	playsound(src, 'sound/effects/splat.ogg', 50, TRUE)
-	for(var/atom/movable/AM in src)
+	for(var/atom/movable/AM as anything in src)
 		AM.forceMove(loc)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Burrow()//Begin the chase to kill the goldgrub in time

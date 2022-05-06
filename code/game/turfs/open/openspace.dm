@@ -26,7 +26,7 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 /turf/open/openspace/airless
 	initial_gas_mix = AIRLESS_ATMOS
 
-/turf/open/openspace/Initialize() // handle plane and layer here so that they don't cover other obs/turfs in Dream Maker
+/turf/open/openspace/Initialize(mapload, inherited_virtual_z) // handle plane and layer here so that they don't cover other obs/turfs in Dream Maker
 	. = ..()
 	vis_contents += GLOB.openspace_backdrop_one_for_all //Special grey square for projecting backdrop darkness filter on it.
 	return INITIALIZE_HINT_LATELOAD
@@ -36,7 +36,7 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 	AddElement(/datum/element/turf_z_transparency, FALSE)
 
 /turf/open/openspace/can_have_cabling()
-	if(locate(/obj/structure/lattice/catwalk, src))
+	if(locate(/obj/structure/catwalk, src))
 		return TRUE
 	return FALSE
 
@@ -87,7 +87,7 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 	if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
 		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-		var/obj/structure/lattice/catwalk/W = locate(/obj/structure/lattice/catwalk, src)
+		var/obj/structure/catwalk/W = locate(/obj/structure/catwalk, src)
 		if(W)
 			to_chat(user, "<span class='warning'>There is already a catwalk here!</span>")
 			return
@@ -95,7 +95,7 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 			if(R.use(1))
 				to_chat(user, "<span class='notice'>You construct a catwalk.</span>")
 				playsound(src, 'sound/weapons/genhit.ogg', 50, TRUE)
-				new/obj/structure/lattice/catwalk(src)
+				new/obj/structure/catwalk(src)
 			else
 				to_chat(user, "<span class='warning'>You need two rods to build a catwalk!</span>")
 			return
@@ -150,7 +150,7 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 	planetary_atmos = TRUE
 	var/replacement_turf = /turf/open/floor/plating/asteroid/snow/icemoon
 
-/turf/open/openspace/icemoon/Initialize()
+/turf/open/openspace/icemoon/Initialize(mapload, inherited_virtual_z)
 	. = ..()
 	var/turf/T = below()
 	if(T.flags_1 & NO_RUINS_1)

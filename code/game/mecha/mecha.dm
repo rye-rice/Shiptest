@@ -186,11 +186,7 @@
 	scanmod = null
 	capacitor = null
 	internal_tank = null
-	if(loc)
-		loc.assume_air(cabin_air)
-		air_update_turf()
-	else
-		qdel(cabin_air)
+	assume_air(cabin_air)
 	cabin_air = null
 	qdel(spark_system)
 	spark_system = null
@@ -266,8 +262,8 @@
 	cabin_air = new
 	cabin_air.set_temperature(T20C)
 	cabin_air.set_volume(200)
-	cabin_air.set_moles(/datum/gas/oxygen, O2STANDARD*cabin_air.return_volume()/(R_IDEAL_GAS_EQUATION*cabin_air.return_temperature()))
-	cabin_air.set_moles(/datum/gas/nitrogen, N2STANDARD*cabin_air.return_volume()/(R_IDEAL_GAS_EQUATION*cabin_air.return_temperature()))
+	cabin_air.set_moles(GAS_O2, O2STANDARD*cabin_air.return_volume()/(R_IDEAL_GAS_EQUATION*cabin_air.return_temperature()))
+	cabin_air.set_moles(GAS_N2, N2STANDARD*cabin_air.return_volume()/(R_IDEAL_GAS_EQUATION*cabin_air.return_temperature()))
 	return cabin_air
 
 /obj/mecha/proc/add_radio()
@@ -344,13 +340,7 @@
 
 		if(internal_damage & MECHA_INT_TANK_BREACH) //remove some air from internal tank
 			if(internal_tank)
-				var/datum/gas_mixture/int_tank_air = internal_tank.return_air()
-				var/datum/gas_mixture/leaked_gas = int_tank_air.remove_ratio(0.1)
-				if(loc)
-					loc.assume_air(leaked_gas)
-					air_update_turf()
-				else
-					qdel(leaked_gas)
+				assume_air_ratio(internal_tank.return_air(), 0.1)
 
 		if(internal_damage & MECHA_INT_SHORT_CIRCUIT)
 			if(get_charge())
@@ -373,8 +363,7 @@
 		if(pressure_delta > 0) //cabin pressure lower than release pressure
 			if(tank_air.return_temperature() > 0)
 				transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
-				var/datum/gas_mixture/removed = tank_air.remove(transfer_moles)
-				cabin_air.merge(removed)
+				tank_air.transfer_to(cabin_air,transfer_moles)
 		else if(pressure_delta < 0) //cabin pressure higher than release pressure
 			var/datum/gas_mixture/t_air = return_air()
 			pressure_delta = cabin_pressure - release_pressure
@@ -382,11 +371,7 @@
 				pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
 			if(pressure_delta > 0) //if location pressure is lower than cabin pressure
 				transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
-				var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)
-				if(t_air)
-					t_air.merge(removed)
-				else //just delete the cabin gas, we're in space or some shit
-					qdel(removed)
+				cabin_air.transfer_to(t_air, transfer_moles)
 
 	if(occupant)
 		if(cell)
@@ -823,8 +808,9 @@
 	AI.cancel_camera()
 	AI.controlled_mech = src
 	AI.remote_control = src
+	REMOVE_TRAIT(AI, TRAIT_HANDS_BLOCKED, ROUNDSTART_TRAIT)
 	AI.can_shunt = 0 //ONE AI ENTERS. NO AI LEAVES.
-	to_chat(AI, AI.can_dominate_mechs ? "<span class='announce'>Takeover of [name] complete! You are now loaded onto the onboard computer. Do not attempt to leave the station sector!</span>" :\
+	to_chat(AI, AI.can_dominate_mechs ? "<span class='announce'>Takeover of [name] complete! You are now loaded onto the onboard computer. Attempting to leave your transmission region will result in connection loss!</span>" :\
 		"<span class='notice'>You have been uploaded to a mech's onboard computer.</span>")
 	to_chat(AI, "<span class='reallybig boldnotice'>Use Middle-Mouse to activate mech functions and equipment. Click normally for AI interactions.</span>")
 	if(interaction == AI_TRANS_FROM_CARD)
@@ -861,6 +847,11 @@
 /obj/mecha/remove_air(amount)
 	if(use_internal_tank)
 		return cabin_air.remove(amount)
+	return ..()
+
+/obj/mecha/remove_air_ratio(ratio)
+	if(use_internal_tank)
+		return cabin_air.remove_ratio(ratio)
 	return ..()
 
 /obj/mecha/return_air()
@@ -919,7 +910,16 @@
 
 	visible_message("<span class='notice'>[user] starts to climb into [name].</span>")
 
-	if(do_after(user, enter_delay, target = src))
+	//check user for fast embark, divide enter_delay by 2, then pass final delay to do_after
+	var/final_delay = enter_delay
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.wear_suit)
+			var/obj/item/clothing/suit/S = H.get_item_by_slot(ITEM_SLOT_OCLOTHING)
+			if(S.clothing_flags & FAST_EMBARK)
+				final_delay = enter_delay/2
+
+	if(do_after(user, final_delay, target = src))
 		if(obj_integrity <= 0)
 			to_chat(user, "<span class='warning'>You cannot get in the [name], it has been destroyed!</span>")
 		else if(occupant)
@@ -1004,7 +1004,15 @@
 /obj/mecha/container_resist_act(mob/living/user)
 	is_currently_ejecting = TRUE
 	to_chat(occupant, "<span class='notice'>You begin the ejection procedure. Equipment is disabled during this process. Hold still to finish ejecting.</span>")
-	if(do_after(occupant, has_gravity() ? exit_delay : 0 , target = src))
+	var/final_exit_delay = exit_delay
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.wear_suit)
+			var/obj/item/clothing/suit/S = H.get_item_by_slot(ITEM_SLOT_OCLOTHING)
+			if(S.clothing_flags & FAST_EMBARK)
+				final_exit_delay = exit_delay/2
+
+	if(do_after(occupant, has_gravity() ? final_exit_delay : 0 , target = src))
 		to_chat(occupant, "<span class='notice'>You exit the mech.</span>")
 		go_out()
 	else
@@ -1012,6 +1020,7 @@
 	is_currently_ejecting = FALSE
 
 /obj/mecha/Exited(atom/movable/M, atom/newloc)
+	. = ..()
 	if(occupant && occupant == M) // The occupant exited the mech without calling go_out()
 		go_out(TRUE, newloc)
 
@@ -1054,6 +1063,7 @@
 				AI.linked_core = null
 				return
 			to_chat(AI, "<span class='notice'>Returning to core...</span>")
+			ADD_TRAIT(AI, TRAIT_HANDS_BLOCKED, ROUNDSTART_TRAIT) // Resets the AI's hand status
 			AI.controlled_mech = null
 			AI.remote_control = null
 			RemoveActions(occupant, 1)
@@ -1160,7 +1170,7 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 		if(istype(gun, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic) && gun.ammo_type == A.ammo_type)
 			found_gun = TRUE
 			if(A.direct_load)
-				ammo_needed = initial(gun.projectiles) - gun.projectiles
+				ammo_needed = gun.projectiles_max - gun.projectiles
 			else
 				ammo_needed = gun.projectiles_cache_max - gun.projectiles_cache
 

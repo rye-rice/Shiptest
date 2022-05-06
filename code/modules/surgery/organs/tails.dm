@@ -18,6 +18,12 @@
 	desc = "A severed cat tail. Who's wagging now?"
 	tail_type = "Cat"
 
+/obj/item/organ/tail/cat/slime
+	name = "slimy cat tail"
+	desc = "A slimy looking severed cat tail."
+	tail_type = "Slimecat"
+	alpha = 150
+
 /obj/item/organ/tail/cat/Insert(mob/living/carbon/human/H, special = 0, drop_if_replaced = TRUE)
 	..()
 	if(istype(H))
@@ -35,8 +41,8 @@
 		H.update_body()
 
 /obj/item/organ/tail/lizard
-	name = "lizard tail"
-	desc = "A severed lizard tail. Somewhere, no doubt, a lizard hater is very pleased with themselves."
+	name = "\improper Sarathi tail"
+	desc = "A severed Sarathi's tail. Can't they regrow these...?"
 	color = "#116611"
 	tail_type = "Smooth"
 	var/spines = "None"

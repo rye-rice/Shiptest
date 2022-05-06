@@ -161,12 +161,18 @@
 			if((rank in jobs) || (truerank in jobs)) //WS edit - alt titles
 				if(!manifest_out[department])
 					manifest_out[department] = list()
-				manifest_out[department] += list(list(
-					"name" = name,
-					"rank" = rank
-				))
+				// Append to beginning of list if captain or department head
+				if (rank == "Captain" || (department != "Command" && (rank in GLOB.command_positions)))
+					manifest_out[department] = list(list(
+						"name" = name,
+						"rank" = rank
+					)) + manifest_out[department]
+				else
+					manifest_out[department] += list(list(
+						"name" = name,
+						"rank" = rank
+					))
 				has_department = TRUE
-				break
 		if(!has_department)
 			if(!manifest_out["Misc"])
 				manifest_out["Misc"] = list()
@@ -313,8 +319,7 @@
 		locked += L
 	return
 
-/datum/datacore/proc/get_id_photo(mob/living/carbon/human/H, client/C, show_directions = list(SOUTH))
-	var/datum/job/J = SSjob.GetJob(H.mind.assigned_role)
+/datum/datacore/proc/get_id_photo(mob/living/carbon/human/H, client/C, show_directions = list(SOUTH), datum/job/J)
 	var/datum/preferences/P
 	if(!C)
 		C = H.client

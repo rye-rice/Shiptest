@@ -39,6 +39,7 @@
 	if(reagents.total_volume && (ignore_flags || M.can_inject(user, 1))) // Ignore flag should be checked first or there will be an error message.
 		to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
 		to_chat(user, "<span class='notice'>You inject [M] with [src].</span>")
+		playsound(loc, pick('sound/items/hypospray.ogg','sound/items/hypospray2.ogg'), 50, TRUE)
 		var/fraction = min(amount_per_transfer_from_this/reagents.total_volume, 1)
 
 
@@ -153,6 +154,14 @@
 	desc = "A modified stimulants autoinjector for use in combat situations. Has a mild healing effect."
 	list_reagents = list(/datum/reagent/medicine/stimulants = 10, /datum/reagent/medicine/omnizine = 10)
 
+//watered down traitor stim
+/obj/item/reagent_containers/hypospray/medipen/stimpack/crisis
+	name = "crisis stimpack"
+	icon_state = "stimpen"
+	item_state = "stimpen"
+	desc = "A modified stimulant autoinjector for use in emergency situations, containing a cocktail of potent nerve excitants that greatly improve both speed and stun resistance for a brief period. Popular among soldiers and adrenaline junkies."
+	list_reagents = list(/datum/reagent/medicine/stimulants = 5, /datum/reagent/medicine/ephedrine = 10, /datum/reagent/medicine/omnizine = 10)
+
 /obj/item/reagent_containers/hypospray/medipen/stimulants
 	name = "stimulant medipen"
 	desc = "Contains a very large amount of an incredibly powerful stimulant, vastly increasing your movement speed and reducing stuns by a very large amount for around five minutes. Do not take if pregnant."
@@ -214,6 +223,7 @@
 	else
 		icon_state = "[initial(icon_state)]0"
 
+/* Replaced with variant in whitesands/code/modules/reagents/reagent_containers/hypospray.dm
 /obj/item/reagent_containers/hypospray/medipen/survival
 	name = "survival medipen"
 	desc = "A medipen for surviving in the harshest of environments, heals and protects from environmental hazards. WARNING: Do not inject more than one pen in quick succession."
@@ -222,7 +232,7 @@
 	volume = 57
 	amount_per_transfer_from_this = 58
 	list_reagents = list(/datum/reagent/medicine/salbutamol = 10, /datum/reagent/medicine/leporazine = 15, /datum/reagent/medicine/bicaridinep = 8, /datum/reagent/medicine/dermaline = 8, /datum/reagent/medicine/epinephrine = 10, /datum/reagent/medicine/lavaland_extract = 2, /datum/reagent/medicine/omnizine = 5)
-
+*/
 /obj/item/reagent_containers/hypospray/medipen/atropine
 	name = "atropine autoinjector"
 	desc = "A rapid way to save a person from a critical injury state!"

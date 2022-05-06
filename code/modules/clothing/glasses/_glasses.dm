@@ -9,6 +9,8 @@
 	equip_delay_other = 25
 	resistance_flags = NONE
 	custom_materials = list(/datum/material/glass = 250)
+	greyscale_colors = list(list(14, 26), list(17, 26))
+	greyscale_icon_state = "glasses"
 	var/vision_flags = 0
 	var/darkness_view = 2//Base human is 2
 	var/invis_view = SEE_INVISIBLE_LIVING	//admin only for now
@@ -100,6 +102,7 @@
 	glass_colour_type = /datum/client_colour/glass_colour/purple
 	resistance_flags = ACID_PROOF
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 80, "acid" = 100)
+	custom_price = 250
 
 /obj/item/clothing/glasses/science/item_action_slot_check(slot)
 	if(slot == ITEM_SLOT_EYES)
@@ -276,6 +279,16 @@
 /obj/item/clothing/glasses/welding/attack_self(mob/user)
 	weldingvisortoggle(user)
 
+/obj/item/clothing/glasses/welding/ghostbuster
+	name = "optical ecto-scanner"
+	desc = "A bulky pair of unwieldy glasses that lets you see things best left unseen. Obscures vision, but also gives a bit of eye protection"
+	icon_state = "bustin-g"
+	item_state = "bustin-g"
+	invis_view = SEE_INVISIBLE_OBSERVER
+	invis_override = null
+	flash_protect = 1
+	visor_vars_to_toggle = VISOR_FLASHPROTECT | VISOR_TINT | VISOR_INVISVIEW
+	glass_colour_type = /datum/client_colour/glass_colour/green
 
 /obj/item/clothing/glasses/blindfold
 	name = "blindfold"
@@ -309,7 +322,7 @@
 	item_state = "blindfoldwhite"
 	var/colored_before = FALSE
 
-/obj/item/clothing/glasses/blindfold/white/equipped(mob/living/carbon/human/user, slot)
+/obj/item/clothing/glasses/blindfold/white/visual_equipped(mob/living/carbon/human/user, slot)
 	if(ishuman(user) && slot == ITEM_SLOT_EYES)
 		update_icon(user)
 		user.update_inv_glasses() //Color might have been changed by update_icon.

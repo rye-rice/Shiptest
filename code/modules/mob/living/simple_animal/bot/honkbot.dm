@@ -344,26 +344,27 @@ Maintenance panel panel is [open ? "opened" : "closed"]"},
 		target = user
 		mode = BOT_HUNT
 
-/mob/living/simple_animal/bot/honkbot/Crossed(atom/movable/AM)
+/mob/living/simple_animal/bot/honkbot/on_entered(datum/source, atom/movable/AM)
 	if(ismob(AM) && (on)) //only if its online
 		if(prob(30)) //you're far more likely to trip on a honkbot
 			var/mob/living/carbon/C = AM
 			if(!istype(C) || !C || in_range(src, target))
 				return
-			C.visible_message("<span class='warning'>[pick( \
-						  	"[C] dives out of [src]'s way!", \
-						  	"[C] stumbles over [src]!", \
-						  	"[C] jumps out of [src]'s path!", \
-						  	"[C] trips over [src] and falls!", \
-						  	"[C] topples over [src]!", \
-						  	"[C] leaps out of [src]'s way!")]</span>")
+			C.visible_message(
+				"<span class='warning'>[pick( \
+					"[C] dives out of [src]'s way!", \
+					"[C] stumbles over [src]!", \
+					"[C] jumps out of [src]'s path!", \
+					"[C] trips over [src] and falls!", \
+					"[C] topples over [src]!", \
+					"[C] leaps out of [src]'s way!")]</span>")
 			C.Paralyze(10)
 			playsound(loc, 'sound/misc/sadtrombone.ogg', 50, TRUE, -1)
 			if(!client)
-				speak("Honk!")
+				INVOKE_ASYNC(src, .proc/speak, "Honk!")
 			sensor_blink()
 			return
-	..()
+	. = ..()
 
 /obj/machinery/bot_core/honkbot
 	req_one_access = list(ACCESS_THEATRE, ACCESS_ROBOTICS)

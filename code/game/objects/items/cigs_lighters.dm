@@ -245,9 +245,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			if (src == C.wear_mask) // if it's in the human/monkey mouth, transfer reagents to the mob
 				var/fraction = min(REAGENTS_METABOLISM/reagents.total_volume, 1)
 				/*
-				 * Given the amount of time the cig will last, and how often we take a hit, find the number
-				 * of chems to give them each time so they'll have smoked it all by the end.
-				 */
+				* Given the amount of time the cig will last, and how often we take a hit, find the number
+				* of chems to give them each time so they'll have smoked it all by the end.
+				*/
 				if (smoke_all)
 					to_smoke = reagents.total_volume/((smoketime * 2) / (dragtime / 10))
 
@@ -334,10 +334,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	desc = "A Carp Classic brand cigarette. A small label on its side indicates that it does NOT contain carpotoxin."
 
 /obj/item/clothing/mask/cigarette/carp/Initialize()
-    . = ..()
-    if(!prob(5))
-        return
-    reagents?.add_reagent(/datum/reagent/toxin/carpotoxin , 3) // They lied
+	. = ..()
+	if(!prob(5))
+		return
+	reagents?.add_reagent(/datum/reagent/toxin/carpotoxin , 3) // They lied
 
 /obj/item/clothing/mask/cigarette/syndicate
 	desc = "An unknown brand cigarette."
@@ -776,6 +776,35 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	overlay_state = "clockwork"
 	grind_results = list(/datum/reagent/iron = 1, /datum/reagent/fuel = 5, /datum/reagent/copper = 1)
 
+/obj/item/lighter/liz
+	name = "small blaze"
+	desc = "A little flame of your own, currently located dangerously in your mouth."
+	icon_state = "fire"
+	item_state = "fire"
+	overlay_state = "fire"
+	grind_results = null
+	lefthand_file = null
+	righthand_file = null
+	item_flags = DROPDEL
+	w_class = WEIGHT_CLASS_HUGE
+	force = 0                       //if you want to attack someone with that fire you gotta spit it out first
+	throwforce = 0
+	throw_range = 0
+	throw_speed = 0
+
+/obj/item/lighter/liz/Initialize()
+	. = ..()
+	set_lit(TRUE)
+	force = 0
+
+/obj/item/lighter/liz/attack_self(mob/user)
+	qdel(src)
+
+/obj/item/lighter/liz/ignition_effect(atom/A, mob/user)
+	if(get_temperature())
+		. = "<span class='rose'>[user] spits fire at [A], igniting it.</span>"
+		playsound(src, 'sound/magic/fireball.ogg', 10, TRUE)
+
 ///////////
 //ROLLING//
 ///////////
@@ -819,7 +848,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/vapetime = 0 //this so it won't puff out clouds every tick
 	var/screw = 0 // kinky
 	var/super = 0 //for the fattest vapes dude.
-	var/vapecolor  //What color the vape should be. If this is not filled out it will automatically be set on Initialize() - WS edit - Lightable e-cigarettes
+	var/vapecolor //What color the vape should be. If this is not filled out it will automatically be set on Initialize() - WS edit - Lightable e-cigarettes
 	var/overlayname = "vape" //Used to decide what overlay sprites to use - WS edit - Lightable e-cigarettes
 
 /obj/item/clothing/mask/vape/suicide_act(mob/user)
@@ -882,8 +911,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			return
 		on = !on
 		if(on)
-			user.visible_message("<span class='notice'>[user] turns on [user.p_their()] [src] with a holographic flame from [user.p_their()] [O].</span>",
-								 "<span class='notice'>You turn on your [src] with a holographic flame from your [O].</span>")
+			user.visible_message(
+				"<span class='notice'>[user] turns on [user.p_their()] [src] with a holographic flame from [user.p_their()] [O].</span>",
+				"<span class='notice'>You turn on your [src] with a holographic flame from your [O].</span>"
+			)
 			reagents.flags |= NO_REACT
 			icon_state = "[vapecolor]_vape"
 			item_state = "[vapecolor]_vape"
@@ -891,8 +922,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 				START_PROCESSING(SSobj, src)
 
 		else
-			user.visible_message("<span class='notice'>[user] turns off [user.p_their()] [src] with a holographic gust from [user.p_their()] [O].</span>",
-								 "<span class='notice'>You turn off your [src] with a holographic gust from your [O].</span>")
+			user.visible_message(
+				"<span class='notice'>[user] turns off [user.p_their()] [src] with a holographic gust from [user.p_their()] [O].</span>",
+				"<span class='notice'>You turn off your [src] with a holographic gust from your [O].</span>"
+			)
 			reagents.flags &= NO_REACT
 			icon_state = "[vapecolor]_vapeoff"
 			item_state = "[vapecolor]_vapeoff"

@@ -32,7 +32,7 @@
 //ATTACK HAND IGNORING PARENT RETURN VALUE
 /mob/living/simple_animal/drone/attack_hand(mob/user)
 	if(ishuman(user))
-		if(stat == DEAD || status_flags & GODMODE || !can_be_held)
+		if(stat == DEAD || status_flags & GODMODE || !HAS_TRAIT(src, TRAIT_HOLDABLE))
 			..()
 			return
 		if(user.get_active_held_item())
@@ -65,14 +65,16 @@
 /mob/living/simple_animal/drone/proc/try_reactivate(mob/living/user)
 	var/mob/dead/observer/G = get_ghost()
 	if(!client && (!G || !G.client))
-		var/list/faux_gadgets = list("hypertext inflator","failsafe directory","DRM switch","stack initializer",\
-									 "anti-freeze capacitor","data stream diode","TCP bottleneck","supercharged I/O bolt",\
-									 "tradewind stabilizer","radiated XML cable","registry fluid tank","open-source debunker")
+		var/list/faux_gadgets = list(
+			"hypertext inflator","failsafe directory","DRM switch","stack initializer",
+			"anti-freeze capacitor","data stream diode","TCP bottleneck","supercharged I/O bolt",
+			"tradewind stabilizer","radiated XML cable","registry fluid tank","open-source debunker")
 
-		var/list/faux_problems = list("won't be able to tune their bootstrap projector","will constantly remix their binary pool"+\
-									  " even though the BMX calibrator is working","will start leaking their XSS coolant",\
-									  "can't tell if their ethernet detour is moving or not", "won't be able to reseed enough"+\
-									  " kernels to function properly","can't start their neurotube console")
+		var/list/faux_problems = list(
+			"won't be able to tune their bootstrap projector","will constantly remix their binary pool"+\
+			" even though the BMX calibrator is working","will start leaking their XSS coolant",
+			"can't tell if their ethernet detour is moving or not", "won't be able to reseed enough"+\
+			" kernels to function properly","can't start their neurotube console")
 
 		to_chat(user, "<span class='warning'>You can't seem to find the [pick(faux_gadgets)]! Without it, [src] [pick(faux_problems)].</span>")
 		return
@@ -88,7 +90,10 @@
 
 
 /mob/living/simple_animal/drone/attackby(obj/item/I, mob/user)
-	if(I.tool_behaviour == TOOL_SCREWDRIVER && stat != DEAD)
+	if(I.tool_behaviour == TOOL_SCREWDRIVER)
+		if(stat == DEAD)
+			try_reactivate(user)
+			return
 		if(health < maxHealth)
 			to_chat(user, "<span class='notice'>You start to tighten loose screws on [src]...</span>")
 			if(I.use_tool(src, user, 80))
@@ -100,11 +105,13 @@
 			to_chat(user, "<span class='warning'>[src]'s screws can't get any tighter!</span>")
 		return //This used to not exist and drones who repaired themselves also stabbed the shit out of themselves.
 	else if(I.tool_behaviour == TOOL_WRENCH && user != src) //They aren't required to be hacked, because laws can change in other ways (i.e. admins)
-		user.visible_message("<span class='notice'>[user] starts resetting [src]...</span>", \
-							 "<span class='notice'>You press down on [src]'s factory reset control...</span>")
+		user.visible_message(
+			"<span class='notice'>[user] starts resetting [src]...</span>",
+			"<span class='notice'>You press down on [src]'s factory reset control...</span>")
 		if(I.use_tool(src, user, 50, volume=50))
-			user.visible_message("<span class='notice'>[user] resets [src]!</span>", \
-								 "<span class='notice'>You reset [src]'s directives to factory defaults!</span>")
+			user.visible_message(
+				"<span class='notice'>[user] resets [src]!</span>",
+				"<span class='notice'>You reset [src]'s directives to factory defaults!</span>")
 			update_drone_hack(FALSE)
 		return
 	else

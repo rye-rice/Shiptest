@@ -53,7 +53,7 @@
 	if(!affecting) //Missing limb?
 		to_chat(user, "<span class='warning'>[C] doesn't have \a [parse_zone(user.zone_selected)]!</span>")
 		return
-	if(affecting.status != BODYPART_ORGANIC) //Limb must be organic to be healed - RR
+	if(!IS_ORGANIC_LIMB(affecting)) //Limb must be organic to be healed - RR
 		to_chat(user, "<span class='warning'>\The [src] won't work on a robotic limb!</span>")
 		return
 
@@ -88,7 +88,7 @@
 			to_chat(user, "<span class='warning'>[C]'s [affecting.name] isn't broken!</span>")
 			return
 		affecting.bone_status = BONE_FLAG_SPLINTED
-		C.update_inv_splints()
+		// C.update_inv_splints() something breaks
 		user.visible_message("<span class='green'>[user] applies [src] on [C].</span>", "<span class='green'>You apply [src] on [C]'s [affecting.name].</span>")
 		return TRUE
 	//WS End
@@ -160,10 +160,12 @@
 		if(get_amount() < 2)
 			to_chat(user, "<span class='warning'>You need at least two gauzes to do this!</span>")
 			return
-		new /obj/item/stack/sheet/cloth(user.drop_location())
-		user.visible_message("<span class='notice'>[user] cuts [src] into pieces of cloth with [I].</span>", \
-					 "<span class='notice'>You cut [src] into pieces of cloth with [I].</span>", \
-					 "<span class='hear'>You hear cutting.</span>")
+		new /obj/item/stack/sheet/cotton/cloth(user.drop_location())
+		user.visible_message(
+			"<span class='notice'>[user] cuts [src] into pieces of cloth with [I].</span>",
+			"<span class='notice'>You cut [src] into pieces of cloth with [I].</span>",
+			"<span class='hear'>You hear cutting.</span>"
+		)
 		use(2)
 	else
 		return ..()
@@ -370,4 +372,4 @@
 	However they provice graunular control of where the healing is directed, this makes them better for curing work-related cuts and scrapes.
 
 	The interesting limb targeting mechanic is retained and i still believe they will be a viable choice, especially when healing others in the field.
-	 */
+	*/

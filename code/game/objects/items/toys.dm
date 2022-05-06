@@ -281,9 +281,11 @@
 		return
 	playsound(user, 'sound/weapons/gun/revolver/shot.ogg', 100, TRUE)
 	src.bullets--
-	user.visible_message("<span class='danger'>[user] fires [src] at [target]!</span>", \
-						"<span class='danger'>You fire [src] at [target]!</span>", \
-						 "<span class='hear'>You hear a gunshot!</span>")
+	user.visible_message(
+		"<span class='danger'>[user] fires [src] at [target]!</span>",
+		"<span class='danger'>You fire [src] at [target]!</span>",
+		"<span class='hear'>You hear a gunshot!</span>"
+	)
 
 /obj/item/toy/ammo/gun
 	name = "capgun ammo"
@@ -308,8 +310,8 @@
 	name = "toy sword"
 	desc = "A cheap, plastic replica of an energy sword. Realistic sounds! Ages 8 and up."
 	icon = 'icons/obj/transforming_energy.dmi'
-	icon_state = "sword0"
-	item_state = "sword0"
+	icon_state = "sword"
+	item_state = "sword"
 	lefthand_file = 'icons/mob/inhands/weapons/swords_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/swords_righthand.dmi'
 	var/active = 0
@@ -333,8 +335,8 @@
 	else
 		to_chat(user, "<span class='notice'>You push the plastic blade back down into the handle.</span>")
 		playsound(user, 'sound/weapons/saberoff.ogg', 20, TRUE)
-		icon_state = "sword0"
-		item_state = "sword0"
+		icon_state = "sword"
+		item_state = "sword"
 		w_class = WEIGHT_CLASS_SMALL
 	add_fingerprint(user)
 
@@ -474,6 +476,13 @@
 	w_class = WEIGHT_CLASS_TINY
 	var/ash_type = /obj/effect/decal/cleanable/ash
 
+/obj/item/toy/snappop/Initialize()
+	. = ..()
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 /obj/item/toy/snappop/proc/pop_burst(n=3, c=1)
 	var/datum/effect_system/spark_spread/s = new()
 	s.set_up(n, c, src)
@@ -491,8 +500,8 @@
 	if(!..())
 		pop_burst()
 
-/obj/item/toy/snappop/Crossed(H as mob|obj)
-	. = ..()
+/obj/item/toy/snappop/proc/on_entered(datum/source, H as mob|obj)
+	SIGNAL_HANDLER
 	if(ishuman(H) || issilicon(H)) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/M = H
 		if(issilicon(H) || M.m_intent == MOVE_INTENT_RUN)

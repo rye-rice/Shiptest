@@ -7,14 +7,12 @@
 	rad_insulation = RAD_MEDIUM_INSULATION
 	pass_flags_self = PASSCLOSEDTURF
 
-/turf/closed/Initialize()
+/turf/closed/Initialize(mapload, inherited_virtual_z)
 	. = ..()
-	update_air_ref()
 
 /turf/closed/AfterChange()
 	. = ..()
 	SSair.high_pressure_delta -= src
-	update_air_ref()
 
 /turf/closed/get_smooth_underlay_icon(mutable_appearance/underlay_appearance, turf/asking_turf, adjacency_dir)
 	return FALSE
@@ -166,7 +164,7 @@
 	smoothing_groups = list(SMOOTH_GROUP_WINDOW_FULLTILE)
 	canSmoothWith = list(SMOOTH_GROUP_WINDOW_FULLTILE)
 
-/turf/closed/indestructible/fakeglass/Initialize()
+/turf/closed/indestructible/fakeglass/Initialize(mapload, inherited_virtual_z)
 	. = ..()
 	underlays += mutable_appearance('icons/obj/structures.dmi', "grille") //add a grille underlay
 	underlays += mutable_appearance('icons/turf/floors.dmi', "plating") //add the plating underlay, below the grille

@@ -6,7 +6,7 @@
 	slot = ORGAN_SLOT_TONGUE
 	attack_verb = list("licked", "slobbered", "slapped", "frenched", "tongued")
 	var/list/languages_possible
-	var/say_mod = null
+	var/say_mod = "says"
 	var/taste_sensitivity = 15 // lower is more sensitive.
 	var/modifies_speech = FALSE
 	var/static/list/languages_possible_base = typecacheof(list(
@@ -22,6 +22,7 @@
 		/datum/language/sylvan,
 		/datum/language/shadowtongue,
 		/datum/language/terrum,
+		/datum/language/ratvar
 	))
 
 /obj/item/organ/tongue/Initialize(mapload)
@@ -32,22 +33,32 @@
 
 /obj/item/organ/tongue/Insert(mob/living/carbon/M, special = 0)
 	..()
-	if(say_mod && M.dna && M.dna.species)
-		M.dna.species.say_mod = say_mod
 	if (modifies_speech)
 		RegisterSignal(M, COMSIG_MOB_SAY, .proc/handle_speech)
 	M.UnregisterSignal(M, COMSIG_MOB_SAY)
 
 /obj/item/organ/tongue/Remove(mob/living/carbon/M, special = 0)
 	..()
-	if(say_mod && M.dna && M.dna.species)
-		M.dna.species.say_mod = initial(M.dna.species.say_mod)
 	UnregisterSignal(M, COMSIG_MOB_SAY, .proc/handle_speech)
 	M.RegisterSignal(M, COMSIG_MOB_SAY, /mob/living/carbon/.proc/handle_tongueless_speech)
 
 /obj/item/organ/tongue/could_speak_language(language)
 	return is_type_in_typecache(language, languages_possible)
 
+//Say_mod-Only Tongues
+/obj/item/organ/tongue/golem_base
+	name = "golem tongue"
+	say_mod = "rumbles"
+
+/obj/item/organ/tongue/golem_honk
+	name = "bananium tongue"
+	say_mod = "honks"
+
+/obj/item/organ/tongue/toma
+	name = "mutated tongue"
+	say_mod = "mumbles"
+
+//Other Tongues
 /obj/item/organ/tongue/lizard
 	name = "forked tongue"
 	desc = "A thin and long muscle typically found in reptilian races, apparently moonlights as a nose."
@@ -87,7 +98,8 @@
 		/datum/language/sylvan,
 		/datum/language/shadowtongue,
 		/datum/language/terrum,
-		/datum/language/buzzwords
+		/datum/language/buzzwords,
+		/datum/language/ratvar
 	))
 
 /obj/item/organ/tongue/fly/handle_speech(datum/source, list/speech_args)
@@ -223,7 +235,8 @@
 		/datum/language/sylvan,
 		/datum/language/shadowtongue,
 		/datum/language/terrum,
-		/datum/language/calcic
+		/datum/language/calcic,
+		/datum/language/ratvar
 	))
 
 /obj/item/organ/tongue/bone/Initialize()
@@ -256,9 +269,11 @@
 	attack_verb = list("beeped", "booped")
 	modifies_speech = TRUE
 	taste_sensitivity = 25 // not as good as an organic tongue
+	var/static/list/languages_possible_robot = typecacheof(subtypesof(/datum/language))
 
-/obj/item/organ/tongue/robot/can_speak_language(language)
-	return TRUE // THE MAGIC OF ELECTRONICS
+/obj/item/organ/tongue/robot/Initialize(mapload)
+	. = ..()
+	languages_possible = languages_possible_robot
 
 /obj/item/organ/tongue/robot/emp_act(severity)
 	owner.apply_effect(EFFECT_STUTTER, 120)
@@ -270,6 +285,7 @@
 
 /obj/item/organ/tongue/snail
 	name = "snailtongue"
+	say_mod = "slurs"
 	modifies_speech = TRUE
 
 /obj/item/organ/tongue/snail/handle_speech(datum/source, list/speech_args)
@@ -293,7 +309,8 @@
 		/datum/language/aphasia,
 		/datum/language/narsie,
 		/datum/language/monkey,
-		/datum/language/shadowtongue
+		/datum/language/shadowtongue,
+		/datum/language/ratvar
 		))
 
 /obj/item/organ/tongue/squid/Initialize(mapload)
@@ -320,10 +337,35 @@
 		/datum/language/sylvan,
 		/datum/language/shadowtongue,
 		/datum/language/terrum,
-		/datum/language/voltaic
+		/datum/language/ratvar,
 	))
 
 /obj/item/organ/tongue/ethereal/Initialize(mapload)
 	. = ..()
 	languages_possible = languages_possible_ethereal
 
+/obj/item/organ/tongue/slime //I really can't be asked to make an icon for this. Besides nobody is ever going to pull your tongue out in the first place.
+	name = "slime 'tongue'"
+	desc = "A glob of slime that somehow lets slimepeople speak."
+	alpha = 150
+	say_mod = "blorbles"
+	var/static/list/languages_possible_slime = typecacheof(list(
+		/datum/language/common,
+		/datum/language/draconic,
+		/datum/language/codespeak,
+		/datum/language/monkey,
+		/datum/language/narsie,
+		/datum/language/beachbum,
+		/datum/language/aphasia,
+		/datum/language/piratespeak,
+		/datum/language/moffic,
+		/datum/language/sylvan,
+		/datum/language/shadowtongue,
+		/datum/language/terrum,
+		/datum/language/ratvar,
+		/datum/language/slime
+	))
+
+/obj/item/organ/tongue/slime/Initialize(mapload)
+	. = ..()
+	languages_possible = languages_possible_slime

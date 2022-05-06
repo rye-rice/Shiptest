@@ -5,12 +5,24 @@
 	cost = 1
 	allow_duplicates = FALSE
 
+/datum/map_template/ruin/space/corporate_mining
+	id = "corporate_mining"
+	suffix = "corporate_mining.dmm"
+	name = "Corporate Mining Module"
+	description = "An old and rusty mining facility, with big ore potential."
+
 /datum/map_template/ruin/space/zoo
 	id = "zoo"
 	suffix = "abandonedzoo.dmm"
 	name = "Biological Storage Facility"
 	description = "In case society crumbles, we will be able to restore our zoos to working order with the breeding stock kept in these 100% secure and unbreachable storage facilities. \
 	At no point has anything escaped. That's our story, and we're sticking to it."
+
+/datum/map_template/ruin/space/excavator_DK
+	id = "Excavator-DK"
+	suffix = "excavator_DK.dmm"
+	name = "Excavator DK Class"
+	description = "A heavily damaged DK class excavator"
 
 /datum/map_template/ruin/space/asteroid1
 	id = "asteroid1"
@@ -105,12 +117,6 @@
 	name = "Empty Shell"
 	description = "Cosy, rural property available for young professional couple. Only twelve parsecs from the nearest hyperspace lane!"
 
-/datum/map_template/ruin/space/gas_the_lizards
-	id = "gas-the-lizards"
-	suffix = "gasthelizards.dmm"
-	name = "Disposal Facility 17"
-	description = "Gas efficiency at 95.6%, fluid elimination at 96.2%. Will require renewed supplies of 'carpet' before the end of the quarter."
-
 /datum/map_template/ruin/space/intact_empty_ship
 	id = "intact-empty-ship"
 	suffix = "intactemptyship.dmm"
@@ -156,11 +162,13 @@
 	name = "Strange Ship"
 	description = "A ship seemingly lost, drifting along the stars. This thing looks like it belongs in ancient times."
 
+/* shiptest: Replaced with dark_glade ruin
 /datum/map_template/ruin/space/way_home
 	id = "way-home"
 	suffix = "way_home.dmm"
 	name = "Salvation"
 	description = "In the darkest times, we will find our way home."
+*/
 
 /datum/map_template/ruin/space/djstation
 	id = "djstation"
@@ -233,13 +241,6 @@
 	description = "There seems to be a pair of buses that pulled over for repairs. What were they doing...? Their shipment sure  seems to be filled with a strange mix. \
 	Anyway, it looks like some people tried to fix it up for a long time but didn't really get anywhere..."
 
-/datum/map_template/ruin/space/oldstation
-	id = "oldstation"
-	suffix = "oldstation.dmm"
-	name = "Ancient Space Station"
-	description = "The crew of a space station awaken one hundred years after a crisis. Awaking to a derelict space station on the verge of collapse, and a hostile force of invading \
-	hivebots. Can the surviving crew overcome the odds and survive and rebuild, or will the cold embrace of the stars become their new home?"
-
 /datum/map_template/ruin/space/gondoland
 	id = "gondolaasteroid"
 	suffix = "gondolaasteroid.dmm"
@@ -266,12 +267,6 @@
 	description = "With heated debates over the legality of the catperson and their status in the workforce, there's always a place for the blackmarket to slip in for some cash. Whether the results \
 	are morally sound or not is another issue entirely."
 
-/datum/map_template/ruin/space/hilbertresearchfacility
-	id = "hilbert_facility"
-	suffix = "hilbertshoteltestingsite.dmm"
-	name = "Hilbert Research Facility"
-	description = "A research facility of great bluespace discoveries. Long since abandoned, willingly or not..."
-
 /datum/map_template/ruin/space/clownplanet
 	id = "clownplanet"
 	suffix = "clownplanet.dmm"
@@ -284,26 +279,32 @@
 	name = "Cleric's Den"
 	description = "Once part of a larger monastery, this holy order of long dead clerics practiced far less non-violence than they preached. Appears to have been untouched by looters, however. Odd."
 
-/datum/map_template/ruin/space/kinggoatarena
-	id = "kinggoatarena"
-	suffix = "kinggoatarena.dmm"
-	name = "King Goat Arena"
-	description = "Well wish you luck."
-	allow_duplicates = FALSE
-	unpickable = TRUE
-
 /datum/map_template/ruin/space/forgottenship
 	id = "forgottenship"
 	suffix = "forgottenship.dmm"
 	name = "Syndicate Forgotten Ship"
 	description = "Seemingly abandoned ship went of course right into NT controlled space. It seems that malfunction caused most systems to turn off, except for sleepers."
+
 /datum/map_template/ruin/space/hellfactory
 	id = "hellfactory"
 	suffix = "hellfactory.dmm"
 	name = "Heck Brewery"
 	description = "An abandoned warehouse and brewing facility, which has been recently rediscovered. Reports claim that the security system entered an ultra-hard lockdown, but these reports are inconclusive."
+
 /datum/map_template/ruin/space/cryocontainment
 	id = "cryocontainment"
 	suffix = "cryocontainment.dmm"
 	name = "Cryogenic Containment Facility"
 	description = "Some old facility where they stored something in a cryotube to experiement on, obviously it got out and now the only thing it contains is Space Carps."
+
+/datum/map_template/ruin/space/syndicatewreck01
+	id = "syndicatewreck01"
+	suffix = "syndicatewreck01.dmm"
+	name = "Syndicate Station Wreckage"
+	description = "An old wreck, made of plastitanium. Somehow, it looks more filled than it ever was..."
+
+/datum/map_template/ruin/space/dangerous_research
+	id = "dangerous_research"
+	suffix = "dangerous_research.dmm"
+	name = "Occult Research Station"
+	description = "This station was deemed unsuitable for continued experiments, and quickly abandoned."

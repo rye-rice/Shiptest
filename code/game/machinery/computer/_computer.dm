@@ -9,6 +9,7 @@
 	max_integrity = 200
 	integrity_failure = 0.5
 	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 40, "acid" = 20)
+	clicksound = "keyboard"
 	var/brightness_on = 1
 	var/icon_keyboard = "generic_key"
 	var/icon_screen = "generic"
@@ -109,13 +110,12 @@
 				new /obj/item/shard(drop_location())
 				new /obj/item/shard(drop_location())
 				A.state = 3
-				A.icon_state = "3"
 			else
 				if(user)
 					to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
 				A.state = 4
-				A.icon_state = "4"
 			circuit = null
+			A.update_icon()
 		for(var/obj/C in src)
 			C.forceMove(loc)
 	qdel(src)

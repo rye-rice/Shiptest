@@ -15,24 +15,22 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 
 	if(turf_type)
 		var/turf/newT = ChangeTurf(turf_type, baseturf_type, flags)
-		SSair.remove_from_active(newT)
 		CALCULATE_ADJACENT_TURFS(newT)
-		SSair.add_to_active(newT,1)
 
-/turf/proc/copyTurf(turf/T)
+/turf/proc/copyTurf(turf/T, copy_air, flags)
 	if(T.type != type)
 		var/obj/O
 		if(underlays.len)	//we have underlays, which implies some sort of transparency, so we want to a snapshot of the previous turf as an underlay
 			O = new()
 			O.underlays.Add(T)
-		T.ChangeTurf(type)
+		T.ChangeTurf(type, null, flags)
 		if(underlays.len)
 			T.underlays = O.underlays
 	if(T.icon_state != icon_state)
 		T.icon_state = icon_state
 	if(T.icon != icon)
 		T.icon = icon
-	if(color)
+	if(atom_colours)
 		T.atom_colours = atom_colours.Copy()
 		T.update_atom_colour()
 	if(T.dir != dir)
@@ -54,6 +52,14 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 /turf/proc/TerraformTurf(path, new_baseturf, flags)
 	return ChangeTurf(path, new_baseturf, flags)
 
+/turf/proc/get_z_base_turf()
+	. = virtual_level_trait(ZTRAIT_BASETURF) || /turf/open/space
+	if (!ispath(.))
+		. = text2path(.)
+		if (!ispath(.))
+			warning("Z-level [z] has invalid baseturf '[virtual_level_trait(ZTRAIT_BASETURF)]'")
+			. = /turf/open/space
+
 // Creates a new turf
 // new_baseturfs can be either a single type or list of types, formated the same as baseturfs. see turf.dm
 /turf/proc/ChangeTurf(path, list/new_baseturfs, flags)
@@ -61,12 +67,7 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 		if(null)
 			return
 		if(/turf/baseturf_bottom)
-			path = SSmapping.level_trait(z, ZTRAIT_BASETURF) || /turf/open/space
-			if (!ispath(path))
-				path = text2path(path)
-				if (!ispath(path))
-					warning("Z-level [z] has invalid baseturf '[SSmapping.level_trait(z, ZTRAIT_BASETURF)]'")
-					path = /turf/open/space
+			path = get_z_base_turf()
 		if(/turf/open/space/basic)
 			// basic doesn't initialize and this will cause issues
 			// no warning though because this can happen naturaly as a result of it being built on top of
@@ -75,12 +76,14 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 	if(!GLOB.use_preloader && path == type && !(flags & CHANGETURF_FORCEOP) && (baseturfs == new_baseturfs)) // Don't no-op if the map loader requires it to be reconstructed, or if this is a new set of baseturfs
 		return src
 	if(flags & CHANGETURF_SKIP)
-		return new path(src)
+		return new path(src, virtual_z)
 
 	var/old_dynamic_lighting = dynamic_lighting
-	var/old_affecting_lights = affecting_lights
 	var/old_lighting_object = lighting_object
-	var/old_corners = corners
+	var/old_lighting_corner_NE = lighting_corner_NE
+	var/old_lighting_corner_SE = lighting_corner_SE
+	var/old_lighting_corner_SW = lighting_corner_SW
+	var/old_lighting_corner_NW = lighting_corner_NW
 	var/old_directional_opacity = directional_opacity
 
 	var/old_exl = explosion_level
@@ -90,18 +93,27 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 
 	var/list/old_baseturfs = baseturfs
 
-	var/list/transferring_comps = list()
-	SEND_SIGNAL(src, COMSIG_TURF_CHANGE, path, new_baseturfs, flags, transferring_comps)
-	for(var/i in transferring_comps)
-		var/datum/component/comp = i
-		comp.RemoveComponent()
+	var/old_virtual_z = virtual_z
+	var/list/post_change_callbacks = list()
+	SEND_SIGNAL(src, COMSIG_TURF_CHANGE, path, new_baseturfs, flags, post_change_callbacks)
 
 	changing_turf = TRUE
-	qdel(src)	//Just get the side effects and call Destroy
-	var/turf/W = new path(src)
+	qdel(src) //Just get the side effects and call Destroy
+	//We do this here so anything that doesn't want to persist can clear itself
+	var/list/old_comp_lookup = comp_lookup?.Copy()
+	var/list/old_signal_procs = signal_procs?.Copy()
+	var/turf/W = new path(src, virtual_z)
 
-	for(var/i in transferring_comps)
-		W.TakeComponent(i)
+	// WARNING WARNING
+	// Turfs DO NOT lose their signals when they get replaced, REMEMBER THIS
+	// It's possible because turfs are fucked, and if you have one in a list and it's replaced with another one, the list ref points to the new turf
+	if(old_comp_lookup)
+		LAZYOR(W.comp_lookup, old_comp_lookup)
+	if(old_signal_procs)
+		LAZYOR(W.signal_procs, old_signal_procs)
+
+	for(var/datum/callback/callback as anything in post_change_callbacks)
+		callback.InvokeAsync(W)
 
 	if(new_baseturfs)
 		W.baseturfs = baseturfs_string_list(new_baseturfs, W)
@@ -116,10 +128,16 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 
 	W.blueprint_data = old_bp
 
+	W.virtual_z = old_virtual_z
+
+	lighting_corner_NE = old_lighting_corner_NE
+	lighting_corner_SE = old_lighting_corner_SE
+	lighting_corner_SW = old_lighting_corner_SW
+	lighting_corner_NW = old_lighting_corner_NW
+
 	if(SSlighting.initialized)
 		lighting_object = old_lighting_object
-		affecting_lights = old_affecting_lights
-		corners = old_corners
+
 		directional_opacity = old_directional_opacity
 		recalculate_directional_opacity()
 
@@ -139,7 +157,6 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 
 /turf/open/ChangeTurf(path, list/new_baseturfs, flags) //Resist the temptation to make this default to keeping air.
 	if ((flags & CHANGETURF_INHERIT_AIR) && ispath(path, /turf/open))
-		SSair.remove_from_active(src)
 		var/datum/gas_mixture/stashed_air = new()
 		stashed_air.copy_from(air)
 		. = ..()
@@ -148,13 +165,17 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 			return
 		var/turf/open/newTurf = .
 		newTurf.air.copy_from(stashed_air)
+		update_air_ref(planetary_atmos ? 1 : 2)
 		QDEL_NULL(stashed_air)
-		update_air_ref()
-		SSair.add_to_active(newTurf)
 	else
 		if(ispath(path,/turf/closed))
 			flags |= CHANGETURF_RECALC_ADJACENT
-		return ..()
+			update_air_ref(-1)
+			. = ..()
+		else
+			. = ..()
+			if(!istype(air,/datum/gas_mixture))
+				Initalize_Atmos(0)
 
 /turf/closed/ChangeTurf(path, list/new_baseturfs, flags)
 	if(ispath(path,/turf/open))
@@ -257,7 +278,7 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 
 // Copy an existing turf and put it on top
 // Returns the new turf
-/turf/proc/CopyOnTop(turf/copytarget, ignore_bottom=1, depth=INFINITY, copy_air = FALSE)
+/turf/proc/CopyOnTop(turf/copytarget, ignore_bottom=1, depth=INFINITY, copy_air = FALSE, flags)
 	var/list/new_baseturfs = list()
 	new_baseturfs += baseturfs
 	new_baseturfs += type
@@ -274,7 +295,7 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 			target_baseturfs -= new_baseturfs & GLOB.blacklisted_automated_baseturfs
 			new_baseturfs += target_baseturfs
 
-	var/turf/newT = copytarget.copyTurf(src, copy_air)
+	var/turf/newT = copytarget.copyTurf(src, copy_air, flags)
 	newT.baseturfs = baseturfs_string_list(new_baseturfs, newT)
 	return newT
 
@@ -317,7 +338,6 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 		total.merge(S.air)
 
 	air.copy_from(total.remove_ratio(1/turf_count))
-	SSair.add_to_active(src)
 
 /turf/proc/ReplaceWithLattice()
 	ScrapeAway(flags = CHANGETURF_INHERIT_AIR)

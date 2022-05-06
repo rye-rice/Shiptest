@@ -8,6 +8,8 @@
 	var/showpipe = TRUE
 	var/shift_underlay_only = TRUE //Layering only shifts underlay?
 
+	var/update_parents_after_rebuild = FALSE
+
 	var/list/datum/pipeline/parents
 	var/list/datum/gas_mixture/airs
 
@@ -40,8 +42,7 @@
 	update_icon_nopipes()
 
 	underlays.Cut()
-
-	plane = showpipe ? GAME_PLANE : FLOOR_PLANE
+	plane = showpipe ? FLOOR_PLANE : FLOOR_PLANE
 
 	if(!showpipe)
 		return
@@ -82,23 +83,50 @@
 	..()
 	update_parents()
 
-/obj/machinery/atmospherics/components/build_network()
+/obj/machinery/atmospherics/components/rebuild_pipes()
+	. = ..()
+	if(update_parents_after_rebuild)
+		update_parents()
+
+/obj/machinery/atmospherics/components/get_rebuild_targets()
+	var/list/to_return = list()
 	for(var/i in 1 to device_type)
-		if(!parents[i])
-			parents[i] = new /datum/pipeline()
-			var/datum/pipeline/P = parents[i]
-			P.build_pipeline(src)
+		if(parents[i])
+			continue
+		parents[i] = new /datum/pipeline()
+		to_return += parents[i]
+	return to_return
 
 /obj/machinery/atmospherics/components/proc/nullifyPipenet(datum/pipeline/reference)
 	if(!reference)
 		CRASH("nullifyPipenet(null) called by [type] on [COORD(src)]")
-	var/i = parents.Find(reference)
-	reference.other_airs -= airs[i]
-	reference.other_atmosmch -= src
-	parents[i] = null
+	for (var/i in 1 to parents.len)
+		if (parents[i] == reference)
+			reference.other_airs -= airs[i] // Disconnects from the pipeline side
+			parents[i] = null // Disconnects from the machinery side.
 
-/obj/machinery/atmospherics/components/returnPipenetAir(datum/pipeline/reference)
-	return airs[parents.Find(reference)]
+	reference.other_atmosmch -= src
+
+	/**
+	*  We explicitly qdel pipeline when this particular pipeline
+	*  is projected to have no member and cause GC problems.
+	*  We have to do this because components don't qdel pipelines
+	*  while pipes must and will happily wreck and rebuild everything
+	*	again every time they are qdeleted.
+	*/
+
+	if(!length(reference.other_atmosmch) && !length(reference.members))
+		if(QDESTROYING(reference))
+			CRASH("nullifyPipenet() called on qdeleting [reference]")
+		qdel(reference)
+
+/obj/machinery/atmospherics/components/returnPipenetAirs(datum/pipeline/reference)
+	var/list/returned_air = list()
+
+	for (var/i in 1 to parents.len)
+		if (parents[i] == reference)
+			returned_air += airs[i]
+	return returned_air
 
 /obj/machinery/atmospherics/components/pipeline_expansion(datum/pipeline/reference)
 	if(reference)
@@ -129,14 +157,9 @@
 			times_lost++
 		var/shared_loss = lost/times_lost
 
-		var/datum/gas_mixture/to_release
 		for(var/i in 1 to device_type)
 			var/datum/gas_mixture/air = airs[i]
-			if(!to_release)
-				to_release = air.remove(shared_loss)
-				continue
-			to_release.merge(air.remove(shared_loss))
-		T.assume_air(to_release)
+			T.assume_air_moles(air, shared_loss)
 		air_update_turf(1)
 
 /obj/machinery/atmospherics/components/proc/safe_input(title, text, default_set)
@@ -153,13 +176,18 @@
 // Helpers
 
 /obj/machinery/atmospherics/components/proc/update_parents()
+	if(!SSair.initialized)
+		return
+	if(rebuilding)
+		update_parents_after_rebuild = TRUE
+		return
 	for(var/i in 1 to device_type)
 		var/datum/pipeline/parent = parents[i]
 		if(!parent)
-			WARNING("Component is missing a pipenet! Rebuilding...")
+			//WARNING("Component is missing a pipenet! Rebuilding...")
 			SSair.add_to_rebuild_queue(src)
-			parent = parents[i]
-		parent.update = 1
+		else
+			parent.update = TRUE
 
 /obj/machinery/atmospherics/components/returnPipenets()
 	. = list()

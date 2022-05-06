@@ -54,6 +54,7 @@ SUBSYSTEM_DEF(ticker)
 	var/roundend_check_paused = FALSE
 
 	var/round_start_time = 0
+	var/round_start_timeofday = 0
 	var/list/round_start_events
 	var/list/round_end_events
 	var/mode_result = "undefined"
@@ -66,6 +67,7 @@ SUBSYSTEM_DEF(ticker)
 
 	/// Why an emergency shuttle was called
 	var/emergency_reason
+
 
 /datum/controller/subsystem/ticker/Initialize(timeofday)
 	load_mode()
@@ -93,14 +95,8 @@ SUBSYSTEM_DEF(ticker)
 		var/lower = lowertext(S)
 		var/list/L = splittext(lower,"+")
 		switch(L.len)
-			if(3) //rare+MAP+sound.ogg or MAP+rare.sound.ogg -- Rare Map-specific sounds
-				if(use_rare_music)
-					if(L[1] == "rare" && L[2] == SSmapping.config.map_name)
-						music += S
-					else if(L[2] == "rare" && L[1] == SSmapping.config.map_name)
-						music += S
 			if(2) //rare+sound.ogg or MAP+sound.ogg -- Rare sounds or Map-specific sounds
-				if((use_rare_music && L[1] == "rare") || (L[1] == SSmapping.config.map_name))
+				if((use_rare_music && L[1] == "rare"))
 					music += S
 			if(1) //sound.ogg -- common sound
 				if(L[1] == "exclude")
@@ -148,12 +144,7 @@ SUBSYSTEM_DEF(ticker)
 	else if(CONFIG_GET(flag/shift_time_realtime))
 		gametime_offset = world.timeofday
 
-	crewobjlist = typesof(/datum/objective/crew)
-	for(var/hooray in crewobjlist) //taken from old Hippie's "job2obj" proc with adjustments.
-		var/datum/objective/crew/obj = hooray
-		var/list/availableto = splittext(initial(obj.jobs),",")
-		for(var/job in availableto)
-			crewobjjobs["[job]"] += list(obj)
+	generate_selectable_species()
 
 	return ..()
 
@@ -165,8 +156,8 @@ SUBSYSTEM_DEF(ticker)
 			for(var/client/C in GLOB.clients)
 				window_flash(C, ignorepref = TRUE) //let them know lobby has opened up.
 			to_chat(world, "<span class='boldnotice'>Welcome to [station_name()]!</span>")
-			send2chat("New round starting on [SSmapping.config.map_name]!", CONFIG_GET(string/chat_announce_new_game))
-			SSredbot.send_discord_message("ooc", "**A new round is beginning on [SSmapping.config.map_name].**")
+			send2chat("New round starting!", CONFIG_GET(string/chat_announce_new_game))
+			SSredbot.send_discord_message("ooc", "**A new round is beginning.**")
 			current_state = GAME_STATE_PREGAME
 			//Everyone who wants to be an observer is now spawned
 			create_observers()
@@ -217,7 +208,6 @@ SUBSYSTEM_DEF(ticker)
 				toggle_ooc(TRUE) // Turn it on
 				toggle_dooc(TRUE)
 				declare_completion(force_ending)
-				check_maprotate()
 				Master.SetRunLevel(RUNLEVEL_POSTGAME)
 
 
@@ -260,8 +250,6 @@ SUBSYSTEM_DEF(ticker)
 	var/can_continue = 0
 	can_continue = src.mode.pre_setup()		//Choose antagonists
 	CHECK_TICK
-	can_continue = can_continue && SSjob.DivideOccupations(mode.required_jobs) 				//Distribute jobs
-	CHECK_TICK
 
 	if(!GLOB.Debug2)
 		if(!can_continue)
@@ -288,13 +276,8 @@ SUBSYSTEM_DEF(ticker)
 
 	CHECK_TICK
 	GLOB.start_landmarks_list = shuffle(GLOB.start_landmarks_list) //Shuffle the order of spawn points so they dont always predictably spawn bottom-up and right-to-left
-	create_characters() //Create player characters
-	collect_minds()
-	equip_characters()
-
-	GLOB.data_core.manifest()
-
-	transfer_characters()	//transfer keys to the new mobs
+	for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
+		player.new_player_panel()
 
 	for(var/I in round_start_events)
 		var/datum/callback/cb = I
@@ -303,6 +286,7 @@ SUBSYSTEM_DEF(ticker)
 
 	log_world("Game start took [(world.timeofday - init_start)/10]s")
 	round_start_time = world.time
+	round_start_timeofday = world.timeofday
 	SSdbcore.SetRoundStart()
 
 	to_chat(world, "<span class='notice'><B>Welcome to [station_name()], enjoy your stay!</B></span>")
@@ -340,10 +324,6 @@ SUBSYSTEM_DEF(ticker)
 		else
 			stack_trace("[S] [S.type] found in start landmarks list, which isn't a start landmark!")
 
-	if(CONFIG_GET(flag/allow_crew_objectives))
-		generate_crew_objectives()
-
-
 //These callbacks will fire after roundstart key transfer
 /datum/controller/subsystem/ticker/proc/OnRoundstart(datum/callback/cb)
 	if(!HasRoundStarted())
@@ -361,60 +341,6 @@ SUBSYSTEM_DEF(ticker)
 /datum/controller/subsystem/ticker/proc/station_explosion_detonation(atom/bomb)
 	if(bomb)	//BOOM
 		qdel(bomb)
-
-/datum/controller/subsystem/ticker/proc/create_characters()
-	for(var/i in GLOB.new_player_list)
-		var/mob/dead/new_player/player = i
-		if(player.ready == PLAYER_READY_TO_PLAY && player.mind)
-			GLOB.joined_player_list += player.ckey
-			player.create_character(FALSE)
-		else
-			player.new_player_panel()
-		CHECK_TICK
-
-/datum/controller/subsystem/ticker/proc/collect_minds()
-	for(var/i in GLOB.new_player_list)
-		var/mob/dead/new_player/P = i
-		if(P.new_character && P.new_character.mind)
-			SSticker.minds += P.new_character.mind
-		CHECK_TICK
-
-
-/datum/controller/subsystem/ticker/proc/equip_characters()
-	var/captainless=1
-	for(var/i in GLOB.new_player_list)
-		var/mob/dead/new_player/N = i
-		var/mob/living/carbon/human/player = N.new_character
-		if(istype(player) && player.mind && player.mind.assigned_role)
-			if(player.mind.assigned_role == "Captain")
-				captainless=0
-			if(player.mind.assigned_role != player.mind.special_role)
-				SSjob.EquipRank(N, player.mind.assigned_role, 0)
-				if(CONFIG_GET(flag/roundstart_traits) && ishuman(N.new_character))
-					SSquirks.AssignQuirks(N.new_character, N.client, TRUE)
-		CHECK_TICK
-	if(captainless)
-		for(var/i in GLOB.new_player_list)
-			var/mob/dead/new_player/N = i
-			if(N.new_character)
-				to_chat(N, "<span class='notice'>Captainship not forced on anyone.</span>")
-			CHECK_TICK
-
-/datum/controller/subsystem/ticker/proc/transfer_characters()
-	var/list/livings = list()
-	for(var/i in GLOB.new_player_list)
-		var/mob/dead/new_player/player = i
-		var/mob/living = player.transfer_character()
-		if(living)
-			qdel(player)
-			living.notransform = TRUE
-			if(living.client)
-				var/atom/movable/screen/splash/S = new(living.client, TRUE)
-				S.Fade(TRUE)
-				living.client.init_verbs()
-			livings += living
-	if(livings.len)
-		addtimer(CALLBACK(src, .proc/release_characters, livings), 30, TIMER_CLIENT_TIME)
 
 /datum/controller/subsystem/ticker/proc/release_characters(list/livings)
 	for(var/I in livings)
@@ -468,13 +394,6 @@ SUBSYSTEM_DEF(ticker)
 			to_chat(next_in_line, "<span class='danger'>No response received. You have been removed from the line.</span>")
 			queued_players -= next_in_line
 			queue_delay = 0
-
-/datum/controller/subsystem/ticker/proc/check_maprotate()
-	if(!CONFIG_GET(flag/maprotation))
-		return
-	if(world.time - SSticker.round_start_time < 10 MINUTES) //Not forcing map rotation for very short rounds.
-		return
-	INVOKE_ASYNC(SSmapping, /datum/controller/subsystem/mapping/.proc/maprotate)
 
 /datum/controller/subsystem/ticker/proc/HasRoundStarted()
 	return current_state >= GAME_STATE_PLAYING

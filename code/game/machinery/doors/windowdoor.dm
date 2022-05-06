@@ -39,6 +39,12 @@
 	if(cable)
 		debris += new /obj/item/stack/cable_coil(src, cable)
 
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_EXIT = .proc/on_exit,
+	)
+
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 /obj/machinery/door/window/ComponentInitialize()
 	. = ..()
 	AddComponent(/datum/component/ntnet_interface)
@@ -125,12 +131,21 @@
 /obj/machinery/door/window/CanAStarPass(obj/item/card/id/ID, to_dir)
 	return !density || (dir != to_dir) || (check_access(ID) && hasPower())
 
-/obj/machinery/door/window/CheckExit(atom/movable/mover, turf/target)
-	if((pass_flags_self & mover.pass_flags) || ((pass_flags_self & LETPASSTHROW) && mover.throwing))
-		return TRUE
-	if(get_dir(loc, target) == dir)
-		return !density
-	return TRUE
+/obj/machinery/door/window/proc/on_exit(datum/source, atom/movable/leaving, direction)
+	SIGNAL_HANDLER
+
+	if(leaving.movement_type & PHASING)
+		return
+
+	if(leaving == src)
+		return // Let's not block ourselves.
+
+	if((pass_flags_self & leaving.pass_flags) || ((pass_flags_self & LETPASSTHROW) && leaving.throwing))
+		return
+
+	if(direction == dir && density)
+		leaving.Bump(src)
+		return COMPONENT_ATOM_BLOCK_EXIT
 
 /obj/machinery/door/window/open(forced=FALSE)
 	if (operating) //doors can still open when emag-disabled
@@ -230,8 +245,10 @@
 
 		if(I.tool_behaviour == TOOL_CROWBAR)
 			if(panel_open && !density && !operating)
-				user.visible_message("<span class='notice'>[user] removes the electronics from the [name].</span>", \
-									 "<span class='notice'>You start to remove electronics from the [name]...</span>")
+				user.visible_message(
+					"<span class='notice'>[user] removes the electronics from the [name].</span>",
+					"<span class='notice'>You start to remove electronics from the [name]...</span>"
+				)
 				if(I.use_tool(src, user, 40, volume=50))
 					if(panel_open && !density && !operating && loc)
 						var/obj/structure/windoor_assembly/WA = new /obj/structure/windoor_assembly(loc)

@@ -3,6 +3,7 @@
 	dying_key = DYE_REGISTRY_UNDER
 	icon = 'icons/obj/clothing/under/color.dmi'
 	mob_overlay_icon = 'icons/mob/clothing/under/color.dmi'
+	supports_variations = DIGITIGRADE_VARIATION
 
 /obj/item/clothing/under/color/jumpskirt
 	body_parts_covered = CHEST|GROIN|ARMS
@@ -191,6 +192,15 @@
 	name = "lightbrown jumpskirt"
 	icon_state = "lightbrown_skirt"
 	item_state = "lb_suit"
+
+/obj/item/clothing/under/color/khaki
+	name = "khaki jumpsuit"
+	icon_state = "khakij"
+	item_state = "lb_suit"
+
+/obj/item/clothing/under/color/khaki/buster
+	name = "buster jumpsuit"
+	desc = "There seems to be a large stain in the left pocket. Someone must have squashed a really big twinkie."
 
 /obj/item/clothing/under/color/brown
 	name = "brown jumpsuit"

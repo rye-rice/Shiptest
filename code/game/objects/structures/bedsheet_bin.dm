@@ -46,7 +46,7 @@ LINEN BINS
 
 /obj/item/bedsheet/attackby(obj/item/I, mob/user, params)
 	if(I.tool_behaviour == TOOL_WIRECUTTER || I.get_sharpness())
-		var/obj/item/stack/sheet/cloth/C = new (get_turf(src), 3)
+		var/obj/item/stack/sheet/cotton/cloth/C = new (get_turf(src), 3)
 		transfer_fingerprints_to(C)
 		C.add_fingerprint(user)
 		qdel(src)
@@ -136,10 +136,11 @@ LINEN BINS
 	name = "Royal Cape of the Liberator"
 	desc = "Majestic."
 	dream_messages = list("mining", "stone", "a golem", "freedom", "doing whatever")
+	custom_price = 500
 
 /obj/item/bedsheet/medical
 	name = "medical blanket"
-	desc = "It's a sterilized* blanket commonly used in the Medbay.  *Sterilization is voided if a virologist is present onboard the station."
+	desc = "It's a sterilized* blanket commonly used in the Medbay.  *Sterilization is voided if a virologist is present within a 10 LY radius*."
 	icon_state = "sheetmedical"
 	item_state = "sheetmedical"
 	dream_messages = list("healing", "life", "surgery", "a doctor")

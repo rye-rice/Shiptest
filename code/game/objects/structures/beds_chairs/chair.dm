@@ -1,7 +1,7 @@
 /obj/structure/chair
 	name = "chair"
 	desc = "You sit in this. Either by will or force."
-	icon = 'whitesands/icons/obj/chairs.dmi' //WS Edit - Better Icons
+	icon = 'icons/obj/chairs.dmi'
 	icon_state = "chair"
 	anchored = TRUE
 	can_buckle = TRUE
@@ -21,11 +21,6 @@
 	if(!has_buckled_mobs() && can_buckle)
 		. += "<span class='notice'>While standing on [src], drag and drop your sprite onto [src] to buckle to it.</span>"
 
-/obj/structure/chair/Initialize()
-	. = ..()
-	if(!anchored)	//why would you put these on the shuttle?
-		addtimer(CALLBACK(src, .proc/RemoveFromLatejoin), 0)
-
 /obj/structure/chair/ComponentInitialize()
 	. = ..()
 	AddComponent(/datum/component/simple_rotation,ROTATION_ALTCLICK | ROTATION_CLOCKWISE, CALLBACK(src, .proc/can_user_rotate),CALLBACK(src, .proc/can_be_rotated),null)
@@ -44,13 +39,6 @@
 	else if(isobserver(user) && CONFIG_GET(flag/ghost_interaction))
 		return TRUE
 	return FALSE
-
-/obj/structure/chair/Destroy()
-	RemoveFromLatejoin()
-	return ..()
-
-/obj/structure/chair/proc/RemoveFromLatejoin()
-	SSjob.latejoin_trackers -= src	//These may be here due to the arrivals shuttle
 
 /obj/structure/chair/deconstruct()
 	// If we have materials, and don't have the NOCONSTRUCT flag
@@ -163,7 +151,7 @@
 	return ..()
 
 /obj/structure/chair/comfy/proc/GetArmrest()
-	return mutable_appearance('whitesands/icons/obj/chairs.dmi', "comfychair_armrest") //WS Edit - Better Icons
+	return mutable_appearance('icons/obj/chairs.dmi', "comfychair_armrest")
 
 /obj/structure/chair/comfy/Destroy()
 	QDEL_NULL(armrest)
@@ -205,7 +193,7 @@
 	buildstacktype = /obj/item/stack/sheet/mineral/titanium
 
 /obj/structure/chair/comfy/shuttle/GetArmrest()
-	return mutable_appearance('whitesands/icons/obj/chairs.dmi', "shuttle_chair_armrest")
+	return mutable_appearance('icons/obj/chairs.dmi', "shuttle_chair_armrest")
 
 /obj/structure/chair/office
 	anchored = FALSE
@@ -258,7 +246,7 @@
 /obj/item/chair
 	name = "chair"
 	desc = "Bar brawl essential."
-	icon = 'whitesands/icons/obj/chairs.dmi' //WS Edit - Better Icons
+	icon = 'icons/obj/chairs.dmi'
 	icon_state = "chair_toppled"
 	item_state = "chair"
 	lefthand_file = 'icons/mob/inhands/misc/chairs_lefthand.dmi'

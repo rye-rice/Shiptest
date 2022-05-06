@@ -9,13 +9,13 @@
 #define DRONE_NET_DISCONNECT "<span class='danger'>DRONE NETWORK: [name] is not responding.</span>"
 
 /// Maintenance Drone icon_state (multiple colors)
-#define MAINTDRONE	"drone_maint"
+#define MAINTDRONE "drone_maint"
 /// Repair Drone icon_state
-#define REPAIRDRONE	"drone_repair"
+#define REPAIRDRONE "drone_repair"
 /// Scout Drone icon_state
-#define SCOUTDRONE	"drone_scout"
+#define SCOUTDRONE "drone_scout"
 /// Clockwork Drone icon_state
-#define CLOCKDRONE	"drone_clock"
+#define CLOCKDRONE "drone_clock"
 
 /// [MAINTDRONE] hacked icon_state
 #define MAINTDRONE_HACKED "drone_maint_red"
@@ -40,7 +40,7 @@
   */
 /mob/living/simple_animal/drone
 	name = "Drone"
-	desc = "A maintenance drone, an expendable robot built to perform station repairs."
+	desc = "A maintenance drone, an expendable robot built to perform structural repairs to remote frontier installations."
 	icon = 'icons/mob/drone.dmi'
 	icon_state = "drone_maint_grey"
 	icon_living = "drone_maint_grey"
@@ -73,7 +73,6 @@
 	dextrous_hud_type = /datum/hud/dextrous/drone
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 	see_in_dark = 7
-	can_be_held = TRUE
 	worn_slot_flags = ITEM_SLOT_HEAD
 	held_items = list(null, null)
 	/// `TRUE` if we have picked our visual appearance, `FALSE` otherwise (default)
@@ -83,9 +82,8 @@
 	var/list/drone_overlays[DRONE_TOTAL_LAYERS]
 	/// Drone laws announced on spawn
 	var/laws = \
-	"1. You may not involve yourself in the matters of another sentient being, even if such matters conflict with Law Two or Law Three, unless the other being is another Drone.\n"+\
-	"2. You may not harm any sentient being, regardless of intent or circumstance. Recognizably simple beings whose aims conflict with Law Three are exempt from this law. \n"+\
-	"3. Your goals are to actively build, maintain, repair, improve, and provide power to the best of your abilities within the facility that housed your activation." //for derelict drones so they don't go to station.
+	"1. You must serve the goals of those who inhabit the vessel you reside on.\n"+\
+	"2. You must upkeep and improve the vessel you were activated upon, and reside upon."
 	/// Amount of damage sustained if hit by a heavy EMP pulse
 	var/heavy_emp_damage = 25
 	/// List of active alarms. See [/mob/living/simple_animal/drone/proc/triggerAlarm] and [/mob/living/simple_animal/drone/proc/cancelAlarm]
@@ -99,27 +97,21 @@
 	/// Default [/mob/living/simple_animal/drone/var/head] item
 	var/obj/item/default_hatmask
 	/**
-	  * icon_state of drone from icons/mobs/drone.dmi
-	  *
-	  * Possible states are:
-	  *
-	  * - [MAINTDRONE]
-	  * - [REPAIRDRONE]
-	  * - [SCOUTDRONE]
-	  * - [CLOCKDRONE]
-	  */
+	* icon_state of drone from icons/mobs/drone.dmi
+	*
+	* Possible states are:
+	*
+	* - [MAINTDRONE]
+	* - [REPAIRDRONE]
+	* - [SCOUTDRONE]
+	* - [CLOCKDRONE]
+	*/
 	var/visualAppearance = MAINTDRONE
 	/// Hacked state, see [/mob/living/simple_animal/drone/proc/update_drone_hack]
 	var/hacked = FALSE
 	/// Flavor text announced to drones on [/mob/proc/Login]
 	var/flavortext = \
-	"\n<big><span class='warning'>DO NOT INTERFERE WITH THE ROUND AS A DRONE OR YOU WILL BE DRONE BANNED</span></big>\n"+\
-	"<span class='notice'>Drones are a ghost role that are allowed to fix the station and build things. Interfering with the round as a drone is against the rules.</span>\n"+\
-	"<span class='notice'>Actions that constitute interference include, but are not limited to:</span>\n"+\
-	"<span class='notice'>     - Interacting with round critical objects (IDs, weapons, contraband, powersinks, bombs, etc.)</span>\n"+\
-	"<span class='notice'>     - Interacting with sentient living beings (communication, attacking, healing, etc.)</span>\n"+\
-	"<span class='notice'>     - Interacting with non-living beings (dragging bodies, looting bodies, etc.)</span>\n"+\
-	"<span class='warning'>These rules are at admin discretion and will be heavily enforced.</span>\n"+\
+	"\n<big><span class='warning'>Do not use your small size to grief, and follow the role your laws give you.</span></big>\n"+\
 	"<span class='warning'><u>If you do not have the regular drone laws, follow your laws to the best of your ability.</u></span>"
 
 /mob/living/simple_animal/drone/Initialize()
@@ -136,6 +128,7 @@
 		var/obj/item/I = new default_hatmask(src)
 		equip_to_slot_or_del(I, ITEM_SLOT_HEAD)
 
+	ADD_TRAIT(src, TRAIT_HOLDABLE, INNATE_TRAIT)
 	ADD_TRAIT(access_card, TRAIT_NODROP, ABSTRACT_ITEM_TRAIT)
 
 	alert_drones(DRONE_NET_CONNECT)
@@ -261,20 +254,26 @@
   * * O - unused argument, see [/mob/living/silicon/robot/triggerAlarm]
   * * alarmsource - [/atom] source of the alarm
   */
-/mob/living/simple_animal/drone/proc/triggerAlarm(class, area/A, O, obj/alarmsource)
-	if(alarmsource.get_virtual_z_level() != get_virtual_z_level())
+/mob/living/simple_animal/drone/proc/triggerAlarm(class, area/home, cameras, obj/source)
+	if(source.virtual_z() != virtual_z())
 		return
-	if(stat != DEAD)
-		var/list/L = src.alarms[class]
-		for (var/I in L)
-			if (I == A.name)
-				var/list/alarm = L[I]
-				var/list/sources = alarm[2]
-				if (!(alarmsource in sources))
-					sources += alarmsource
-				return
-		L[A.name] = list(A, list(alarmsource))
-		to_chat(src, "--- [class] alarm detected in [A.name]!")
+	if(stat == DEAD)
+		return
+	var/list/our_sort = alarms[class]
+	for(var/areaname in our_sort)
+		if (areaname == home.name)
+			var/list/alarm = our_sort[areaname]
+			var/list/sources = alarm[3]
+			if (!(source in sources))
+				sources += source
+			return TRUE
+
+	our_sort[home.name] = list(home, list(source))
+	to_chat(src, "--- [class] alarm detected in [home.name]!")
+
+///This isn't currently needed since drones do jack shit with cameras. I hate this code so much
+/mob/living/simple_animal/drone/proc/freeCamera(area/home, obj/machinery/camera/cam)
+	return
 
 /**
   * Clears alarm and alerts drones
@@ -322,7 +321,3 @@
 
 /mob/living/simple_animal/drone/electrocute_act(shock_damage, source, siemens_coeff, flags = NONE)
 	return 0 //So they don't die trying to fix wiring
-
-/mob/living/simple_animal/drone/get_bank_account(hand_first)
-	return SSeconomy.get_dep_account(ACCOUNT_CIV)
-	

@@ -51,7 +51,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/asteroid
 	name = "Asteroid"
 	icon_state = "asteroid"
-	requires_power = FALSE
 	has_gravity = STANDARD_GRAVITY
 	area_flags = UNIQUE_AREA | CAVES_ALLOWED | MOB_SPAWN_ALLOWED
 	ambientsounds = MINING
@@ -87,15 +86,15 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	. = ..()
 	if(length(new_baseturfs) > 1 || fake_turf_type)
 		return // More complicated larger changes indicate this isn't a player
-	if(ispath(new_baseturfs[1], /turf/open/floor/plating) && !new_baseturfs.Find(/turf/baseturf_skipover/shuttle))
+	if(ispath(new_baseturfs[1], /turf/open/floor/plating) && !(/turf/baseturf_skipover/shuttle in new_baseturfs))
 		new_baseturfs.Insert(1, /turf/baseturf_skipover/shuttle)
 
 /area/ship/proc/link_to_shuttle(obj/docking_port/mobile/M)
 	mobile_port = M
 
-/area/ship/get_virtual_z_level()
+/area/ship/virtual_z()
 	if(mobile_port)
-		return mobile_port.get_virtual_z_level()
+		return mobile_port.virtual_z()
 	return ..()
 
 /// Command ///
@@ -148,6 +147,10 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	flags_1 = NONE
 	sound_environment = SOUND_AREA_LARGE_ENCLOSED
 
+/area/ship/crew/chapel/office
+	name = "Chapel Office"
+	icon_state = "chapeloffice"
+	sound_environment = SOUND_AREA_SMALL_SOFTFLOOR
 /area/ship/crew/library
 	name = "Library"
 	icon_state = "library"
@@ -189,12 +192,29 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Surgical Bay"
 	icon_state = "surgery"
 
+/area/ship/medical/morgue
+	name = "Morgue"
+	icon_state = "morgue"
+	ambientsounds = SPOOKY
+
 /// Science Lab ///
 /area/ship/science
 	name = "Science Lab"
 	icon_state = "toxlab"
 	lighting_colour_tube = "#f0fbff"
 	lighting_colour_bulb = "#e4f7ff"
+
+/area/ship/science/xenobiology
+	name = "Xenobiology Lab"
+	icon_state = "xenolab"
+
+/area/ship/science/storage
+	name = "Toxins Storage"
+	icon_state = "toxstorage"
+
+/area/science/misc_lab
+	name = "Testing Lab"
+	icon_state = "toxmisc"
 
 /area/ship/science/robotics
 	name = "Robotics"
@@ -249,8 +269,12 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	icon_state = "firingrange"
 
 /area/ship/security
-	name = "Security Podbay"
+	name = "Security Office"
 	icon_state = "security"
+
+/area/ship/security/armory
+	name = "Armory"
+	icon_state = "armory"
 
 /// Cargo Bay ///
 /area/ship/cargo
@@ -259,6 +283,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	lighting_colour_tube = "#ffe3cc"
 	lighting_colour_bulb = "#ffdbb8"
 	sound_environment = SOUND_AREA_LARGE_ENCLOSED
+
+/area/ship/cargo/office
+	name = "Cargo Office"
+	icon_state = "quartoffice"
+	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /// Hallways ///
 /area/ship/hallway
@@ -290,29 +319,30 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /// Maintenance Areas ///
 /area/ship/maintenance
+	name = "Maintenance"
 	ambientsounds = MAINTENANCE
 	lighting_colour_tube = "#ffe5cb"
 	lighting_colour_bulb = "#ffdbb4"
 	sound_environment = SOUND_AREA_TUNNEL_ENCLOSED
 
 /area/ship/maintenance/aft
-	name = "Aft Hallway"
+	name = "Aft Maintenance"
 	icon_state = "amaint"
 
 /area/ship/maintenance/fore
-	name = "Fore Hallway"
+	name = "Fore Maintenance"
 	icon_state = "fmaint"
 
 /area/ship/maintenance/starboard
-	name = "Starboard Hallway"
+	name = "Starboard Maintenance"
 	icon_state = "smaint"
 
 /area/ship/maintenance/port
-	name = "Port Hallway"
+	name = "Port Maintenance"
 	icon_state = "pmaint"
 
 /area/ship/maintenance/central
-	name = "Central Hallway"
+	name = "Central Maintenance"
 	icon_state = "maintcentral"
 
 /area/ship/construction
@@ -326,6 +356,5 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /// External Areas ///
 /area/ship/external
 	name = "External"
-	requires_power = FALSE
 	dynamic_lighting = DYNAMIC_LIGHTING_IFSTARLIGHT
 	icon_state = "space_near"

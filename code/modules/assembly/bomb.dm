@@ -13,6 +13,13 @@
 	var/obj/item/assembly_holder/bombassembly = null   //The first part of the bomb is an assembly holder, holding an igniter+some device
 	var/obj/item/tank/bombtank = null //the second part of the bomb is a plasma tank
 
+/obj/item/onetankbomb/Initialize()
+	. = ..()
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 /obj/item/onetankbomb/IsSpecialAssembly()
 	return TRUE
 
@@ -78,10 +85,10 @@
 
 //Assembly / attached device memes
 
-/obj/item/onetankbomb/Crossed(atom/movable/AM as mob|obj) //for mousetraps
-	. = ..()
+/obj/item/onetankbomb/proc/on_entered(datum/source, atom/movable/AM as mob|obj) //for mousetraps
+	SIGNAL_HANDLER
 	if(bombassembly)
-		bombassembly.Crossed(AM)
+		bombassembly.on_entered(src, AM)
 
 /obj/item/onetankbomb/on_found(mob/finder) //for mousetraps
 	if(bombassembly)
@@ -142,7 +149,7 @@
 	return
 
 /obj/item/tank/proc/ignite()	//This happens when a bomb is told to explode
-	var/fuel_moles = air_contents.get_moles(/datum/gas/plasma) + air_contents.get_moles(/datum/gas/oxygen)/6
+	var/fuel_moles = air_contents.get_moles(GAS_PLASMA) + air_contents.get_moles(GAS_O2)/6
 	var/datum/gas_mixture/bomb_mixture = air_contents.copy()
 	var/strength = 1
 
@@ -194,11 +201,10 @@
 	ground_zero.air_update_turf()
 
 /obj/item/tank/proc/release()	//This happens when the bomb is not welded. Tank contents are just spat out.
-	var/datum/gas_mixture/removed = air_contents.remove(air_contents.total_moles())
 	var/turf/T = get_turf(src)
 	if(!T)
 		return
-	T.assume_air(removed)
+	T.assume_air(air_contents)
 	air_update_turf()
 
 /obj/item/onetankbomb/return_analyzable_air()

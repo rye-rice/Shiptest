@@ -1,7 +1,7 @@
 /mob/living/carbon/Initialize()
 	. = ..()
 	create_reagents(1000)
-	assign_bodypart_ownership()
+	// assign_bodypart_ownership()
 	update_body_parts() //to update the carbon's new bodyparts appearance
 	GLOB.carbon_list += src
 
@@ -55,20 +55,6 @@
 	else
 		mode() // Activate held item
 
-/mob/living/carbon/attackby(obj/item/I, mob/user, params)
-	var/be_nice = FALSE
-	// if(body_position == LYING_DOWN) //WS - Fix IPC surgery
-	if((I.item_flags & SURGICAL_TOOL) && user.a_intent == INTENT_HELP)
-		attempt_initiate_surgery(I, src, user)
-		be_nice = TRUE
-	for(var/datum/surgery/S in surgeries)
-		if(body_position == LYING_DOWN || !S.lying_required)
-			if((S.self_operable || user != src) && (user.a_intent == INTENT_HELP || user.a_intent == INTENT_DISARM))
-				if(S.next_step(user ,user.a_intent))
-					return 1
-	if(be_nice)//so that if we don't stab them after starting a surgery that can't be started with a sharp tool
-		return 1
-	return ..()
 
 /mob/living/carbon/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	. = ..()
@@ -97,20 +83,22 @@
 /mob/living/carbon/proc/toggle_throw_mode()
 	if(stat)
 		return
-	if(in_throw_mode)
-		throw_mode_off()
+	if(throw_mode)
+		throw_mode_off(THROW_MODE_TOGGLE)
 	else
-		throw_mode_on()
+		throw_mode_on(THROW_MODE_TOGGLE)
 
 
-/mob/living/carbon/proc/throw_mode_off()
-	in_throw_mode = 0
+/mob/living/carbon/proc/throw_mode_off(method)
+	if(throw_mode > method) //A toggle doesnt affect a hold
+		return
+	throw_mode = THROW_MODE_DISABLED
 	if(client && hud_used)
 		hud_used.throw_icon.icon_state = "act_throw_off"
 
 
-/mob/living/carbon/proc/throw_mode_on()
-	in_throw_mode = 1
+/mob/living/carbon/proc/throw_mode_on(mode = THROW_MODE_TOGGLE)
+	throw_mode = mode
 	if(client && hud_used)
 		hud_used.throw_icon.icon_state = "act_throw_on"
 
@@ -120,7 +108,7 @@
 
 /mob/living/carbon/throw_item(atom/target)
 	. = ..()
-	throw_mode_off()
+	throw_mode_off(THROW_MODE_TOGGLE)
 	if(!target || !isturf(loc))
 		return
 	if(istype(target, /atom/movable/screen))
@@ -233,7 +221,7 @@
 
 /mob/living/carbon/on_fall()
 	. = ..()
-	loc.handle_fall(src)//it's loc so it doesn't call the mob's handle_fall which does nothing
+	loc?.handle_fall(src)//it's loc so it doesn't call the mob's handle_fall which does nothing
 
 /mob/living/carbon/is_muzzled()
 	return(istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
@@ -523,8 +511,7 @@
 	var/total_burn	= 0
 	var/total_brute	= 0
 	var/total_stamina = 0
-	for(var/X in bodyparts)	//hardcoded to streamline things a bit
-		var/obj/item/bodypart/BP = X
+	for(var/obj/item/bodypart/BP as anything in bodyparts)
 		total_brute	+= (BP.brute_dam * BP.body_damage_coeff)
 		total_burn	+= (BP.burn_dam * BP.body_damage_coeff)
 		total_stamina += (BP.stamina_dam * BP.stam_damage_coeff)
@@ -586,7 +573,7 @@
 		if(G.invis_override)
 			see_invisible = G.invis_override
 		else
-			see_invisible = min(G.invis_view, see_invisible)
+			see_invisible = max(G.invis_view, see_invisible)
 		if(!isnull(G.lighting_alpha))
 			lighting_alpha = min(lighting_alpha, G.lighting_alpha)
 
@@ -1012,7 +999,7 @@
 				if("augment")
 					if(ishuman(src))
 						if(BP)
-							BP.change_bodypart_status(BODYPART_ROBOTIC, TRUE, TRUE)
+							BP.change_bodypart_status(BODYTYPE_ROBOTIC, TRUE, TRUE)
 						else
 							to_chat(usr, "<span class='boldwarning'>[src] doesn't have such bodypart.</span>")
 					else
@@ -1084,9 +1071,9 @@
 			new result(src, TRUE)
 
 /mob/living/carbon/has_mouth()
-	for(var/obj/item/bodypart/head/head in bodyparts)
-		if(head.mouth)
-			return TRUE
+	var/obj/item/bodypart/head/head = get_bodypart(BODY_ZONE_HEAD)
+	if(head && head.mouth)
+		return TRUE
 
 /mob/living/carbon/can_resist()
 	return bodyparts.len > 2 && ..()

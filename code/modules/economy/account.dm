@@ -45,7 +45,7 @@
 	return FALSE
 
 /datum/bank_account/proc/transfer_money(datum/bank_account/from, amount)
-	if(from?.has_money(amount))
+	if(from.has_money(amount))
 		adjust_money(amount)
 		SSblackbox.record_feedback("amount", "credits_transferred", amount)
 		log_econ("[amount] credits were transferred from [from.account_holder]'s account to [src.account_holder]")
@@ -112,6 +112,13 @@
 				if(M.can_hear())
 					M.playsound_local(get_turf(sound_atom), 'sound/machines/twobeep_high.ogg', 50, TRUE)
 					to_chat(M, "[icon2html(icon_source, M)] <span class='notice'>[message]</span>")
+
+/datum/bank_account/ship
+	add_to_accounts = FALSE
+
+/datum/bank_account/ship/New(newname, budget)
+	account_holder = newname
+	account_balance = budget
 
 /datum/bank_account/department
 	account_holder = "Guild Credit Agency"

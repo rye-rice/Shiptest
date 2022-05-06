@@ -10,6 +10,8 @@
 	max_integrity = 250
 	resistance_flags = NONE
 	armor = list("melee" = 35, "bullet" = 30, "laser" = 30, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	greyscale_colors = list(list(14, 18))
+	greyscale_icon_state = "armor"
 
 /obj/item/clothing/suit/armor/Initialize()
 	. = ..()
@@ -29,6 +31,31 @@
 	icon_state = "armoralt"
 	item_state = "armoralt"
 
+/obj/item/clothing/suit/armor/vest/marine
+	name = "tactical armor vest"
+	desc = "A set of the finest mass produced, stamped plasteel armor plates, containing an environmental protection unit for all-condition door kicking."
+	icon_state = "marine_command"
+	item_state = "armor"
+	clothing_flags = STOPSPRESSUREDAMAGE | THICKMATERIAL
+	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	armor = list("melee" = 50, "bullet" = 50, "laser" = 30, "energy" = 25, "bomb" = 50, "bio" = 100, "fire" = 40, "acid" = 50)
+	cold_protection = CHEST | GROIN | LEGS | FEET | ARMS | HANDS
+	min_cold_protection_temperature = ARMOR_MIN_TEMP_PROTECT
+	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	resistance_flags = FIRE_PROOF | ACID_PROOF
+
+/obj/item/clothing/suit/armor/vest/marine/security
+	name = "large tactical armor vest"
+	icon_state = "marine_security"
+
+/obj/item/clothing/suit/armor/vest/marine/engineer
+	name = "tactical utility armor vest"
+	icon_state = "marine_engineer"
+
+/obj/item/clothing/suit/armor/vest/marine/medic
+	name = "tactical medic's armor vest"
+	icon_state = "marine_medic"
+
 /obj/item/clothing/suit/armor/vest/old
 	name = "degrading armor vest"
 	desc = "Older generation Type 1 armored vest. Due to degradation over time the vest is far less maneuverable to move in."
@@ -42,6 +69,15 @@
 	icon_state = "blueshift"
 	item_state = "blueshift"
 	custom_premium_price = 750
+
+/obj/item/clothing/suit/armor/vest/duster
+	name = "black duster"
+	desc = "A long, intimidating black coat. This one is reinforced and ideal for protecting its wearer from rain, sun, dust, and bullets."
+	icon_state = "duster_sec"
+	item_state = "duster_sec"
+	body_parts_covered = CHEST|GROIN|ARMS|LEGS
+	cold_protection = CHEST|GROIN|LEGS|ARMS
+	heat_protection = CHEST|GROIN|LEGS|ARMS
 
 /obj/item/clothing/suit/armor/hos
 	name = "armored greatcoat"
@@ -57,7 +93,6 @@
 /obj/item/clothing/suit/armor/hos/trenchcoat
 	name = "armored trenchcoat"
 	desc = "A trenchcoat enhanced with a special lightweight kevlar. The epitome of tactical plainclothes."
-	mob_overlay_icon = 'whitesands/icons/mob/clothing/suits.dmi'
 	icon_state = "hostrench"
 	item_state = "hostrench"
 	flags_inv = 0
@@ -66,8 +101,7 @@
 /obj/item/clothing/suit/armor/vest/security/warden
 	name = "warden's jacket"
 	desc = "A black armored jacket with silver shoulder designations and '/Warden/' stitched into one of the chest pockets."
-	icon = 'whitesands/icons/obj/clothing/suits.dmi'
-	mob_overlay_icon = 'whitesands/icons/mob/clothing/suits.dmi'
+
 	icon_state = "warden_alt"
 	item_state = "armor"
 	body_parts_covered = CHEST|GROIN|ARMS
@@ -82,6 +116,11 @@
 	desc = "A white jacket with silver rank pips and body armor strapped on top."
 	icon_state = "warden_jacket"
 
+/obj/item/clothing/suit/armor/vest/security/warden/alt/nt
+	name = "warden's red armored jacket"
+	desc = "A red jacket with silver rank pips and body armor strapped on top."
+	icon_state = "rwarden_jacket"
+
 /obj/item/clothing/suit/armor/vest/leather
 	name = "security overcoat"
 	desc = "Lightly armored leather overcoat meant as casual wear for high-ranking officers. Bears the crest of Nanotrasen Security."
@@ -94,9 +133,7 @@
 
 /obj/item/clothing/suit/armor/vest/capcarapace
 	name = "captain's carapace"
-	desc = "A fireproof armored chestpiece reinforced with ceramic plates and plasteel pauldrons to provide additional protection whilst still offering maximum mobility and flexibility. Issued only to the station's finest, although it does chafe your nipples."
-	icon = 'whitesands/icons/obj/clothing/suits.dmi'
-	mob_overlay_icon = 'whitesands/icons/mob/clothing/suits.dmi'
+	desc = "A fireproof armored chestpiece reinforced with ceramic plates and plasteel pauldrons to provide additional protection whilst still offering maximum mobility and flexibility. Issued only to NT's finest, although it does chafe your nipples."
 	icon_state = "capcarapace"
 	item_state = "armor"
 	body_parts_covered = CHEST|GROIN
@@ -114,6 +151,17 @@
 	desc = "For when an armoured vest isn't fashionable enough."
 	icon_state = "capformal"
 	item_state = "capspacesuit"
+
+/obj/item/clothing/suit/armor/vest/capcarapace/minutemen
+	name = "colonial minutemen general coat"
+	desc = "A very fancy coat used by generals of the Colonial Minutemen."
+	icon_state = "minuteman_general"
+
+/obj/item/clothing/suit/armor/vest/capcarapace/duster
+	name = "captain's duster"
+	desc = "A long, commanding coat worn over a surprisingly sleek set of armor and decorated with gold embroidery. Ideal for protecting its wearer from rain, sun, dust, mutineers, pirates, bears, hordes of angry legions, and so on."
+	icon_state = "duster_captain"
+	item_state = "duster_captain"
 
 /obj/item/clothing/suit/armor/riot
 	name = "riot suit"
@@ -258,12 +306,13 @@
 	item_state = "knight_red"
 
 /obj/item/clothing/suit/armor/riot/knight/greyscale
-	name = "knight armour"
-	desc = "A classic suit of armour, able to be made from many different materials."
+	name = "heavy plate armour"
+	desc = "A suit of magical plate armour, able to be made from many different materials. The thick armor is far lighter than it otherwise would be."
 	icon_state = "knight_greyscale"
 	item_state = "knight_greyscale"
 	material_flags = MATERIAL_ADD_PREFIX | MATERIAL_COLOR | MATERIAL_AFFECT_STATISTICS//Can change color and add prefix
-	armor = list("melee" = 30, "bullet" = 10, "laser" = 10, "energy" = 20, "bomb" = 30, "bio" = 10, "rad" = 10, "fire" = 40, "acid" = 40)
+	armor = list("melee" = 45, "bullet" = 20, "laser" = 20, "energy" = 25, "bomb" = 35, "bio" = 10, "rad" = 10, "fire" = 40, "acid" = 40)
+	slowdown = 0
 
 /obj/item/clothing/suit/armor/vest/durathread
 	name = "durathread vest"
@@ -292,3 +341,10 @@
 	cold_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	min_cold_protection_temperature = SPACE_SUIT_MIN_TEMP_PROTECT
 	armor = list("melee" = 25, "bullet" = 20, "laser" = 20, "energy" = 30, "bomb" = 20, "bio" = 50, "rad" = 20, "fire" = -10, "acid" = 50)
+
+/obj/item/clothing/suit/armor/hos/inteq
+	name = "inteq battle coat"
+	desc = "A luxurious brown coat with an crossweave of Kevlar and fur from genuine wolves, as protective as it is stylish."
+	icon_state = "inteq_battlecoat"
+	item_state = "inteq_battlecoat"
+	supports_variations = DIGITIGRADE_VARIATION

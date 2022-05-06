@@ -3,7 +3,7 @@
 /client/proc/secrets() //Creates a verb for admins to open up the ui
 	set name = "Secrets"
 	set desc = "Abuse harder than you ever have before with this handy dandy semi-misc stuff menu"
-	set category = "Admin - Game"
+	set category = "Admin.Game"
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Secrets Panel") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	var/datum/secrets_menu/tgui  = new(usr)//create the datum
 	tgui.ui_interact(usr)//datum has a tgui component, here we open the window
@@ -104,15 +104,6 @@
 				if (ACCESS_MAINT_TUNNELS in M.req_access)
 					M.req_access = list(ACCESS_BRIG)
 			message_admins("[key_name_admin(holder)] made all maint doors brig access-only.")
-		if("infinite_sec")
-			if(!is_debugger)
-				return
-			var/datum/job/J = SSjob.GetJob("Security Officer")
-			if(!J)
-				return
-			J.total_positions = -1
-			J.spawn_positions = -1
-			message_admins("[key_name_admin(holder)] has removed the cap on security officers.")
 		//Buttons for helpful stuff. This is where people land in the tgui
 		if("clear_virus")
 			var/choice = input("Are you sure you want to cure all disease?") in list("Yes", "Cancel")
@@ -147,12 +138,7 @@
 			else
 				alert("For some reason there's a SSticker, but not a game mode")
 		if("manifest")
-			var/dat = "<B>Showing Crew Manifest.</B><HR>"
-			dat += "<table cellspacing=5><tr><th>Name</th><th>Position</th></tr>"
-			for(var/datum/data/record/t in GLOB.data_core.general)
-				dat += "<tr><td>[t.fields["name"]]</td><td>[t.fields["rank"]]</td></tr>"
-			dat += "</table>"
-			holder << browse(dat, "window=manifest;size=440x410")
+			GLOB.crew_manifest_tgui.ui_interact(holder)
 		if("dna")
 			var/dat = "<B>Showing DNA from blood.</B><HR>"
 			dat += "<table cellspacing=5><tr><th>Name</th><th>DNA</th><th>Blood Type</th></tr>"
@@ -192,39 +178,19 @@
 			var/area/template = GLOB.areas_by_type[/area/tdome/arena_source]
 			template.copy_contents_to(thunderdome)
 		if("set_name")
-			var/new_name = input(holder, "Please input a new name for the station.", "What?", "") as text|null
+			var/new_name = input(holder, "Please input a new name for the sector.", "What?", "") as text|null
 			if(!new_name)
 				return
 			set_station_name(new_name)
-			log_admin("[key_name(holder)] renamed the station to \"[new_name]\".")
+			log_admin("[key_name(holder)] renamed the sector to \"[new_name]\".")
 			message_admins("<span class='adminnotice'>[key_name_admin(holder)] renamed the station to: [new_name].</span>")
-			priority_announce("[command_name()] has renamed the station to \"[new_name]\".")
+			priority_announce("[command_name()] has renamed the sector to \"[new_name]\".")
 		if("reset_name")
 			var/new_name = new_station_name()
 			set_station_name(new_name)
-			log_admin("[key_name(holder)] reset the station name.")
-			message_admins("<span class='adminnotice'>[key_name_admin(holder)] reset the station name.</span>")
-			priority_announce("[command_name()] has renamed the station to \"[new_name]\".")
-		if("moveferry")
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Send CentCom Ferry"))
-			if(!SSshuttle.toggleShuttle("ferry","ferry_home","ferry_away"))
-				message_admins("[key_name_admin(holder)] moved the CentCom ferry")
-				log_admin("[key_name(holder)] moved the CentCom ferry")
-		if("togglearrivals")
-			var/obj/docking_port/mobile/arrivals/A = SSshuttle.arrivals
-			if(A)
-				var/new_perma = !A.perma_docked
-				A.perma_docked = new_perma
-				SSblackbox.record_feedback("nested tally", "admin_toggle", 1, list("Permadock Arrivals Shuttle", "[new_perma ? "Enabled" : "Disabled"]"))
-				message_admins("[key_name_admin(holder)] [new_perma ? "stopped" : "started"] the arrivals shuttle")
-				log_admin("[key_name(holder)] [new_perma ? "stopped" : "started"] the arrivals shuttle")
-			else
-				to_chat(holder, "<span class='admin'>There is no arrivals shuttle.</span>", confidential = TRUE)
-		if("movelaborshuttle")
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Send Labor Shuttle"))
-			if(!SSshuttle.toggleShuttle("laborcamp","laborcamp_home","laborcamp_away"))
-				message_admins("[key_name_admin(holder)] moved labor shuttle")
-				log_admin("[key_name(holder)] moved the labor shuttle")
+			log_admin("[key_name(holder)] reset the sector's name.")
+			message_admins("<span class='adminnotice'>[key_name_admin(holder)] reset the sector's name.</span>")
+			priority_announce("[command_name()] has renamed the sector to \"[new_name]\".")
 		//!fun! buttons.
 		if("virus")
 			if(!is_funmin)
@@ -257,17 +223,19 @@
 		if("power")
 			if(!is_funmin)
 				return
+			var/result = input(holder, "Please choose what Z level to power. Specify none to power all Zs.","Power") as null|num
 			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Power All APCs"))
 			log_admin("[key_name(holder)] made all areas powered", 1)
 			message_admins("<span class='adminnotice'>[key_name_admin(holder)] made all areas powered</span>")
-			power_restore()
+			power_restore(result)
 		if("unpower")
 			if(!is_funmin)
 				return
+			var/result = input(holder, "Please choose what Z level to depower. Specify none to power all Zs.","Unpower") as null|num
 			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Depower All APCs"))
 			log_admin("[key_name(holder)] made all areas unpowered", 1)
 			message_admins("<span class='adminnotice'>[key_name_admin(holder)] made all areas unpowered</span>")
-			power_failure()
+			power_failure(result)
 		if("quickpower")
 			if(!is_funmin)
 				return
@@ -280,20 +248,6 @@
 				return
 			holder.anon_names()
 			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Anonymous Names"))
-		if("tripleAI")
-			if(!is_funmin)
-				return
-			holder.triple_ai()
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Triple AI"))
-		if("onlyone")
-			if(!is_funmin)
-				return
-			var/response = alert("Delay by 40 seconds?", "There can, in fact, only be one", "Instant!", "40 seconds (crush the hope of a normal shift)")
-			if(response == "Instant!")
-				holder.only_one()
-			else
-				holder.only_one_delayed()
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("There Can Be Only One"))
 		if("guns")
 			if(!is_funmin)
 				return
@@ -340,7 +294,8 @@
 				return
 			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Egalitarian Station"))
 			for(var/obj/machinery/door/airlock/W in GLOB.machines)
-				if(is_station_level(W.z) && !istype(get_area(W), /area/ship/bridge) && !istype(get_area(W), /area/ship/crew) && !istype(get_area(W), /area/ship/security/prison))
+				var/area/airlock_area = get_area(W)
+				if(istype(airlock_area, /area/ship) && !istype(airlock_area, /area/ship/bridge) && !istype(airlock_area, /area/ship/crew) && !istype(airlock_area, /area/ship/security/prison))
 					W.req_access = list()
 			message_admins("[key_name_admin(holder)] activated Egalitarian Station mode")
 			priority_announce("CentCom airlock control override activated. Please take this time to get acquainted with your coworkers.", null, 'sound/ai/commandreport.ogg')
@@ -423,7 +378,9 @@
 				H.adjustOrganLoss(ORGAN_SLOT_BRAIN, 60, 80)
 			message_admins("[key_name_admin(holder)] made everybody brain damaged")
 		if("floorlava")
-			SSweather.run_weather(/datum/weather/floor_is_lava)
+			/// Should point to a central mapzone.weather_controller, one doesn't exist in shiptest
+			WARNING("Floor lava bus is not implemented.")
+			return
 		if("anime")
 			if(!is_funmin)
 				return
@@ -441,7 +398,7 @@
 				var/mob/living/carbon/human/H = i
 				SEND_SOUND(H, sound('sound/ai/animes.ogg'))
 
-				if(H.dna.species.id == "human")
+				if(H.dna.species.id == SPECIES_HUMAN)
 					if(H.dna.features["tail_human"] == "None" || H.dna.features["ears"] == "None")
 						var/obj/item/organ/ears/cat/ears = new
 						var/obj/item/organ/tail/cat/tail = new

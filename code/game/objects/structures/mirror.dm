@@ -177,7 +177,7 @@
 				if(new_mutantcolor)
 					var/temp_hsv = RGBtoHSV(new_mutantcolor)
 
-					if(ReadHSV(temp_hsv)[3] >= ReadHSV("#7F7F7F")[3]) // mutantcolors must be bright
+					if(ReadHSV(temp_hsv)[3] >= ReadHSV("#191919")[3]) // mutantcolors must be bright
 						H.dna.features["mcolor"] = sanitize_hexcolor(new_mutantcolor)
 
 					else
@@ -185,7 +185,7 @@
 
 			H.update_body()
 			H.update_hair()
-			H.update_body_parts()
+			H.update_body_parts(TRUE)
 			H.update_mutations_overlay() // no hulk lizard
 
 		if("gender")

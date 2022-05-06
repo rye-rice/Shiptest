@@ -10,7 +10,6 @@
 	exp_requirements = 300
 	exp_type = EXP_TYPE_CREW
 	wiki_page = "Guide_to_Medicine" //WS Edit - Wikilinks/Warning
-	special_notice = "You are not a security officer, do not do their job for them. However, you can help them if they need immediate assistance. You are to tend to the medical needs of officers and prisoners." //WS Edit - Wikilinks/Warning
 
 	outfit = /datum/outfit/job/brig_phys
 
@@ -44,7 +43,7 @@
 /datum/outfit/job/brig_phys/securitymedic
 	name = "Brig Physician (Security Medic)"
 
-	uniform = /obj/item/clothing/under/rank/security/brig_phys/security_medic
+	uniform = /obj/item/clothing/under/rank/security/brig_phys/nt
 	suit = /obj/item/clothing/suit/toggle/labcoat/brig_phys
 	suit_store = /obj/item/flashlight/pen
 	alt_suit = null
@@ -52,7 +51,7 @@
 /datum/outfit/job/brig_phys/executionsupervisor
 	name = "Brig Physician (Execution Supervisor)"
 
-	uniform = /obj/item/clothing/under/rank/security/brig_phys/security_medic
+	uniform = /obj/item/clothing/under/rank/security/brig_phys/nt
 	suit = /obj/item/clothing/suit/toggle/labcoat/brig_phys
 	l_pocket = /obj/item/reagent_containers/syringe
 	alt_suit = null

@@ -55,16 +55,7 @@ All ShuttleMove procs go here
 	if(!shuttle_boundary)
 		CRASH("A turf queued to move via shuttle somehow had no skipover in baseturfs. [src]([type]):[loc]")
 	var/depth = baseturfs.len - shuttle_boundary + 1
-	newT.CopyOnTop(src, 1, depth, TRUE)
-	//Air stuff
-	newT.blocks_air = TRUE
-	newT.air_update_turf(TRUE)
-	blocks_air = TRUE
-	air_update_turf(TRUE)
-	if(isopenturf(newT))
-		var/turf/open/new_open = newT
-		new_open.copy_air_with_tile(src)
-
+	newT.CopyOnTop(src, 1, depth, TRUE, CHANGETURF_DEFER_CHANGE)
 	return TRUE
 
 // Called on the new turf after everything has been moved
@@ -73,7 +64,7 @@ All ShuttleMove procs go here
 	oldT.TransferComponents(src)
 	var/shuttle_boundary = baseturfs.Find(/turf/baseturf_skipover/shuttle)
 	if(shuttle_boundary)
-		oldT.ScrapeAway(baseturfs.len - shuttle_boundary + 1)
+		oldT.ScrapeAway(baseturfs.len - shuttle_boundary + 1, CHANGETURF_DEFER_CHANGE)
 
 	if(rotation)
 		shuttleRotate(rotation) //see shuttle_rotate.dm
@@ -81,10 +72,8 @@ All ShuttleMove procs go here
 	return TRUE
 
 /turf/proc/lateShuttleMove(turf/oldT)
-	blocks_air = initial(blocks_air)
-	air_update_turf(TRUE)
-	oldT.blocks_air = initial(oldT.blocks_air)
-	oldT.air_update_turf(TRUE)
+	AfterChange(CHANGETURF_RECALC_ADJACENT)
+	oldT.AfterChange(CHANGETURF_RECALC_ADJACENT)
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -93,24 +82,26 @@ All ShuttleMove procs go here
 // returns the new move_mode (based on the old)
 // WARNING: Do not leave turf contents in beforeShuttleMove or dock() will runtime
 /atom/movable/proc/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
+	SHOULD_CALL_PARENT(TRUE)
 	return move_mode
 
 // Called on atoms to move the atom to the new location
 /atom/movable/proc/onShuttleMove(turf/newT, turf/oldT, list/movement_force, move_dir, obj/docking_port/stationary/old_dock, obj/docking_port/mobile/moving_dock)
+	SHOULD_CALL_PARENT(TRUE)
 	if(newT == oldT) // In case of in place shuttle rotation shenanigans.
 		return
 
 	if(loc != oldT) // This is for multi tile objects
 		return
 
-	loc = newT
+	abstract_move(newT)
 
 
 	return TRUE
 
 // Called on atoms after everything has been moved
 /atom/movable/proc/afterShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
-
+	SHOULD_CALL_PARENT(TRUE)
 	var/turf/newT = get_turf(src)
 	if (newT.z != oldT.z)
 		onTransitZ(oldT.z, newT.z)
@@ -125,6 +116,7 @@ All ShuttleMove procs go here
 	return TRUE
 
 /atom/movable/proc/lateShuttleMove(turf/oldT, list/movement_force, move_dir)
+	SHOULD_CALL_PARENT(TRUE)
 	if(!movement_force || anchored)
 		return
 	var/throw_force = movement_force["THROW"]
@@ -216,8 +208,7 @@ All ShuttleMove procs go here
 
 /obj/machinery/computer/auxillary_base/afterShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
 	. = ..()
-	if(is_mining_level(z)) //Avoids double logging and landing on other Z-levels due to badminnery
-		SSblackbox.record_feedback("associative", "colonies_dropped", 1, list("x" = x, "y" = y, "z" = z))
+	SSblackbox.record_feedback("associative", "colonies_dropped", 1, list("x" = x, "y" = y, "z" = z))
 
 /obj/machinery/gravity_generator/main/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
 	. = ..()
@@ -282,7 +273,7 @@ All ShuttleMove procs go here
 	// If the pod was launched, the storage will always open. The reserved_level check
 	// ignores the movement of the shuttle from the transit level to
 	// the station as it is loaded in.
-	if (oldT && !is_reserved_level(oldT.z))
+	if (oldT && !is_reserved_level(oldT))
 		unlocked = TRUE
 
 /************************************Mob move procs************************************/
@@ -329,9 +320,9 @@ All ShuttleMove procs go here
 	if(. & MOVE_AREA)
 		. |= MOVE_CONTENTS
 
-/obj/structure/cable/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
+/obj/structure/cable/afterShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
 	. = ..()
-	cut_cable_from_powernet(FALSE)
+	qdel(powernet)
 
 /obj/structure/cable/lateShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
 	. = ..()
@@ -361,6 +352,7 @@ All ShuttleMove procs go here
 /************************************Misc move procs************************************/
 
 /atom/movable/lighting_object/onShuttleMove()
+	SHOULD_CALL_PARENT(FALSE)
 	return FALSE
 
 /obj/docking_port/mobile/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
@@ -379,9 +371,10 @@ All ShuttleMove procs go here
 		return FALSE
 	. = ..()
 
-/obj/docking_port/stationary/public_mining_dock/onShuttleMove(turf/newT, turf/oldT, list/movement_force, move_dir, obj/docking_port/stationary/old_dock, obj/docking_port/mobile/moving_dock)
-	id = "mining_public" //It will not move with the base, but will become enabled as a docking point.
-
 /obj/effect/abstract/proximity_checker/onShuttleMove(turf/newT, turf/oldT, list/movement_force, move_dir, obj/docking_port/stationary/old_dock, obj/docking_port/mobile/moving_dock)
+	. = ..()
 	//timer so it only happens once
+	if(!monitor)
+		qdel(src)
+		return
 	addtimer(CALLBACK(monitor, /datum/proximity_monitor/proc/SetRange, monitor.current_range, TRUE), 0, TIMER_UNIQUE)
