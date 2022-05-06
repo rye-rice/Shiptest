@@ -7,10 +7,10 @@
 	var/list/species = list()
 	var/drowning = FALSE
 	var/ticks_drowned = 0
-	var/slowdown = 4
 	var/bob_height_min = 2
 	var/bob_height_max = 5
 	var/bob_tick = 0
+	var/slowdown_mod = /datum/movespeed_modifier/swimming
 
 /datum/component/swimming/Initialize()
 	. = ..()
@@ -19,7 +19,7 @@
 		return INITIALIZE_HINT_QDEL //Only mobs can swim, like Ian...
 	var/mob/M = parent
 	M.visible_message("<span class='notice'>[parent] starts splashing around in the water!</span>")
-	M.add_movespeed_modifier(MOVESPEED_ID_SWIMMING, update=TRUE, priority=50, multiplicative_slowdown=slowdown, movetypes=GROUND)
+	M.add_movespeed_modifier(slowdown_mod, update=TRUE)
 	RegisterSignal(parent, COMSIG_MOVABLE_MOVED, .proc/onMove)
 	RegisterSignal(parent, COMSIG_CARBON_SPECIESCHANGE, .proc/onChangeSpecies)
 	RegisterSignal(parent, COMSIG_MOB_ATTACK_HAND_TURF, .proc/try_leave_pool)
@@ -41,7 +41,7 @@
 	if(istype(C) && C?.dna?.species)
 		component_type = C.dna.species.swimming_component
 	var/mob/M = parent
-	RemoveComponent()
+	UnregisterFromParent()
 	M.AddComponent(component_type)
 
 /datum/component/swimming/proc/try_leave_pool(datum/source, turf/clicked_turf)
@@ -60,13 +60,13 @@
 			L.visible_message("<span class='notice'>[parent] pulls [pulled_object] out of the pool.</span>")
 			var/datum/component/swimming/swimming_comp = pulled_object.GetComponent(/datum/component/swimming)
 			if(swimming_comp)
-				swimming_comp.RemoveComponent()
+				swimming_comp.UnregisterFromParent()
 		return
 	to_chat(parent, "<span class='notice'>You start to climb out of the pool...</span>")
 	if(do_after(parent, 1 SECONDS, target=clicked_turf))
 		L.forceMove(clicked_turf)
 		L.visible_message("<span class='notice'>[parent] climbs out of the pool.</span>")
-		RemoveComponent()
+		UnregisterFromParent()
 
 /datum/component/swimming/UnregisterFromParent()
 	exit_pool()
@@ -139,3 +139,13 @@
 //Essentially the same as remove component, but easier for overiding
 /datum/component/swimming/proc/exit_pool()
 	return
+
+/datum/movespeed_modifier/swimming
+	id = MOVESPEED_ID_SWIMMING
+	priority = 50
+	multiplicative_slowdown = 4
+	blacklisted_movetypes = FLOATING|FLYING
+
+/datum/movespeed_modifier/swimming/squid
+	id = MOVESPEED_ID_SWIMMING_SQUID
+	multiplicative_slowdown = 0.7

@@ -1,5 +1,5 @@
 /* /obj/item/twohanded/required/pool
-	icon = 'whitesands/icons/obj/pool.dmi'
+	icon = 'icons/obj/pool.dmi'
 	lefthand_file = 'icons/mob/inhands/items_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/items_righthand.dmi'
 	force = 0

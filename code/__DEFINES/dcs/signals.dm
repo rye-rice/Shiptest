@@ -167,6 +167,8 @@
 ///from base of atom/attack_paw(): (mob/user)
 #define COMSIG_ATOM_ATTACK_PAW "atom_attack_paw"
 	#define COMPONENT_NO_ATTACK_HAND (1<<0) //works on all 3.
+///Called on mob, params: turf
+#define COMSIG_MOB_ATTACK_HAND_TURF "mob_attack_hand_turf"
 ///from base of atom/set_opacity(): (new_opacity)
 #define COMSIG_ATOM_SET_OPACITY "atom_set_opacity"
 

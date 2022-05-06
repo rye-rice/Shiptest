@@ -10,7 +10,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 
 /obj/effect/overlay/poolwater
 	name = "Pool water"
-	icon = 'whitesands/icons/obj/pool.dmi'
+	icon = 'icons/obj/pool.dmi'
 	icon_state = "water"
 	anchored = TRUE
 	layer = ABOVE_ALL_MOB_LAYER
@@ -19,7 +19,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 /turf/open/indestructible/sound/pool
 	name = "Swimming pool"
 	desc = "A fun place where you go to swim! <b>Drag and drop yourself onto it to climb in...</b>"
-	icon = 'whitesands/icons/obj/pool.dmi'
+	icon = 'icons/obj/pool.dmi'
 	icon_state = "pool"
 	sound = 'sound/effects/splash.ogg'
 	var/id = null //Set me if you don't want the pool and the pump to be in the same area, or you have multiple pools per area.
@@ -66,7 +66,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	. = ..()
 	if(!istype(newloc, /turf/open/indestructible/sound/pool))
 		var/datum/component/swimming/S = Obj.GetComponent(/datum/component/swimming) //Handling admin TPs here.
-		S?.RemoveComponent()
+		S?.UnregisterFromParent()
 
 /turf/open/MouseDrop_T(atom/dropping, mob/user)
 	if(!isliving(user) || !isliving(dropping)) //No I don't want ghosts to be able to dunk people into the pool.
@@ -75,7 +75,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	var/datum/component/swimming/S = dropping.GetComponent(/datum/component/swimming)
 	if(S)
 		if(do_after(user, 1 SECONDS, target = dropping))
-			S.RemoveComponent()
+			S.UnregisterFromParent()
 			visible_message("<span class='notice'>[dropping] climbs out of the pool.</span>")
 			AM.forceMove(src)
 	else
@@ -116,7 +116,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	if(ishuman(user))
 		var/mob/living/carbon/human/F = user
 		var/datum/species/SS = F.dna.species
-		if(MOB_ROBOTIC in SS.inherent_biotypes)  //ZAP goes the IPC!
+		if((MOB_ROBOTIC) in SS.inherent_biotypes)  //ZAP goes the IPC!
 			zap = 2 //You can protect yourself from water damage with thick clothing.
 		if(F.head && isclothing(F.head))
 			var/obj/item/clothing/CH = F.head
@@ -156,7 +156,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 
 /obj/effect/turf_decal/pool
 	name = "Pool siding"
-	icon = 'whitesands/icons/obj/pool.dmi'
+	icon = 'icons/obj/pool.dmi'
 	icon_state = "poolborder"
 
 /obj/effect/turf_decal/pool/corner
@@ -170,7 +170,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 /obj/structure/pool_ladder
 	name = "Pool ladder"
 	desc = "Click this to get out of a pool quickly."
-	icon = 'whitesands/icons/obj/pool.dmi'
+	icon = 'icons/obj/pool.dmi'
 	icon_state = "ladder"
 	pixel_y = 12
 
@@ -179,7 +179,7 @@ GLOBAL_LIST_EMPTY(pool_filters)
 /obj/machinery/pool_filter
 	name = "Pool filter"
 	desc = "A device which can help you regulate conditions in a pool. Use a <b>wrench</b> to change its operating temperature, or hit it with a reagent container to load in new liquid to add to the pool."
-	icon = 'whitesands/icons/obj/pool.dmi'
+	icon = 'icons/obj/pool.dmi'
 	icon_state = "poolfilter"
 	pixel_y = 12 //So it sits above the water
 	idle_power_usage = IDLE_POWER_USE
@@ -266,7 +266,7 @@ GLOBAL_LIST_EMPTY(pool_filters)
 	if(S)
 		to_chat(user, "<span class='notice'>You start to climb out of the pool...</span>")
 		if(do_after(user, 1 SECONDS, target=src))
-			S.RemoveComponent()
+			S.UnregisterFromParent()
 			visible_message("<span class='notice'>[user] climbs out of the pool.</span>")
 			user.forceMove(get_turf(get_step(src, NORTH))) //Ladders shouldn't adjoin another pool section. Ever.
 	else
