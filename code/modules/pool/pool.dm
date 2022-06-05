@@ -16,6 +16,12 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	layer = ABOVE_ALL_MOB_LAYER
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
+#define SUBMERGE_SHALLOW 1 //think beach planet sshores, you can stick your head out of it, and go into normal submerged water like that
+#define SUBMERGE_NORMAL 2 // normal water, for deeper water or, you know, pools
+#define SUBMERGE_DEEP 3 //absouletly submerged. Used when you are implied to be deep underwater, no way out.
+/// i dont fucking know where to put this, so...
+#define COMSIG_POOL_DEPTH_CHANGED "pool_depth_change"
+
 /turf/open/indestructible/sound/pool
 	name = "Swimming pool"
 	desc = "A fun place where you go to swim! <b>Drag and drop yourself onto it to climb in...</b>"
@@ -24,6 +30,8 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	sound = 'sound/effects/splash.ogg'
 	var/id = null //Set me if you don't want the pool and the pump to be in the same area, or you have multiple pools per area.
 	var/obj/effect/water_overlay = null
+	var/depth = SUBMERGE_NORMAL
+	var/can_eat_shit = FALSE
 
 /turf/open/indestructible/sound/pool/end
 	icon_state = "poolwall"
@@ -41,9 +49,10 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	. = ..()
 
 /turf/open/CanPass(atom/movable/mover, turf/target)
-	var/datum/component/swimming/S = mover.GetComponent(/datum/component/swimming) //If you're swimming around, you don't really want to stop swimming just like that do you?
-	if(S)
-		return FALSE //If you're swimming, you can't swim into a regular turf, y'dig?
+	var/datum/component/swimming/mover_swimmer = mover.GetComponent(/datum/component/swimming) //If you're swimming around, you don't really want to stop swimming just like that do you?
+	if(mover_swimmer)
+		if(mover_swimmer.depth != SUBMERGE_SHALLOW)
+			return FALSE //If you're swimming, you can't swim into a regular turf, y'dig?
 	. = ..()
 
 /turf/open/indestructible/sound/pool/CanPass(atom/movable/mover, turf/target)
@@ -61,6 +70,7 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 			if(istype(C) && C?.dna?.species)
 				component_type = C.dna.species.swimming_component
 			AM.AddComponent(component_type)
+		SEND_SIGNAL(AM, COMSIG_POOL_DEPTH_CHANGED, depth)
 
 /turf/open/indestructible/sound/pool/Exited(atom/movable/Obj, atom/newloc)
 	. = ..()
@@ -115,8 +125,8 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 		zap = 1 //Sorry borgs! Swimming will come at a cost.
 	if(ishuman(user))
 		var/mob/living/carbon/human/F = user
-		var/datum/species/SS = F.dna.species
-		if((MOB_ROBOTIC) in SS.inherent_biotypes)  //ZAP goes the IPC!
+		var/datum/species/swimmimer_speceies = F.dna.species
+		if((MOB_ROBOTIC) in swimmimer_speceies.inherent_biotypes)  //ZAP goes the IPC!
 			zap = 2 //You can protect yourself from water damage with thick clothing.
 		if(F.head && isclothing(F.head))
 			var/obj/item/clothing/CH = F.head
@@ -135,6 +145,11 @@ Place a pool filter somewhere in the pool if you want people to be able to modif
 	else
 		SEND_SIGNAL(user, COMSIG_ADD_MOOD_EVENT, "pool", /datum/mood_event/poolparty)
 		return
+
+/turf/open/indestructible/sound/pool/Destroy()
+	if(water_overlay)
+		qdel(water_overlay)
+	return ..()
 
 /*//Largely a copypaste from shower.dm. Checks if the mob was stupid enough to enter a pool fully clothed. We allow masks as to not discriminate against clown and mime players.
 /turf/open/indestructible/sound/pool/proc/check_clothes(mob/living/carbon/human/H)

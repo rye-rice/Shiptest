@@ -11,6 +11,7 @@
 	var/bob_height_max = 5
 	var/bob_tick = 0
 	var/slowdown_mod = /datum/movespeed_modifier/swimming
+	var/depth //how deep we are? affects breathing
 
 /datum/component/swimming/Initialize()
 	. = ..()
@@ -20,10 +21,11 @@
 	var/mob/M = parent
 	M.visible_message("<span class='notice'>[parent] starts splashing around in the water!</span>")
 	M.add_movespeed_modifier(slowdown_mod, update=TRUE)
+	RegisterSignal(parent, COMSIG_POOL_DEPTH_CHANGED, .proc/handle_depth_change)
 	RegisterSignal(parent, COMSIG_MOVABLE_MOVED, .proc/onMove)
 	RegisterSignal(parent, COMSIG_CARBON_SPECIESCHANGE, .proc/onChangeSpecies)
 	RegisterSignal(parent, COMSIG_MOB_ATTACK_HAND_TURF, .proc/try_leave_pool)
-	START_PROCESSING(SSprocessing, src)
+	START_PROCESSING(SSobj, src)
 	enter_pool()
 
 /datum/component/swimming/proc/onMove()
@@ -67,6 +69,12 @@
 		L.forceMove(clicked_turf)
 		L.visible_message("<span class='notice'>[parent] climbs out of the pool.</span>")
 		UnregisterFromParent()
+		qdel(src)
+
+/datum/component/swimming/proc/handle_depth_change(new_depth)
+	if(!new_depth)
+		return
+	depth = new_depth
 
 /datum/component/swimming/UnregisterFromParent()
 	exit_pool()
@@ -76,10 +84,11 @@
 	if(bob_tick)
 		M.pixel_y = 0
 	M.remove_movespeed_modifier(MOVESPEED_ID_SWIMMING)
+	UnregisterSignal(parent, COMSIG_POOL_DEPTH_CHANGED)
 	UnregisterSignal(parent, COMSIG_MOVABLE_MOVED)
 	UnregisterSignal(parent, COMSIG_CARBON_SPECIESCHANGE)
 	UnregisterSignal(parent, COMSIG_MOB_ATTACK_HAND_TURF)
-	STOP_PROCESSING(SSprocessing, src)
+	STOP_PROCESSING(SSobj, src)
 	return ..()
 
 /datum/component/swimming/process()
@@ -108,7 +117,15 @@
 //	var/obj/item/twohanded/required/pool/helditem = victim.get_active_held_item()
 //	if(istype(helditem)) //&& helditem.wielded) commenting this out because i cba to fix it and you can float fine by holding onto a pool noodle with one hand
 //		return
-	return ((!(victim.mobility_flags & MOBILITY_STAND)) && (!HAS_TRAIT(victim, TRAIT_NOBREATH)))
+	if((!HAS_TRAIT(victim, TRAIT_NOBREATH)))
+		return FALSE
+	if(depth == SUBMERGE_DEEP)
+		return TRUE
+	if(!(victim.mobility_flags & MOBILITY_STAND))
+		if(depth == SUBMERGE_SHALLOW)
+			return FALSE
+		return TRUE
+	return FALSE
 
 /datum/component/swimming/proc/drown(mob/living/victim)
 	if(victim.losebreath < 1)
