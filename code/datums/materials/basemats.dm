@@ -419,3 +419,42 @@ Unless you know what you're doing, only use the first three numbers. They're in 
 	beauty_modifier = 0.2
 	turf_sound_override = FOOTSTEP_WOOD
 	texture_layer_icon_state = "bamboo"
+
+/datum/material/copper
+	name = "copper"
+	id = "copper"
+	desc = "Copper is a soft, malleable, and ductile metal with very high thermal and electrical conductivity."
+	color = "#c47a3d"
+	categories = list(MAT_CATEGORY_ORE = TRUE, MAT_CATEGORY_RIGID = TRUE)
+	sheet_type = /obj/item/stack/sheet/mineral/copper
+	ore_type = /obj/item/stack/ore/copper
+	value_per_unit = 0.0025
+
+/datum/material/lead
+	name = "lead"
+	id = "lead"
+	desc = "Lead is a soft, malleable, and heavy metal found in sedimentary and igneous layers of the crust."
+	color = "#60706b"
+	categories = list(MAT_CATEGORY_ORE = TRUE, MAT_CATEGORY_RIGID = TRUE)
+	sheet_type = /obj/item/stack/sheet/mineral/lead
+	ore_type = /obj/item/stack/ore/lead
+	value_per_unit = 0.0025
+
+/datum/material/sulfur
+	name = "sulfur"
+	id = "sulfur"
+	desc = "Also known as brimstone, Sulfur is a flammable substance, but is also a core component of life."
+	color = "#ede218"
+	categories = list(MAT_CATEGORY_ORE = TRUE)
+	sheet_type = /obj/item/stack/ore/sulfur
+	ore_type = /obj/item/stack/ore/sulfur
+	value_per_unit = 0.0025
+
+/datum/material/sulfur/on_applied(atom/source, amount, material_flags)
+	. = ..()
+	if(ismovable(source))
+		source.AddComponent(/datum/component/explodable, 0, 0, amount / 3000, amount / 1000)
+
+/datum/material/plasma/on_removed(atom/source, material_flags)
+	. = ..()
+	qdel(source.GetComponent(/datum/component/explodable))

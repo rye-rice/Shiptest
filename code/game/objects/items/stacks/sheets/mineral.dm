@@ -552,16 +552,19 @@ GLOBAL_LIST_INIT(abductor_recipes, list ( \
 
 /obj/item/stack/sheet/mineral/coal/attackby(obj/item/W, mob/user, params)
 	if(W.get_temperature() > 300)//If the temperature of the object is over 300, then ignite
-		var/turf/T = get_turf(src)
-		message_admins("Coal ignited by [ADMIN_LOOKUPFLW(user)] in [ADMIN_VERBOSEJMP(T)]")
-		log_game("Coal ignited by [key_name(user)] in [AREACOORD(T)]")
+		var/turf/current_turf = get_turf(src)
+		message_admins("Coal ignited by [ADMIN_LOOKUPFLW(user)] in [ADMIN_VERBOSEJMP(current_turf)]")
+		log_game("Coal ignited by [key_name(user)] in [AREACOORD(current_turf)]")
 		fire_act(W.get_temperature())
 		return TRUE
 	else
 		return ..()
 
 /obj/item/stack/sheet/mineral/coal/fire_act(exposed_temperature, exposed_volume)
+	var/turf/current_turf = get_turf(src)
 	atmos_spawn_air("co2=[amount*10];TEMP=[exposed_temperature]")
+	if(isopenturf(current_turf))
+		current_turf.IgniteTurf(1*amount)
 	qdel(src)
 
 /obj/item/stack/sheet/mineral/coal/five
@@ -569,3 +572,59 @@ GLOBAL_LIST_INIT(abductor_recipes, list ( \
 
 /obj/item/stack/sheet/mineral/coal/ten
 	amount = 10
+
+/*
+ * Copper
+ */
+/obj/item/stack/sheet/mineral/copper
+	name = "copper"
+	desc = "Does not give bonus EXP."
+	icon_state = "sheet-copper"
+	item_state = "sheet-copper"
+	singular_name = "copper bar"
+	sheettype = "copper"
+	custom_materials = list(/datum/material/copper=MINERAL_MATERIAL_AMOUNT)
+	grind_results = list(/datum/reagent/copper = 20)
+	point_value = 3
+	merge_type = /obj/item/stack/sheet/mineral/copper
+
+/* sprites for this look real bad, resprite
+GLOBAL_LIST_INIT(copper_recipes, list ( \
+	new/datum/stack_recipe("Copper Door", /obj/structure/mineral_door/copper, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("Copper Tile", /obj/item/stack/tile/mineral/copper, 1, 4, 20), \
+	new/datum/stack_recipe("Quartermaster Statue", /obj/structure/statue/copper/dimas, 10, one_per_turf = 1, on_floor = 1), \
+	))
+
+/obj/item/stack/sheet/mineral/copper/Initialize(mapload, new_amount, merge = TRUE)
+	recipes = GLOB.copper_recipes
+	. = ..()
+*/
+/obj/item/stack/sheet/mineral/copper/fifty
+	amount = 50
+
+/obj/item/stack/sheet/mineral/copper/twenty
+	amount = 20
+
+/obj/item/stack/sheet/mineral/copper/five
+	amount = 5
+
+/obj/item/stack/sheet/mineral/lead
+	name = "lead"
+	desc = "Looks tasty."
+	icon_state = "sheet-lead"
+	item_state = "sheet-lead"
+	singular_name = "lead bar"
+	sheettype = "lead"
+	custom_materials = list(/datum/material/lead=MINERAL_MATERIAL_AMOUNT)
+	grind_results = list(/datum/reagent/toxin/leadacetate = 20) //maybe make it a more unique reagent?
+	point_value = 2
+	merge_type = /obj/item/stack/sheet/mineral/lead
+
+/obj/item/stack/sheet/mineral/lead/fifty
+	amount = 50
+
+/obj/item/stack/sheet/mineral/lead/twenty
+	amount = 20
+
+/obj/item/stack/sheet/mineral/lead/five
+	amount = 5

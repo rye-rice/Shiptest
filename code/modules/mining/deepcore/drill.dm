@@ -41,6 +41,9 @@
 		return TRUE
 	else
 		var/obj/effect/landmark/ore_vein/O = scanArea()
+		var/area/current_area = get_area(src)
+		if(!istype(current_area, /area/overmap_encounter/planetoid))
+			to_chat(user, "<span class='warning'>You can't deploy the [src] indoors!</span>")
 		if(O)
 			anchored = TRUE
 			playsound(src, 'sound/machines/windowdoor.ogg', 50)

@@ -42,6 +42,8 @@ All ShuttleMove procs go here
 				continue
 			if(!thing.anchored)
 				step(thing, shuttle_dir)
+			if(istype(thing, /obj/effect/landmark/ore_vein)
+				continue
 			else
 				qdel(thing)
 
