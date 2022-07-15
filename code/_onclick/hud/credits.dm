@@ -46,7 +46,7 @@ GLOBAL_LIST_INIT(patrons, world.file2list("[global.config.directory]/patrons.txt
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	alpha = 0
 	screen_loc = "2,2"
-	layer = SPLASHSCREEN_LAYER
+	plane = SPLASHSCREEN_PLANE
 	var/matrix/target
 
 /atom/movable/screen/credit/Initialize(mapload, credited)

@@ -1,3 +1,7 @@
+//why the fuck do we still have devil
+//admins can't spawn it in and if they can i have never seen it before
+//relavent pr: https://github.com/tgstation/tgstation/pull/53612
+
 #define BLOOD_THRESHOLD 3 //How many souls are needed per stage.
 #define TRUE_THRESHOLD 7
 #define ARCH_THRESHOLD 12
