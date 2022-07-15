@@ -209,7 +209,6 @@ GLOBAL_LIST_EMPTY(custom_shuttle_machines)		//Machines that require updating (He
 		return FALSE
 	newS = new /area/ship()
 	newS.setup(str)
-	newS.set_dynamic_lighting()
 	//Shuttles always have gravity
 	newS.has_gravity = TRUE
 	newS.requires_power = TRUE

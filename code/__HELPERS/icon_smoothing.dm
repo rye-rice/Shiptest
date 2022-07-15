@@ -149,7 +149,7 @@ DEFINE_BITFIELD(smoothing_junction, list(
 	return ..()
 
 
-//do not use, use QUEUE_SMOOTH(atom)
+///do not use, use QUEUE_SMOOTH(atom)
 /atom/proc/smooth_icon()
 	smoothing_flags &= ~SMOOTH_QUEUED
 	flags_1 |= HTML_USE_INITAL_ICON_1

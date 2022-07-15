@@ -13,12 +13,6 @@ SUBSYSTEM_DEF(lighting)
 
 /datum/controller/subsystem/lighting/Initialize(timeofday)
 	if(!initialized)
-		if (CONFIG_GET(flag/starlight))
-			for(var/I in GLOB.sortedAreas)
-				var/area/A = I
-				if (A.dynamic_lighting == DYNAMIC_LIGHTING_IFSTARLIGHT)
-					A.luminosity = 0
-
 		create_all_lighting_objects()
 		initialized = TRUE
 
@@ -65,13 +59,12 @@ SUBSYSTEM_DEF(lighting)
 		queue.Cut(1, i+1)
 		i = 0
 
-
 	if(!init_tick_checks)
 		MC_SPLIT_TICK
 
 	queue = objects_queue
 	for (i in 1 to length(queue))
-		var/atom/movable/lighting_object/O = queue[i]
+		var/datum/lighting_object/O = queue[i]
 
 		if (QDELETED(O))
 			continue

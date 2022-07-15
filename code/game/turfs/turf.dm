@@ -1,7 +1,7 @@
 /turf
 	icon = 'icons/turf/floors.dmi'
 	flags_1 = CAN_BE_DIRTY_1
-	vis_flags = VIS_INHERIT_ID|VIS_INHERIT_PLANE // Important for interaction with and visualization of openspace.
+	vis_flags = VIS_INHERIT_ID | VIS_INHERIT_PLANE // Important for interaction with and visualization of openspace.
 	luminosity = 1
 
 	var/intact = 1
@@ -46,12 +46,13 @@
 	///Lumcount added by sources other than lighting datum objects, such as the overlay lighting component.
 	var/dynamic_lumcount = 0
 
-	var/dynamic_lighting = TRUE
+	///Bool, whether this turf will always be illuminated no matter what area it is in
+	var/always_lit = FALSE
 
 	var/tmp/lighting_corners_initialised = FALSE
 
 	///Our lighting object.
-	var/tmp/atom/movable/lighting_object/lighting_object
+	var/tmp/datum/lighting_object/lighting_object
 	///Lighting Corner datums.
 	var/tmp/datum/lighting_corner/lighting_corner_NE
 	var/tmp/datum/lighting_corner/lighting_corner_SE
@@ -113,9 +114,8 @@
 	for(var/atom/movable/content as anything in src)
 		Entered(content, null)
 
-	var/area/A = loc
-	if(!IS_DYNAMIC_LIGHTING(src) && IS_DYNAMIC_LIGHTING(A))
-		add_overlay(/obj/effect/fullbright)
+	if(always_lit)
+		add_overlay(GLOB.fullbright_overlay)
 
 	if(requires_activation)
 		CALCULATE_ADJACENT_TURFS(src)

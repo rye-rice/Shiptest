@@ -353,10 +353,6 @@ All ShuttleMove procs go here
 
 /************************************Misc move procs************************************/
 
-/atom/movable/lighting_object/onShuttleMove()
-	SHOULD_CALL_PARENT(FALSE)
-	return FALSE
-
 /obj/docking_port/mobile/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
 	. = ..()
 	if(moving_dock == src)

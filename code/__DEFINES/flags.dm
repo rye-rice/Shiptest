@@ -81,6 +81,8 @@ GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 204
 #define BLOCK_SUICIDE (1<<9)
 /// Can the Xenobio management console transverse this area by default?
 #define XENOBIOLOGY_COMPATIBLE (1<<10)
+///Whther this area is iluminated by starlight
+#define AREA_USES_STARLIGHT (1<<11)
 
 /*
 	These defines are used specifically with the atom/pass_flags bitmask
