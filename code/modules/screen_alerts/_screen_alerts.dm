@@ -21,7 +21,6 @@
 	icon = null
 	icon_state = null
 	alpha = 255
-	layer = HUD_LAYER
 	plane = HUD_PLANE
 
 	maptext_height = 64
