@@ -20,7 +20,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	icon_state = "space"
 	requires_power = TRUE
 	always_unpowered = TRUE
-	static_lighting = FALSE
 	power_light = FALSE
 	power_equip = FALSE
 	power_environ = FALSE
@@ -29,6 +28,9 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	ambientsounds = SPACE
 	flags_1 = CAN_BE_DIRTY_1
 	sound_environment = SOUND_AREA_SPACE
+	static_lighting = FALSE
+	base_lighting_alpha = 255
+	base_lighting_color = COLOR_WHITE
 
 /area/space/nearstation
 	icon_state = "space_near"
