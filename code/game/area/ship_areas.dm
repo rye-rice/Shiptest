@@ -32,7 +32,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/space/nearstation
 	icon_state = "space_near"
-	area_flags = UNIQUE_AREA | NO_ALERTS | AREA_USES_STARLIGHT
+	area_flags = UNIQUE_AREA | AREA_USES_STARLIGHT
 
 /area/start
 	name = "start area"
