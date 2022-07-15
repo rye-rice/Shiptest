@@ -1,3 +1,4 @@
+
 /datum/element/turf_z_transparency
 	var/show_bottom_level = FALSE
 	var/turf/our_turf
@@ -50,13 +51,13 @@
 		our_turf.underlays += plating_underlay
 	return TRUE
 
-/datum/element/turf_z_transparency/proc/on_multiz_turf_del(turf/our_turf, turf/T, dir)
+/datum/element/turf_z_transparency/proc/on_multiz_turf_del(turf/our_turf, turf/below_turf, dir)
 	SIGNAL_HANDLER
 	if(dir != DOWN)
 		return
 	update_multiz(our_turf)
 
-/datum/element/turf_z_transparency/proc/on_multiz_turf_new(turf/our_turf, turf/T, dir)
+/datum/element/turf_z_transparency/proc/on_multiz_turf_new(turf/our_turf, turf/below_turf, dir)
 	SIGNAL_HANDLER
 	if(dir != DOWN)
 		return

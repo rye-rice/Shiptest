@@ -60,6 +60,14 @@
 	SSmachines.setup_template_powernets(cables)
 	SSair.setup_template_machinery(atmos_machines)
 
+	for(var/turf/unlit as anything in turfs)
+		if(unlit.always_lit)
+			continue
+		var/area/loc_area = unlit.loc
+		if(!loc_area.static_lighting)
+			continue
+		unlit.lighting_build_overlay()
+
 	//calculate all turfs inside the border
 	var/list/template_and_bordering_turfs = block(
 		locate(

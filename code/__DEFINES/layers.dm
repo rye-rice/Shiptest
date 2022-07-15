@@ -109,7 +109,7 @@
 #define FRILL_MASK_RENDER_TARGET "*FRILL_MASK_PLANE"
 
 //---------- LIGHTING -------------
-///Normal 1 per turf dynamic lighting objects
+///Normal 1 per turf dynamic lighting underlays
 #define LIGHTING_PLANE 100
 #define LIGHTING_RENDER_TARGET "LIGHT_PLANE"
 
@@ -120,6 +120,10 @@
 ///Things that should render ignoring lighting
 #define ABOVE_LIGHTING_PLANE 120
 #define ABOVE_LIGHTING_RENDER_TARGET "ABOVE_LIGHTING_PLANE"
+
+#define LIGHTING_PRIMARY_LAYER 15	//The layer for the main lights of the station
+#define LIGHTING_PRIMARY_DIMMER_LAYER 15.1	//The layer that dims the main lights of the station
+#define LIGHTING_SECONDARY_LAYER 16	//The colourful, usually small lights that go on top
 
 ///visibility + hiding of things outside of light source range
 #define BYOND_LIGHTING_PLANE 130

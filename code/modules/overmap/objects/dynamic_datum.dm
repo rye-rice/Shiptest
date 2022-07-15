@@ -356,7 +356,9 @@
 	icon_state = "away"
 	area_flags = HIDDEN_AREA | UNIQUE_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED | NOTELEPORT
 	flags_1 = CAN_BE_DIRTY_1
-	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
+	static_lighting = FALSE
+	base_lighting_alpha = 255
+	base_lighting_color = COLOR_WHITE
 	sound_environment = SOUND_ENVIRONMENT_STONEROOM
 	ambientsounds = RUINS
 	outdoors = TRUE

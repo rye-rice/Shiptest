@@ -271,7 +271,7 @@
 	power_light = FALSE
 	requires_power = TRUE
 	ambientsounds = MINING
-	dynamic_lighting = DYNAMIC_LIGHTING_ENABLED
+	static_lighting = TRUE
 	area_flags = VALID_TERRITORY | UNIQUE_AREA | FLORA_ALLOWED
 
 /area/whitesands/surface/outdoors // weather happens here
@@ -308,7 +308,7 @@
 	power_light = FALSE
 	requires_power = TRUE
 	ambientsounds = MINING
-	dynamic_lighting = DYNAMIC_LIGHTING_ENABLED
+	static_lighting = TRUE
 	area_flags = VALID_TERRITORY | UNIQUE_AREA | FLORA_ALLOWED
 
 /area/jungle/surface/outdoors // weather happens here
@@ -345,7 +345,7 @@
 	power_light = FALSE
 	requires_power = TRUE
 	ambientsounds = MINING
-	dynamic_lighting = DYNAMIC_LIGHTING_ENABLED
+	static_lighting = TRUE
 	area_flags = VALID_TERRITORY | UNIQUE_AREA | FLORA_ALLOWED
 
 /area/rock/surface/outdoors // weather happens here
