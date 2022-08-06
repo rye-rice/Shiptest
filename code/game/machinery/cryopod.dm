@@ -13,8 +13,8 @@ GLOBAL_LIST_EMPTY(cryopod_computers)
 /obj/machinery/computer/cryopod
 	name = "cryogenic oversight console"
 	desc = "An interface between crew and the cryogenic storage oversight systems."
-	icon_state = "wallconsole"
-	icon_screen = "wallconsole_cryo"
+	icon_state = "wallconsole_old"
+	icon_screen = "wallconsole_old_cryo"
 	icon_keyboard = null
 	// circuit = /obj/item/circuitboard/cryopodcontrol
 	density = FALSE

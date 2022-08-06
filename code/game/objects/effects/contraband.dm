@@ -654,62 +654,62 @@
 	random_basetype = /obj/structure/sign/poster/retro
 
 /obj/structure/sign/poster/retro/nanotrasen_logo_70s
-	name = "\improper Ancient Nanotrasen logo"
-	desc = "A poster depicting the Nanotrasen logo. This thing is ancient."
+	name = "\improper Old Nanotrasen logo"
+	desc = "A poster depicting the old Nanotrasen logo."
 	icon_state = "poster-nanotrasen70s_retro"
 
 /obj/structure/sign/poster/retro/nanotrasen_logo_80s
 	name = "\improper Nanotrasen logo"
-	desc = "A poster depicting the Nanotrasen logo. It has a nice aesthetic."
+	desc = "A poster depicting the current Nanotrasen logo. There has been some controversy over the redesign as many believe it makes Nanotrasen look less 'fun'."
 	icon_state = "poster-nanotrasen_retro"
 
 /obj/structure/sign/poster/retro/smile
 	name = "Smile"
-	desc = "Turn that frown upside down! It has a nice aesthetic."
+	desc = "Turn that frown upside down!."
 	icon_state = "poster-smile_retro"
 
 /obj/structure/sign/poster/retro/we_watch
 	name = "We Watch"
-	desc = "Big Brother is always watching. It has a nice aesthetic."
+	desc = "Big Brother is always watching."
 	icon_state = "poster-watch_retro"
 
 /obj/structure/sign/poster/retro/build
 	name = "Build"
-	desc = "A poster glorifying the engineering team. It has a nice aesthetic."
+	desc = "A poster glorifying the engineering team."
 	icon_state = "poster-build_retro"
 
 /obj/structure/sign/poster/retro/science
 	name = "Science"
-	desc = "A poster depicting an atom. It has a nice aesthetic."
+	desc = "A poster depicting an atom.."
 	icon_state = "poster-science_retro"
 
 /obj/structure/sign/poster/retro/pdaancient
-	name = "PDA Ad"
-	desc = "A poster advertising the original Thinkitronic PDA after it was aquired by Nanotrasen. This thing shipped with severe problems such as PDA message 'bombing' and memory errors. Despite this, it's fondly remembered. This thing is ancient."
+	name = "PDA 2500 Ad"
+	desc = "A poster advertising the Thinkitronic PDA after it was aquired by Nanotrasen. You remember the disastrous launch of this thing, and the stories of PDAs exploding. But now you have one with you, who's laughing now?"
 	icon_state = "poster-pda70_retro"
 /obj/structure/sign/poster/retro/lasergun
-	name = "Retro Laser Gun"
-	desc = "A poster advertising the retro laser gun, back when it was new and called the L-102. This thing is ancient."
+	name = "L-102"
+	desc = "A poster advertising a older laser gun model, from before Nanotrasen fully bought out Sharplite Defence."
 	icon_state = "poster-l102_retro"
 
 /obj/structure/sign/poster/retro/lasergun_new
-	name = "Old Laser Gun"
-	desc = "A poster advertising a older version of the L-704, the L-204 model. It has a nice aesthetic."
+	name = "Laser Gun"
+	desc = "A poster advertising the recently launched L-204. Many are sticking with their anciently outdated 102s or even E-11, but the very high reviews for this thing are promising."
 	icon_state = "poster-newl204_retro"
 
 /obj/structure/sign/poster/retro/emag
 	name = "Cryptographic Sequencer"
-	desc = "A poster advertising a Nanotrasen beginner hacker tool. It was shelved due to not taking any skill to use. You wonder how it worked out for them. It has a nice aesthetic."
+	desc = "A poster advertising a Nanotrasen beginner hacker tool. The whole story is pretty baffiling, and just barely happened a day ago. Somehow, Nanotrasen created a military grade hacking tool that is easibly usable by anyone, and instead of targetting the military, they targetted the toy fucking market. Obviously many lawsuits are underway."
 	icon_state = "poster-emag_retro"
 
 /obj/structure/sign/poster/retro/telecrystal
 	name = "Telecrystals"
-	desc = "A poster advertising a teleportation alternative to bluespace. It was notable for not requiring massive machinery to use, and can even work in a handheld PDA. It was shelved due to high costs. It has a nice aesthetic."
+	desc = "A poster advertising Nanotrasen Electronic's teleportation alternative to bluespace. It doesn't take a genius to figure out these things were a massive commercial failure."
 	icon_state = "poster-tc-retro"
 
 /obj/structure/sign/poster/retro/radio
 	name = "Radio"
-	desc = "A poster advertising one of Nanotrasen's earliest products, a radio. One of its main selling points was a integrated OS, and dual langauge support for Galactic Common, and Draconic, which made it a smash hit. This thing is ancient."
+	desc = "A poster advertising one of Nanotrasen Electronics's earliest products, a radio. The poster touts about a integrated OS, and dual langauge support for Galactic Common, and Draconic. Despite these things being antiquated as all hell, the success of the original makes them still desirable almost 20 years later."
 	icon_state = "poster-radio70_retro"
 
 //Safety moth posters, credit to AspEv for the art which the below posters are based on and to Ayy-Robotics for the sprites.

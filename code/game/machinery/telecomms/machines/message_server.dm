@@ -9,7 +9,8 @@
 /obj/machinery/blackbox_recorder
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "blackbox"
-	name = "Blackbox Recorder"
+	name = "blackbox recorder"
+	desc = "A device used for logging almost everything about a ship. While it is useful for tracking data after a crash, it's main purpose is for storing data for AI flight units."
 	density = TRUE
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
@@ -60,8 +61,8 @@
 		icon_state = "blackbox"
 
 /obj/item/blackbox
-	name = "\proper the blackbox"
-	desc = "A strange relic, capable of recording data on extradimensional vertices. It lives inside the blackbox recorder for safe keeping."
+	name = "\proper blackbox"
+	desc = "A bulky piece of machinery that contains logs of almost all ship data for the AI flight unit. You hope these bulky things are phased out in the next 100 years as they are a bitch to handle."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "blackcube"
 	lefthand_file = 'icons/mob/inhands/items_lefthand.dmi'
