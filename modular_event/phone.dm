@@ -200,7 +200,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	T.update_icon()
 
 	to_chat(user, SPAN_PURPLE("[icon2html(src, user)] Dialing [calling_phone_id].."))
-	playsound(get_turf(user), "rtb_handset")
+	playsound(src, "rtb_handset")
 	timeout_timer_id = addtimer(CALLBACK(src, .proc/reset_call, TRUE), timeout_duration, TIMER_UNIQUE|TIMER_OVERRIDE|TIMER_STOPPABLE)
 
 	START_PROCESSING(SSobj, src)
@@ -235,7 +235,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 			T.timeout_timer_id = null
 
 	to_chat(user, SPAN_PURPLE("[icon2html(src, user)] Picked up a call from [T.phone_id]."))
-	playsound(get_turf(user), "rtb_handset")
+	playsound(src), "rtb_handset")
 
 	user.put_in_active_hand(attached_to)
 	attached_to.setup_signal(user)
@@ -321,7 +321,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.dropItemToGround(attached_to)
-		playsound(get_turf(M), "rtb_handset", 100, FALSE, 7)
+		playsound(src), "rtb_handset", 100, FALSE, 7)
 
 	attached_to.forceMove(src)
 	reset_call()
@@ -423,6 +423,24 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	remove_attached()
 	return ..()
 
+/obj/item/phone/Moved()
+	. = ..()
+	check_range()
+
+/obj/item/phone/proc/check_range()
+	SIGNAL_HANDLER
+
+	if(!attached_to)
+		return
+
+	if(!in_range(src,attached_to))
+		var/mob/living/holder = loc
+		if(istype(holder))
+			to_chat(holder, "<span class='warning'>[src] overextends and come out of your hands!</span>")
+		else
+			visible_message("<span class='notice'>[src] flies back to [attached_to].</span>")
+		forceMove(get_turf(attached_to))
+
 /obj/item/phone/proc/handle_speak(datum/source, list/speech_args, mob/living/speaker)
 	SIGNAL_HANDLER
 
@@ -447,7 +465,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 		return
 
 	if(!raised)
-		new_message = stars(new_message)
+		new_message = stars(new_message, 40)
 
 	var/composed_message = compose_message(speaker, language, new_message, FREQ_PHONE)
 
@@ -506,6 +524,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 /obj/item/phone/dropped(var/mob/user)
 	. = ..()
 	UnregisterSignal(user, COMSIG_MOB_SAY)
+	UnregisterSignal(user, COMSIG_MOVABLE_MOVED)
 
 	set_raised(FALSE, user)
 
@@ -520,6 +539,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 
 /obj/item/phone/proc/setup_signal(mob/user)
 	RegisterSignal(user, COMSIG_MOB_SAY, .proc/handle_speak)
+	RegisterSignal(user, COMSIG_MOVABLE_MOVED, .proc/check_range)
 
 /obj/item/phone/proc/do_zlevel_check()
 	if(!attached_to || !loc.z || !attached_to.z)
