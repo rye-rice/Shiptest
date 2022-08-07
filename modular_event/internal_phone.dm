@@ -6,6 +6,7 @@
 
 /obj/structure/transmitter/internal
 	name = "\improper internal telephone receiver"
+	desc = "A telephone box compacted enough to fit inside a bag, while the phone lies outside on a handle. Unfortunately, this and the heavy duty battery leave less space for items."
 
 	phone_type = /obj/item/phone
 

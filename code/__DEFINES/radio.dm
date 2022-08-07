@@ -46,17 +46,16 @@
 #define RADIO_KEY_CENTCOM "y"
 #define RADIO_TOKEN_CENTCOM ":y"
 
-//WS Begin - SGR, Overmaps
 #define RADIO_CHANNEL_SOLGOV "SolGov"
 #define RADIO_KEY_SOLGOV "z"
 #define RADIO_TOKEN_SOLGOV ":z"
 
 #define RADIO_CHANNEL_WIDEBAND "Wideband"
-//WS End
 
 #define RADIO_CHANNEL_CTF_RED "Red Team"
 #define RADIO_CHANNEL_CTF_BLUE "Blue Team"
 
+#define RADIO_CHANNEL_PHONELINE "Phone Line"
 
 #define MIN_FREE_FREQ 1201 // -------------------------------------------------
 // Frequencies are always odd numbers and range from 1201 to 1599.
@@ -99,6 +98,8 @@
 #define FREQ_WIDEBAND 1501 // Subspace/shuttle comms frequency, dark blue WS ADDITION
 
 #define MAX_FREE_FREQ 1599 // -------------------------------------------------
+
+#define FREQ_PHONE 2300
 
 // Transmission types.
 #define TRANSMISSION_WIRE 0 // some sort of wired connection, not used

@@ -40,7 +40,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	name = "telephone receiver"
 	icon = 'modular_event/phone.dmi'
 	icon_state = "wall_phone"
-	desc = "It is a wall mounted telephone. The fine text reads: To log your details with the mainframe please insert your keycard into the slot below. Unfortunately the slot is jammed. You can still use the phone, however."
+	desc = "It is a wall mounted telephone. Uses 8G to communicate across local space, although it cant reach any further than the sector."
 
 	var/phone_category = "Uncategorised"
 	var/phone_color = "white"
@@ -207,7 +207,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	START_PROCESSING(SSobj, T)
 
 	user.put_in_active_hand(attached_to)
-	attached_to.pickup(user)
+	attached_to.setup_signal(user)
 
 /obj/structure/transmitter/attack_hand(mob/user)
 	. = ..()
@@ -238,7 +238,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	playsound(get_turf(user), "rtb_handset")
 
 	user.put_in_active_hand(attached_to)
-	attached_to.pickup(user)
+	attached_to.setup_signal(user)
 
 	update_icon()
 
@@ -427,7 +427,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	SIGNAL_HANDLER
 
 	if(!attached_to || loc == attached_to)
-		UnregisterSignal(speech_args, COMSIG_MOB_SAY)
+		UnregisterSignal(speaker, COMSIG_MOB_SAY)
 		return
 
 	attached_to.handle_speak(source, speech_args, speaker)
@@ -449,9 +449,11 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	if(!raised)
 		new_message = stars(new_message)
 
+	var/composed_message = compose_message(speaker, language, new_message, FREQ_PHONE)
+
 	var/mob/living/carbon/M = loc
 
-	M.Hear(new_message, speaker, language, raw_message = new_message)
+	M.Hear(composed_message, speaker, language, new_message, FREQ_PHONE)
 
 /obj/item/phone/proc/attach_to(var/obj/structure/transmitter/to_attach)
 	if(!istype(to_attach))
@@ -514,6 +516,9 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 
 /obj/item/phone/pickup(mob/user)
 	. = ..()
+	setup_signal(user)
+
+/obj/item/phone/proc/setup_signal(mob/user)
 	RegisterSignal(user, COMSIG_MOB_SAY, .proc/handle_speak)
 
 /obj/item/phone/proc/do_zlevel_check()
