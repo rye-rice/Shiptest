@@ -14,7 +14,7 @@
 /turf/open/floor/plating,
 /area/ship/engineering/atmospherics)
 "ao" = (
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 6
 	},
 /obj/machinery/light,
@@ -423,7 +423,7 @@
 /turf/open/floor/plasteel/tech,
 /area/ship/bridge)
 "iL" = (
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 8
 	},
 /obj/machinery/firealarm{
@@ -540,7 +540,7 @@
 /turf/open/floor/plating,
 /area/ship/engineering/atmospherics)
 "km" = (
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 10
 	},
 /obj/machinery/light,
@@ -808,7 +808,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
-/obj/effect/turf_decal/corner/neutral/border,
+/obj/effect/turf_decal/corner/transparent/neutral/border,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
 /turf/open/floor/plasteel/dark,
 /area/ship/hallway/fore)
@@ -848,7 +848,7 @@
 /area/ship/hallway/central)
 "qj" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 4
 	},
 /turf/open/floor/plasteel/dark,
@@ -1266,7 +1266,7 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer2{
 	dir = 1
 	},
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 4
 	},
 /turf/open/floor/plasteel/dark,
@@ -1435,7 +1435,7 @@
 /turf/closed/wall/mineral/titanium,
 /area/ship/bridge)
 "Ch" = (
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 8
 	},
 /turf/open/floor/plasteel/dark,
@@ -1930,7 +1930,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
@@ -2448,7 +2448,7 @@
 /turf/open/floor/engine/o2,
 /area/ship/engineering/atmospherics)
 "TU" = (
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 5
 	},
 /obj/machinery/light{
@@ -2569,7 +2569,7 @@
 /turf/open/floor/plasteel/white,
 /area/ship/crew/canteen)
 "Vl" = (
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 9
 	},
 /obj/machinery/light{
@@ -2598,7 +2598,7 @@
 /obj/structure/cable{
 	icon_state = "2-8"
 	},
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 4
 	},
 /obj/machinery/light_switch{
@@ -2713,7 +2713,7 @@
 /obj/structure/cable{
 	icon_state = "4-8"
 	},
-/obj/effect/turf_decal/corner/neutral/border{
+/obj/effect/turf_decal/corner/transparent/neutral/border{
 	dir = 8
 	},
 /obj/machinery/light_switch{
