@@ -71,7 +71,7 @@ GLOBAL_LIST_EMPTY_TYPED(radio_packs, /obj/item/storage/backpack/radio)
 	PHONE_RENAME_CAT,
 	PHONE_RENAME_ID,
 	)
-	var/picked = input("Rename which field?", , sortList(choices))
+	var/picked = input(user, "Rename which field?", , sortList(choices))
 
 	if(isnull(picked))
 		return

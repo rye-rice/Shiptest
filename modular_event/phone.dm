@@ -357,20 +357,18 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 /obj/structure/transmitter/attackby(obj/item/W, mob/user)
 	if(W == attached_to)
 		recall_phone()
+	if(istype(W, /obj/item/multitool))
+		rename_phone(user)
 	else
 		. = ..()
 
-
-/obj/structure/transmitter/multitool_act(mob/living/user, obj/item/I)
-	. = ..()
-	rename_phone(user)
 
 /obj/structure/transmitter/proc/rename_phone(mob/living/user)
 	var/choices = list(
 	PHONE_RENAME_CAT,
 	PHONE_RENAME_ID,
 	)
-	var/picked = input("Rename which field?", , sortList(choices))
+	var/picked = input(user, "Rename which field?", , sortList(choices))
 
 	if(isnull(picked))
 		return
