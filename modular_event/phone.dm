@@ -200,7 +200,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	T.update_icon()
 
 	to_chat(user, SPAN_PURPLE("[icon2html(src, user)] Dialing [calling_phone_id].."))
-	playsound(src, "rtb_handset")
+	playsound(src, 'sound/machines/telephone/rtb_handset_1.ogg')
 	timeout_timer_id = addtimer(CALLBACK(src, .proc/reset_call, TRUE), timeout_duration, TIMER_UNIQUE|TIMER_OVERRIDE|TIMER_STOPPABLE)
 
 	START_PROCESSING(SSobj, src)
@@ -235,7 +235,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 			T.timeout_timer_id = null
 
 	to_chat(user, SPAN_PURPLE("[icon2html(src, user)] Picked up a call from [T.phone_id]."))
-	playsound(src), "rtb_handset")
+	playsound(src, 'sound/machines/telephone/rtb_handset_1.ogg')
 
 	user.put_in_active_hand(attached_to)
 	attached_to.setup_signal(user)
@@ -321,7 +321,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 	if(ismob(attached_to.loc))
 		var/mob/M = attached_to.loc
 		M.dropItemToGround(attached_to)
-		playsound(src), "rtb_handset", 100, FALSE, 7)
+		playsound(src, 'sound/machines/telephone/rtb_handset_1.ogg', 100, FALSE, 7)
 
 	attached_to.forceMove(src)
 	reset_call()
@@ -363,25 +363,29 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 		. = ..()
 
 
-/obj/structure/transmitter/proc/rename_phone(mob/living/user)
+/obj/structure/transmitter/proc/rename_phone(mob/user)
 	var/choices = list(
 	PHONE_RENAME_CAT,
 	PHONE_RENAME_ID,
 	)
-	var/picked = input(user, "Rename which field?", , sortList(choices))
+	var/picked = tgui_input_list(user, "Rename which field?", "Rename what?" , sortList(choices))
 
 	if(isnull(picked))
 		return
 	switch(picked)
 		if(PHONE_RENAME_CAT)
 			var/input = stripped_input(user,"What category do you want to set [src.name] to?", ,"", MAX_NAME_LEN)
-			phone_category = input
-			to_chat(user, "<span class='notice'>You set the phone category to [input].</span>")
+			if(input)
+				phone_category = input
+				to_chat(user, "<span class='notice'>You set the phone category to [input].</span>")
 
 		if(PHONE_RENAME_ID)
 			var/input = stripped_input(user,"What do you want to name [src.name]?", ,"", MAX_NAME_LEN)
-			phone_id = input
-			to_chat(user, "<span class='notice'>You set the phone name to [input].</span>")
+			if(input)
+				phone_id = input
+				to_chat(user, "<span class='notice'>You set the phone name to [input].</span>")
+				auto_name = FALSE
+
 
 /obj/structure/transmitter/Destroy()
 	if(attached_to)
