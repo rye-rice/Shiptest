@@ -473,6 +473,10 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/transmitter)
 
 	var/mob/living/carbon/M = loc
 
+	for(var/mob/dead/observer/observer in GLOB.player_list)
+		if(M.client.prefs.chat_toggles & CHAT_GHOSTRADIO)
+			observer.Hear(composed_message, speaker, language, new_message, FREQ_PHONE)
+
 	M.Hear(composed_message, speaker, language, new_message, FREQ_PHONE)
 
 /obj/item/phone/proc/attach_to(var/obj/structure/transmitter/to_attach)
