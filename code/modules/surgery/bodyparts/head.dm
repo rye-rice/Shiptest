@@ -17,7 +17,6 @@
 	disabled_wound_penalty = 25
 	scars_covered_by_clothes = FALSE
 	grind_results = null
-	is_dimorphic = TRUE
 
 	var/mob/living/brain/brainmob = null //The current occupant.
 	var/obj/item/organ/brain/brain = null //The brain organ
@@ -244,13 +243,20 @@
 				. += lips_overlay
 
 			// eyes
+			var/mutable_appearance/sclera_overlay = mutable_appearance('icons/mob/human_face.dmi', "", -BODY_LAYER, SOUTH)
 			var/image/eyes_overlay = image('icons/mob/human_face.dmi', "eyes_missing", -BODY_LAYER, SOUTH)
+
 			. += eyes_overlay
 			if(eyes)
+				. += sclera_overlay
+			if(eyes)
 				eyes_overlay.icon_state = eyes.eye_icon_state
-
 				if(eyes.eye_color)
 					eyes_overlay.color = "#" + eyes.eye_color
+				if(eyes.sclera_icon_state)
+					sclera_overlay.icon_state = eyes.sclera_icon_state
+					if(eyes.sclera_color)
+						sclera_overlay.color = "#" + eyes.sclera_color
 
 /obj/item/bodypart/head/monkey
 	icon = 'icons/mob/animal_parts.dmi'
