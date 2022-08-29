@@ -2786,6 +2786,7 @@
 #include "code\modules\overmap\_overmap_datum.dm"
 #include "code\modules\overmap\docking_ticket.dm"
 #include "code\modules\overmap\helm.dm"
+#include "code\modules\overmap\interdiction.dm"
 #include "code\modules\overmap\missions.dm"
 #include "code\modules\overmap\overmap_token.dm"
 #include "code\modules\overmap\overmap_turf.dm"

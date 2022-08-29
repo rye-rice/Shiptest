@@ -318,3 +318,12 @@
 	build_path = /obj/item/circuitboard/computer/shuttle/helm
 	category = list("Computer Boards", "Shuttle Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_SCIENCE | DEPARTMENTAL_FLAG_ENGINEERING
+
+// NOT A SUBTYPE OF BOARD BECAUSE IMPRINTERS ARE STUPID
+/datum/design/interdiction_board
+	name = "Computer Design (Interdiction Control)"
+	desc = "Allows for the construction of circuit boards used to interdict other spacecraft."
+	id = "shuttle_interdict"
+	build_path = /obj/item/circuitboard/computer/interdiction
+	category = list("Computer Boards", "Shuttle Machinery")
+	departmental_flags = DEPARTMENTAL_FLAG_SECURITY

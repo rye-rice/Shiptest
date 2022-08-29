@@ -95,7 +95,10 @@
 
 /obj/machinery/computer/helm/proc/do_jump()
 	priority_announce("Bluespace Jump Initiated.", sender_override="[current_ship.name] Bluespace Pylon", sound='sound/magic/lightningbolt.ogg', zlevel=virtual_z())
-	current_ship.shuttle_port.intoTheSunset()
+	if(current_ship)
+		qdel(current_ship)
+	else
+		current_ship.shuttle_port.intoTheSunset()
 
 /obj/machinery/computer/helm/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	if(current_ship && current_ship != port.current_ship)
@@ -115,6 +118,7 @@
 		current_ship.helms |= src
 
 /obj/machinery/computer/helm/ui_interact(mob/living/user, datum/tgui/ui)
+	user.changeNext_move(CLICK_CD_RAPID)
 	// Update UI
 	if(!current_ship && !reload_ship())
 		return
@@ -195,6 +199,11 @@
 			)
 		.["engineInfo"] += list(engine_data)
 
+/obj/machinery/computer/helm/ui_status(mob/user)
+	if(current_ship?.helm_locked)
+		return UI_UPDATE
+	return ..()
+
 /obj/machinery/computer/helm/ui_static_data(mob/user)
 	. = list()
 	.["isViewer"] = viewer || (!allow_ai_control && issilicon(user))
@@ -257,6 +266,9 @@
 	if(!current_ship.docked_to && !current_ship.docking)
 		switch(action)
 			if("act_overmap")
+				if(current_ship.interdictor)
+					say("Cannot dock due to an active Interdiction Tether!")
+					return
 				if(SSshuttle.jump_mode > BS_JUMP_CALLED)
 					to_chat(usr, "<span class='warning'>Cannot dock due to bluespace jump preperations!</span>")
 					return
@@ -275,6 +287,9 @@
 				current_ship.burn_engines()
 				return
 			if("bluespace_jump")
+				if(current_ship.interdictor)
+					say("Cannot jump due to an active Interdiction Tether!")
+					return
 				if(calibrating)
 					cancel_jump()
 					return
@@ -284,6 +299,9 @@
 					calibrate_jump()
 					return
 			if("dock_empty")
+				if(current_ship.interdictor)
+					say("Cannot dock due to an active Interdiction Tether!")
+					return
 				current_ship.dock_in_empty_space(usr)
 				return
 	else if(current_ship.docked_to)
