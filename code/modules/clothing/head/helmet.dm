@@ -210,6 +210,13 @@
 	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50, "wound" = 5)
 	can_flashlight = TRUE
 	dog_fashion = null
+	allow_post_reskins = TRUE
+	unique_reskin = list("Urban" = "helmetalt",
+		"Desert" = "helmetalt_desert",
+		"Woodland" = "helmetalt_woodland",
+		"Snow" = "helmetalt_snow",
+		)
+
 
 /obj/item/clothing/head/helmet/marine
 	name = "tactical combat helmet"
@@ -498,10 +505,13 @@
 	icon_state = "inteq_helmet"
 	can_flashlight = TRUE
 
-/obj/item/clothing/head/helmet/alt/minutemen
+/obj/item/clothing/head/helmet/minutemen
 	name = "minutemen ballistic helmet"
-	desc = "A bulletproof helmet that is worn by members of the colonial minutemen."
+	desc = "A bulletproof helmet that is worn by members of the Colonial Minutemen."
 	icon_state = "antichristhelm"
+	allow_post_reskins = TRUE
+	unique_reskin = null
+	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
 
 /obj/item/clothing/head/helmet/solgov
 	name = "\improper SolGov Helmet"
@@ -510,6 +520,7 @@
 	item_state = "helmet_terragov"
 	can_flashlight = FALSE
 	dog_fashion = null
+	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
 
 /obj/item/clothing/head/solgov
 	name = "\improper SolGov officer's cap"
@@ -537,3 +548,36 @@
 	desc = "A robust combat helmet commonly employed by Syndicate forces, regardless of alignment."
 	icon_state = "operator"
 	item_state = "operator"
+
+/obj/item/clothing/head/helmet/m10
+	name = "\improper M10 pattern Helmet"
+	desc = "A classic looking helmet, developed convergently from across all over the galaxy. A faded tag reads: 'The difference between an open-casket and closed-casket funeral. Wear on head for best results.'"
+	icon_state = "m10helm"
+	can_flashlight = TRUE
+	dog_fashion = null
+	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	unique_reskin = list("Urban" = "m10helm",
+		"Desert" = "m10helm_desert",
+		"Woodland" = "m10helm_woodland",
+		"Snow" = "m10helm_snow",
+		)
+
+/obj/item/clothing/head/helmet/x11
+	name = "\improper Type X11 Helmet"
+	desc = "A large, but protective helmet. Originating from Kalixcis, it's large size gives extra space for Sarathi frills and horns, and is considerably more armored."
+	icon_state = "x11helm"
+	can_flashlight = TRUE
+	dog_fashion = null
+	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
+	allow_post_reskins = TRUE
+	unique_reskin = list("Urban" = "x11helm",
+		"Desert" = "x11helm_desert",
+		"Woodland" = "x11helm_woodland",
+		"Snow" = "x11helm_snow",
+		)
+
+/obj/item/clothing/head/helmet/x11/frontier
+	name = "\improper Frontiersmen X11 Helmet"
+	desc = "A heavily modified X11 that was once produced by the Frontiersmen pirate fleet."
+	icon_state = "x11helm_frontier"
+	unique_reskin = null

@@ -34,11 +34,11 @@
 	item_state = "armoralt"
 
 /obj/item/clothing/suit/armor/vest/marine
-	name = "tactical armor vest"
-	desc = "A set of the finest mass produced, stamped plasteel armor plates, containing an environmental protection unit for all-condition door kicking."
-	icon_state = "armor_marine"
+	name = "light tactical armor vest"
+	desc = "A set of the finest mass produced, stamped plasteel armor plates. Often the top of the line stuff most non-government groups can afford."
+	icon_state = "marine_light"
 	item_state = "armor"
-	clothing_flags = STOPSPRESSUREDAMAGE | THICKMATERIAL
+	clothing_flags = THICKMATERIAL
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	armor = list("melee" = 50, "bullet" = 50, "laser" = 30, "energy" = 25, "bomb" = 50, "bio" = 100, "fire" = 40, "acid" = 50)
 	cold_protection = CHEST | GROIN | LEGS | FEET | ARMS | HANDS
@@ -46,17 +46,13 @@
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 
-/obj/item/clothing/suit/armor/vest/marine/security
+/obj/item/clothing/suit/armor/vest/marine/medium
+	name = "medium tactical armor vest"
+	icon_state = "marine_medium"
+
+/obj/item/clothing/suit/armor/vest/marine/heavy
 	name = "large tactical armor vest"
-	icon_state = "marine_security"
-
-/obj/item/clothing/suit/armor/vest/marine/engineer
-	name = "tactical utility armor vest"
-	icon_state = "marine_engineer"
-
-/obj/item/clothing/suit/armor/vest/marine/medic
-	name = "tactical medic's armor vest"
-	icon_state = "marine_medic"
+	icon_state = "marine_heavy"
 
 /obj/item/clothing/suit/armor/vest/old
 	name = "degrading armor vest"
@@ -193,6 +189,11 @@
 	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50, "wound" = 20)
 	strip_delay = 70
 	equip_delay_other = 50
+
+/obj/item/clothing/suit/armor/bulletproof/frontier
+	name = "frontiersmen bulletproof armor"
+	desc = "A piece of armor that can be best described as a plate of metal with kevlar in between. Was once produced by the Frontiersmen pirate fleet."
+	icon_state = "frontier_armor"
 
 /obj/item/clothing/suit/armor/laserproof
 	name = "reflector vest"
@@ -391,6 +392,7 @@
 	desc = "A standard armor vest fielded for SolGov's infantry."
 	icon_state = "armor_solgov"
 	item_state = "armor_solgov"
+	armor = list("melee" = 15, "bullet" = 60, "laser" = 10, "energy" = 10, "bomb" = 40, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
 
 /obj/item/clothing/suit/armor/vest/solgov/Initialize()
 	. = ..()
@@ -401,6 +403,7 @@
 	desc = "A type I armor vest emblazoned with the SolGov logo."
 	icon_state = "armor_alt_solgov"
 	item_state = "armor_alt_solgov"
+	armor = list("melee" = 35, "bullet" = 30, "laser" = 30, "energy" = 40, "bomb" = 25, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 50)
 
 /obj/item/clothing/suit/armor/vest/hop
 	name = "head of personnel's parade jacket"
@@ -476,3 +479,11 @@
 	desc = "A black jacket with dark blue and silver accents, for the brig physician to prove they're a real member of security in style."
 	icon_state = "brigphysjacket"
 	body_parts_covered = CHEST|ARMS
+
+/obj/item/clothing/suit/armor/frontier
+	name = "reinforced fur coat"
+	desc = "A coat made from hard leather. Once mass produced by the frontiersmen. This one is reinforced, probably was meant for officers."
+	icon_state = "frontier_coat"
+	body_parts_covered = CHEST|GROIN|ARMS
+	cold_protection = CHEST|GROIN|ARMS
+	heat_protection = CHEST|GROIN|ARMS

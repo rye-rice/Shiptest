@@ -289,3 +289,30 @@
 	desc = "A jumpsuit worn by low ranking members of the Colonial Minutemen."
 	icon_state = "minuteman"
 	item_state = "b_suit"
+
+/obj/item/clothing/under/rank/security/officer/camo
+	name = "\improper fatigues"
+	desc = "Standard combat uniform. Often found in the hands of mercanaries, this outift can change the color of it's camo to match any combat scenario on the fly."
+	icon_state = "camo"
+	item_state = "fatigues"
+	can_adjust = FALSE
+	allow_post_reskins = TRUE
+	unique_reskin = list("Urban" = "camo",
+		"Desert" = "camo_desert",
+		"Woodland" = "camo_woodland",
+		"Snow" = "camo_snow",
+		)
+
+/obj/item/clothing/under/rank/security/officer/frontier
+	name = "frontiersmen fatigues"
+	desc = "Fatigues once worn by members of the frontiersmen pirate fleet."
+	icon_state = "frontier"
+	item_state = "gy_suit"
+
+/obj/item/clothing/under/rank/security/officer/frontier/officer
+	name = "frontiersmen officer fatigues"
+	icon_state = "frontier_officer"
+
+/obj/item/clothing/under/rank/security/officer/frontier/admiral
+	name = "frontiersmen admiral fatigues"
+	icon_state = "frontier_admiral"
