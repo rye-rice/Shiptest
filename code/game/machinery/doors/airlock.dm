@@ -1157,7 +1157,7 @@
 								"<span class='hear'>You hear welding.</span>")
 				if(W.use_tool(src, user, 40, volume=50, extra_checks = CALLBACK(src, .proc/weld_checks, W, user)))
 					obj_integrity = max_integrity
-					machine_stat &= ~BROKEN
+					set_machine_stat(machine_stat & ~BROKEN)
 					user.visible_message("<span class='notice'>[user] finishes welding [src].</span>", \
 										"<span class='notice'>You finish repairing the airlock.</span>")
 					update_icon()
@@ -1168,13 +1168,13 @@
 	return !operating && density
 
 /**
-  * Used when attempting to remove a seal from an airlock
-  *
-  * Called when attacking an airlock with an empty hand, returns TRUE (there was a seal and we removed it, or failed to remove it)
-  * or FALSE (there was no seal)
-  * Arguments:
-  * * user - Whoever is attempting to remove the seal
-  */
+ * Used when attempting to remove a seal from an airlock
+ *
+ * Called when attacking an airlock with an empty hand, returns TRUE (there was a seal and we removed it, or failed to remove it)
+ * or FALSE (there was no seal)
+ * Arguments:
+ * * user - Whoever is attempting to remove the seal
+ */
 /obj/machinery/door/airlock/try_remove_seal(mob/living/user)
 	if(!seal)
 		return FALSE
@@ -1249,7 +1249,7 @@
 
 
 /obj/machinery/door/airlock/open(forced=0)
-	if( operating || welded || locked || seal )
+	if(operating || welded || locked || seal)
 		return FALSE
 	if(!forced)
 		if(!hasPower() || wires.is_cut(WIRE_OPEN))
