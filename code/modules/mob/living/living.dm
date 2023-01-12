@@ -1923,3 +1923,17 @@
 		remove_movespeed_modifier(/datum/movespeed_modifier/living_varspeed)
 		return
 	add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/living_varspeed, multiplicative_slowdown = speed)
+
+/mob/living/carbon/verb/open_close_eyes()
+	set category = "IC"
+	set name = "Open/Close Eyes"
+
+	if(HAS_TRAIT(src, TRAIT_EYESCLOSED))
+		REMOVE_TRAIT(src, TRAIT_EYESCLOSED, "[type]")
+		src.cure_blind("[type]")
+		src.update_body()
+		return
+	ADD_TRAIT(src, TRAIT_EYESCLOSED, "[type]")
+	src.become_blind("[type]")
+	src.update_body()
+	return
