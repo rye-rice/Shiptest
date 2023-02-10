@@ -420,3 +420,5 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_BLOODY_MESS "bloody_mess" //from heparin, makes open bleeding wounds rapidly spill more blood
 #define TRAIT_COAGULATING "coagulating" //from coagulant reagents, this doesn't affect the bleeding itself but does affect the bleed warning messages
 #define TRAIT_NOBLEED "nobleed" //This carbon doesn't bleed
+/// Trait granted by [/obj/item/clothing/head/helmet/space/hardsuit/berserker]
+#define BERSERK_TRAIT "berserk_trait"
