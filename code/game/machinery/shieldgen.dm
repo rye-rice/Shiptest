@@ -653,6 +653,7 @@
 	layer = UNDERDOOR
 	light_color = "#f6e384"
 	light_system = MOVABLE_LIGHT //for instant visual feedback reguardless of lag
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /obj/machinery/shieldwall/atmos/Initialize()
 	. = ..()
