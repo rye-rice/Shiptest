@@ -1,4 +1,27 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/obj/machinery/light/small,
+/obj/structure/catwalk/over/plated_catwalk/dark,
+/obj/machinery/atmospherics/components/unary/tank/nitrogen{
+	dir = 1
+	},
+/turf/open/floor/plating,
+/area/ship/engineering)
+"ab" = (
+/obj/structure/catwalk/over/plated_catwalk/dark,
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_y = -25
+	},
+/obj/machinery/airalarm/all_access{
+	dir = 8;
+	pixel_x = 25
+	},
+/obj/machinery/atmospherics/components/unary/tank/oxygen{
+	dir = 1
+	},
+/turf/open/floor/plating,
+/area/ship/engineering)
 "ah" = (
 /obj/effect/turf_decal/box/corners{
 	dir = 1
@@ -290,6 +313,7 @@
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4,
+/obj/effect/landmark/observer_start,
 /turf/open/floor/plasteel/patterned/grid,
 /area/ship/hallway/central)
 "dI" = (
@@ -352,7 +376,7 @@
 	},
 /obj/structure/curtain/bounty,
 /obj/item/bedsheet/brown,
-/obj/structure/sign/poster/contraband/busty_backdoor_xeno_babes_6{
+/obj/structure/sign/poster/contraband/backdoor_xeno_babes_6{
 	pixel_y = -32
 	},
 /turf/open/floor/carpet/black,
@@ -362,6 +386,7 @@
 /obj/effect/turf_decal/floordetail/edgedrain{
 	dir = 1
 	},
+/obj/effect/landmark/start/assistant,
 /turf/open/floor/plasteel/patterned,
 /area/ship/cargo)
 "eD" = (
@@ -422,21 +447,6 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/ship/crew/office)
-"eV" = (
-/obj/machinery/atmospherics/components/unary/tank/nitrogen{
-	dir = 1
-	},
-/obj/structure/catwalk/over/plated_catwalk/dark,
-/obj/machinery/firealarm{
-	dir = 1;
-	pixel_y = -25
-	},
-/obj/machinery/airalarm/all_access{
-	dir = 8;
-	pixel_x = 25
-	},
-/turf/open/floor/plating,
-/area/ship/engineering)
 "eX" = (
 /obj/machinery/vending/coffee,
 /obj/structure/cable{
@@ -678,12 +688,12 @@
 /obj/effect/turf_decal/siding/thinplating/dark{
 	dir = 8
 	},
-/obj/structure/sign/poster/contraband/revolver{
+/obj/structure/sign/poster/contraband/peacemaker{
 	pixel_x = -32
 	},
-/obj/item/clothing/suit/armor/bulletproof,
-/obj/item/clothing/suit/armor/bulletproof,
-/obj/item/clothing/suit/armor/bulletproof,
+/obj/item/clothing/suit/armor/vest/bulletproof,
+/obj/item/clothing/suit/armor/vest/bulletproof,
+/obj/item/clothing/suit/armor/vest/bulletproof,
 /obj/item/clothing/head/helmet/swat/inteq,
 /obj/item/clothing/head/helmet/swat/inteq,
 /obj/item/clothing/head/helmet/swat/inteq,
@@ -1741,6 +1751,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
 	dir = 4
 	},
+/obj/effect/landmark/start/medical_doctor,
 /turf/open/floor/plasteel/patterned/cargo_one,
 /area/ship/cargo)
 "sD" = (
@@ -1926,9 +1937,7 @@
 /obj/item/clothing/under/syndicate/inteq,
 /obj/item/clothing/suit/armor/hos/inteq,
 /obj/item/clothing/head/beret/sec/hos/inteq,
-/obj/item/radio/headset/heads/captain/alt{
-	name = "\proper the vanguard's bowman headset"
-	},
+/obj/item/radio/headset/inteq/alt/captain,
 /obj/item/areaeditor/shuttle,
 /obj/item/shield/riot/tele,
 /turf/open/floor/carpet/orange,
@@ -1940,7 +1949,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
-/obj/machinery/holopad,
+/obj/machinery/holopad/emergency/command,
 /turf/open/floor/carpet/orange,
 /area/ship/bridge)
 "tR" = (
@@ -1982,6 +1991,7 @@
 /obj/structure/cable{
 	icon_state = "4-8"
 	},
+/obj/effect/landmark/start/head_of_security,
 /turf/open/floor/carpet/orange,
 /area/ship/bridge)
 "uq" = (
@@ -2236,7 +2246,6 @@
 /turf/open/floor/plasteel/tech/grid,
 /area/ship/crew/cryo)
 "wW" = (
-/obj/machinery/holopad,
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
@@ -2245,6 +2254,7 @@
 	codes_txt = "patrol;next_patrol=hall";
 	location = "office"
 	},
+/obj/machinery/holopad/emergency/security,
 /turf/open/floor/plasteel/dark,
 /area/ship/crew/office)
 "xd" = (
@@ -2511,7 +2521,7 @@
 /obj/structure/curtain/bounty,
 /obj/structure/bed,
 /obj/item/bedsheet/brown,
-/obj/structure/sign/poster/contraband/bountyhunters{
+/obj/structure/sign/poster/contraband/inteq{
 	pixel_x = -32
 	},
 /turf/open/floor/carpet/black,
@@ -2863,6 +2873,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
 	dir = 4
 	},
+/obj/effect/landmark/start/security_officer,
 /turf/open/floor/plasteel/dark,
 /area/ship/crew/office)
 "EC" = (
@@ -3325,9 +3336,6 @@
 /turf/open/floor/plasteel/patterned/cargo_one,
 /area/ship/cargo)
 "Lp" = (
-/obj/effect/turf_decal/trimline/opaque/yellow/warning{
-	dir = 1
-	},
 /obj/effect/turf_decal/siding/thinplating/corner{
 	dir = 1
 	},
@@ -3339,6 +3347,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
+/obj/effect/turf_decal/trimline/opaque/yellow/warning{
+	dir = 1
+	},
 /turf/open/floor/plasteel/patterned/grid,
 /area/ship/hallway/central)
 "Lr" = (
@@ -3447,6 +3458,13 @@
 	},
 /turf/closed/wall/mineral/plastitanium,
 /area/ship/bridge)
+"Nz" = (
+/obj/structure/chair{
+	dir = 4
+	},
+/obj/effect/landmark/start/security_officer,
+/turf/open/floor/plasteel/dark,
+/area/ship/crew/office)
 "NP" = (
 /obj/item/kirbyplants/random,
 /obj/effect/turf_decal/corner/opaque/yellow,
@@ -3888,6 +3906,7 @@
 	dir = 5
 	},
 /obj/effect/turf_decal/industrial/loading,
+/obj/effect/landmark/start/station_engineer,
 /turf/open/floor/plasteel/patterned/cargo_one,
 /area/ship/cargo)
 "Sb" = (
@@ -3964,14 +3983,6 @@
 /obj/effect/decal/cleanable/dirt/dust,
 /turf/open/floor/plasteel/patterned,
 /area/ship/cargo)
-"SO" = (
-/obj/machinery/atmospherics/components/unary/tank/oxygen{
-	dir = 1
-	},
-/obj/machinery/light/small,
-/obj/structure/catwalk/over/plated_catwalk/dark,
-/turf/open/floor/plating,
-/area/ship/engineering)
 "Tk" = (
 /obj/effect/turf_decal/industrial/traffic{
 	dir = 4
@@ -3998,6 +4009,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
 	dir = 4
 	},
+/obj/effect/landmark/start/assistant,
 /turf/open/floor/plasteel/patterned/cargo_one,
 /area/ship/cargo)
 "Tw" = (
@@ -4087,6 +4099,7 @@
 	pixel_x = 32
 	},
 /obj/effect/decal/cleanable/oil/streak,
+/obj/effect/landmark/start/assistant,
 /turf/open/floor/plasteel/patterned/cargo_one,
 /area/ship/cargo)
 "UN" = (
@@ -4349,7 +4362,7 @@
 /obj/effect/turf_decal/siding/thinplating/dark{
 	dir = 8
 	},
-/obj/structure/sign/poster/official/twelve_gauge{
+/obj/structure/sign/poster/contraband/twelve_gauge{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/tech/grid,
@@ -4776,7 +4789,7 @@ Zv
 zZ
 sN
 tR
-SO
+aa
 rl
 ps
 ei
@@ -4818,7 +4831,7 @@ ZT
 fQ
 EG
 GL
-eV
+ab
 rl
 us
 PP
@@ -5061,7 +5074,7 @@ Dq
 lU
 dS
 jw
-ry
+Nz
 ry
 Ck
 Od
@@ -5104,7 +5117,7 @@ Wn
 eK
 jw
 sP
-ry
+Nz
 Er
 Pv
 Ur

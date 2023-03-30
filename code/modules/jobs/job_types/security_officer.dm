@@ -113,7 +113,7 @@ GLOBAL_LIST_INIT(available_depts, list(SEC_DEPT_ENGINEERING, SEC_DEPT_MEDICAL, S
 	accessory = /obj/item/clothing/accessory/armband
 	shoes = /obj/item/clothing/shoes/combat
 	head = /obj/item/clothing/head/helmet/solgov
-	suit = /obj/item/clothing/suit/armor/vest/solgov
+	suit = /obj/item/clothing/suit/armor/vest/bulletproof/solgov
 
 /datum/outfit/job/security/solgov/rebel
 	name = "Boarding Specialist (Deserter)"
@@ -169,9 +169,9 @@ GLOBAL_LIST_INIT(available_depts, list(SEC_DEPT_ENGINEERING, SEC_DEPT_MEDICAL, S
 /datum/outfit/job/security/minutemen
 	name = "Minuteman (Colonial Minutemen)"
 
-	head = /obj/item/clothing/head/helmet/alt/minutemen
+	head = /obj/item/clothing/head/helmet/bulletproof/minutemen
 	mask = /obj/item/clothing/mask/gas/sechailer/minutemen
-	suit = /obj/item/clothing/suit/armor/bulletproof
+	suit = /obj/item/clothing/suit/armor/vest/bulletproof
 	uniform = /obj/item/clothing/under/rank/security/officer/minutemen
 	shoes = /obj/item/clothing/shoes/combat
 	gloves = /obj/item/clothing/gloves/combat
@@ -181,7 +181,7 @@ GLOBAL_LIST_INIT(available_depts, list(SEC_DEPT_ENGINEERING, SEC_DEPT_MEDICAL, S
 	l_pocket = /obj/item/flashlight/seclite
 	r_pocket = /obj/item/tank/internals/emergency_oxygen/double
 
-	backpack = /obj/item/storage/backpack
+	backpack = /obj/item/storage/backpack/security/cmm
 	box = /obj/item/storage/box/survival/engineer/radio
 	backpack_contents = null
 
@@ -205,6 +205,13 @@ GLOBAL_LIST_INIT(available_depts, list(SEC_DEPT_ENGINEERING, SEC_DEPT_MEDICAL, S
 
 	suit_store = /obj/item/gun/ballistic/automatic/assualt/p16/minutemen
 	belt = /obj/item/storage/belt/military/minutemen
+
+/datum/outfit/job/security/minutemen/mechpilot
+	name = "Mech Pilot  (Colonial Minutemen)"
+
+	suit = /obj/item/clothing/suit/armor/vest/alt
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	glasses = /obj/item/clothing/glasses/hud/diagnostic
 
 	backpack_contents = list(/obj/item/melee/classic_baton=1, /obj/item/gun/ballistic/automatic/pistol/commander=1, /obj/item/restraints/handcuffs=1)
 

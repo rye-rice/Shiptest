@@ -89,6 +89,7 @@ Assistant
 	name = "Volunteer (Minutemen)"
 
 	uniform = /obj/item/clothing/under/rank/security/officer/minutemen
+	backpack = /obj/item/storage/backpack/security/cmm
 
 /datum/outfit/job/assistant/inteq
 	name = "IRMG Recruit (Inteq)"
@@ -149,6 +150,16 @@ Assistant
 	uniform = /obj/item/clothing/under/syndicate/gorlex
 	alt_uniform = /obj/item/clothing/under/syndicate
 
+/datum/outfit/job/assistant/syndicate/gec
+	name = "Deckhand (GEC)"
+
+	id = /obj/item/card/id/syndicate_command/crew_id
+	uniform = /obj/item/clothing/under/syndicate
+	suit = /obj/item/clothing/suit/toggle/hazard
+	alt_uniform = null
+	shoes = /obj/item/clothing/shoes/jackboots
+	head = /obj/item/clothing/head/safety_helmet
+
 /datum/outfit/job/assistant/independent/crewmatefancy
 	name = "Crewmate (Independent)"
 
@@ -195,3 +206,22 @@ Assistant
 	suit = /obj/item/clothing/suit/armor/roumain/shadow
 
 	head = /obj/item/clothing/head/cowboy/sec/roumain/shadow
+
+/datum/outfit/job/assistant/syndicate/cyberagent
+	name = "Junior Agent (Cybersun)"
+
+	uniform = /obj/item/clothing/under/syndicate
+	shoes = /obj/item/clothing/shoes/jackboots
+	r_pocket = /obj/item/radio
+	head = /obj/item/clothing/head/soft/black
+/datum/outfit/job/assistant/pharma
+	name = "Pharmacology Student"
+
+	uniform = /obj/item/clothing/under/rank/medical/chemist/junior_chemist
+	shoes = /obj/item/clothing/shoes/sneakers/white
+	accessory = /obj/item/clothing/neck/scarf/orange
+	l_pocket = /obj/item/pda/medical
+	r_pocket = /obj/item/reagent_containers/pill/floorpill
+	belt = /obj/item/reagent_scanner
+	backpack_contents = list(/obj/item/book/manual/wiki/chemistry=1)
+
