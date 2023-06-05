@@ -1303,6 +1303,19 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /turf/open/floor/plasteel,
 /area/ship/hallway)
+"zh" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
+	dir = 4
+	},
+/obj/structure/cable{
+	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
+	dir = 8
+	},
+/obj/effect/landmark/observer_start,
+/turf/open/floor/plasteel/mono,
+/area/ship/hallway)
 "zq" = (
 /obj/effect/turf_decal/corner/opaque/blue{
 	dir = 8
@@ -1377,10 +1390,10 @@
 /obj/item/seeds/corn,
 /obj/item/circuitboard/computer/xenobiology,
 /obj/item/bodypart/chest/robot,
-/obj/item/bodypart/r_leg/robot,
-/obj/item/bodypart/l_leg/robot,
+/obj/item/bodypart/leg/right/robot,
+/obj/item/bodypart/leg/left/robot,
 /obj/item/bodypart/r_arm/robot,
-/obj/item/bodypart/r_leg/robot,
+/obj/item/bodypart/leg/right/robot,
 /obj/item/assembly/flash/handheld,
 /obj/item/slime_scanner,
 /obj/item/slime_extract/grey,
@@ -2098,9 +2111,9 @@
 	},
 /obj/structure/table/reinforced,
 /obj/machinery/recharger,
-/obj/item/stack/spacecash/c1000,
-/obj/item/stack/spacecash/c1000,
-/obj/item/stack/spacecash/c1000,
+/obj/item/spacecash/bundle/c1000,
+/obj/item/spacecash/bundle/c1000,
+/obj/item/spacecash/bundle/c1000,
 /turf/open/floor/plasteel/dark,
 /area/ship/bridge)
 "Nx" = (
@@ -2904,7 +2917,7 @@ uI
 yG
 EZ
 tv
-mx
+zh
 Oa
 hj
 OQ

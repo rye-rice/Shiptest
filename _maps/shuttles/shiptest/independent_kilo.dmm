@@ -640,9 +640,9 @@
 /obj/item/paicard,
 /obj/item/clothing/shoes/cowboy/white,
 /obj/item/clothing/head/caphat/cowboy,
-/obj/item/stack/spacecash/c1000,
-/obj/item/stack/spacecash/c1000,
-/obj/item/stack/spacecash/c1000,
+/obj/item/spacecash/bundle/c1000,
+/obj/item/spacecash/bundle/c1000,
+/obj/item/spacecash/bundle/c1000,
 /turf/open/floor/carpet,
 /area/ship/crew)
 "da" = (
@@ -2211,6 +2211,7 @@
 	dir = 4;
 	pixel_x = -27
 	},
+/obj/effect/landmark/observer_start,
 /turf/open/floor/mineral/titanium/yellow,
 /area/ship/cargo)
 "Vd" = (
@@ -2314,7 +2315,7 @@
 /obj/item/storage/toolbox/mechanical{
 	pixel_y = 6
 	},
-/obj/item/stack/spacecash/c200,
+/obj/item/spacecash/bundle/c200,
 /turf/open/floor/mineral/plastitanium,
 /area/ship/bridge)
 "XR" = (

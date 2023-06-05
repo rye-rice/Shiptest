@@ -719,7 +719,7 @@
 	pixel_x = 5;
 	pixel_y = 4
 	},
-/obj/item/stack/spacecash/c100,
+/obj/item/spacecash/bundle/c100,
 /obj/effect/decal/cleanable/cobweb/cobweb2,
 /turf/open/floor/plating,
 /area/ruin/powered)
@@ -3216,7 +3216,7 @@
 /turf/open/floor/plating/rust,
 /area/ruin/powered)
 "Es" = (
-/obj/effect/mob_spawn/human/corpse/whitesands/survivor,
+/obj/effect/mob_spawn/human/corpse/damaged/whitesands/survivor,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/light{
 	dir = 1

@@ -347,9 +347,9 @@
 /obj/item/wallframe/intercom/wideband,
 /obj/item/circuitboard/machine/holopad,
 /obj/item/circuitboard/computer/cargo/express,
-/obj/item/stack/spacecash/c500{
-	amount = 25
-	},
+/obj/item/spacecash/bundle/loadsamoney,
+/obj/item/spacecash/bundle/loadsamoney,
+/obj/item/spacecash/bundle/loadsamoney,
 /turf/open/floor/plating/airless,
 /area/ship/construction)
 "Gb" = (
@@ -371,6 +371,7 @@
 /obj/item/toy/crayon/spraycan/infinite{
 	name = "stencil tool"
 	},
+/obj/effect/landmark/observer_start,
 /turf/open/floor/plating,
 /area/ship/construction)
 "HK" = (

@@ -380,7 +380,7 @@
 /area/ship/maintenance/central)
 "nK" = (
 /obj/effect/decal/cleanable/dirt/dust,
-/obj/machinery/holopad/emergency/command,
+/obj/machinery/holopad/emergency/buddy,
 /turf/open/floor/plating,
 /area/ship/maintenance/fore)
 "nT" = (
@@ -942,7 +942,7 @@
 /turf/open/floor/plating,
 /area/ship/external)
 "Lr" = (
-/obj/item/stack/spacecash/c1,
+/obj/item/spacecash/bundle/c1,
 /turf/open/floor/plating,
 /area/ship/maintenance/port)
 "LD" = (
@@ -988,6 +988,14 @@
 /obj/structure/cable/yellow,
 /turf/open/floor/plating,
 /area/ship/maintenance/starboard)
+"MP" = (
+/obj/structure/cable{
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer2,
+/obj/effect/landmark/observer_start,
+/turf/open/floor/plating,
+/area/ship/maintenance/central)
 "MS" = (
 /obj/structure/falsewall,
 /turf/open/floor/plating,
@@ -1608,7 +1616,7 @@ nT
 wj
 yo
 Wn
-lC
+MP
 bA
 qn
 PP

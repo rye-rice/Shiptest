@@ -29,6 +29,8 @@
 	/// What items can be consumed to repair this clothing (must by an /obj/item/stack)
 	var/repairable_by = /obj/item/stack/sheet/cotton/cloth
 
+	var/can_be_bloody = TRUE
+
 	//Var modification - PLEASE be careful with this I know who you are and where you live
 	var/list/user_vars_to_edit //VARNAME = VARVALUE eg: "name" = "butts"
 	var/list/user_vars_remembered //Auto built by the above + dropped() + equipped()
@@ -62,6 +64,8 @@
 	. = ..()
 	if(ispath(pocket_storage_component_path))
 		LoadComponent(pocket_storage_component_path)
+	if(can_be_bloody && ((body_parts_covered & FEET) || (flags_inv & HIDESHOES)))
+		LoadComponent(/datum/component/bloodysoles)
 
 /obj/item/clothing/MouseDrop(atom/over_object)
 	. = ..()
@@ -536,13 +540,10 @@
 		return
 	adjusted = !adjusted
 	if(adjusted)
-		if(fitted != FEMALE_UNIFORM_TOP)
-			fitted = NO_FEMALE_UNIFORM
-		if(!alt_covers_chest) // for the special snowflake suits that expose the chest when adjusted (and also the arms, realistically)
+		if(!alt_covers_chest) // for the special snowflake suits that expose the chest when adjusted
 			body_parts_covered &= ~CHEST
 			body_parts_covered &= ~ARMS
 	else
-		fitted = initial(fitted)
 		if(!alt_covers_chest)
 			body_parts_covered |= CHEST
 			body_parts_covered |= ARMS

@@ -86,6 +86,7 @@
 	shoes =/obj/item/clothing/shoes/laceup
 	ears = /obj/item/radio/headset/syndicate/alt/captain
 	id = /obj/item/card/id/syndicate_command/captain_id
+	gloves = /obj/item/clothing/gloves/combat
 
 /datum/outfit/job/ce/syndicate
 	name = "Chief Engineer (Syndicate Generic)"
@@ -118,3 +119,14 @@
 	belt = /obj/item/storage/belt/utility/full
 
 	courierbag = /obj/item/storage/backpack/messenger/inteq
+
+/datum/outfit/job/ce/frontiersmen
+	name = "Head Carpenter (Frontiersmen)"
+
+	ears = /obj/item/radio/headset/pirate
+	uniform = /obj/item/clothing/under/rank/security/officer/frontier/officer
+	head = /obj/item/clothing/head/hardhat/white
+	shoes = /obj/item/clothing/shoes/combat
+	gloves = /obj/item/clothing/gloves/combat
+	belt = /obj/item/storage/belt/utility/full
+
