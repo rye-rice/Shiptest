@@ -974,7 +974,7 @@
 /obj/item/bodypart/proc/get_bleed_rate()
 	if(HAS_TRAIT(owner, TRAIT_NOBLEED))
 		return
-	if(bodytype  != BODYPART_ORGANIC) // maybe in the future we can bleed oil from aug parts, but not now
+	if(bodytype  == BODYTYPE_ROBOTIC) // maybe in the future we can bleed oil from aug parts, but not now
 		return
 
 	var/bleed_rate = 0
