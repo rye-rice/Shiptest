@@ -2,7 +2,7 @@
 
 /mob/living/simple_animal/hostile/headcrab
 	name = "headslug"
-	desc = "Absolutely not de-beaked or harmless. Keep away from corpses."
+	desc = "Absolutely not de-beaked or harmless. Keep away from corpses. Free crabs! crab crab crab crab crab crab crab crab crab crab crab crab crab crab crab "
 	icon_state = "headcrab"
 	icon_living = "headcrab"
 	icon_dead = "headcrab_dead"
