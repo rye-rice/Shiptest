@@ -139,7 +139,7 @@
 	throw_range = 6
 	custom_materials = list(/datum/material/iron=4000)
 	attack_verb = list("prodded", "whiffed","rolled", "poked")
-	sharpness = IS_SHARP
+	sharpness = SHARP_EDGED
 
 /obj/item/kitchen/knife/ritual
 	name = "ritual knife"
