@@ -1002,6 +1002,9 @@
 	export_price = 5000
 
 /////////////////////////Nanites/////////////////////////
+
+//Disabled pending nanite rework --Apogee-dev
+/*
 /datum/techweb_node/nanite_base
 	id = "nanite_base"
 	display_name = "Basic Nanite Programming"
@@ -1096,7 +1099,7 @@
 	export_price = 2500
 	hidden = TRUE
 	experimental = TRUE
-
+*/
 ////////////////////////Alien technology////////////////////////
 /datum/techweb_node/alientech //AYYYYYYYYLMAOO tech
 	id = "alientech"
@@ -1181,18 +1184,6 @@
 	prereq_ids = list("basic_shuttle")
 	design_ids = list("engine_expulsion")
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 5000)
-	export_price = 2500
-
-
-////////////////////// Deepcore ///////////////////////
-
-/datum/techweb_node/deepcore
-	id = "deepcore"
-	display_name = "Deepcore Mining"
-	description = "Mining, but automated."
-	prereq_ids = list("basic_mining")
-	design_ids = list("deepcore_drill", "deepcore_hopper", "deepcore_hub")
-	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
 	export_price = 2500
 
 ////////////////////// IPC Parts ///////////////////////
@@ -1293,6 +1284,17 @@
 	will no longer be accepted in its academic journals."
 	design_ids = list("tackle_dolphin", "tackle_rocket")
 
+	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
+	export_price = 2500
+	hidden = TRUE
+	experimental = TRUE
+
+/datum/techweb_node/fishing
+	id = "fishing"
+	display_name = "Fishing Technology"
+	description = "Cutting edge fishing advancements."
+	prereq_ids = list("base")
+	design_ids = list("fishing_rod_tech")
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
 	export_price = 2500
 	hidden = TRUE
