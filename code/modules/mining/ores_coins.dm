@@ -355,6 +355,59 @@ GLOBAL_LIST_INIT(sand_recipes, list(\
 		return
 	qdel(src)
 
+/obj/item/stack/ore/sulfur
+	name = "sulfur"
+	icon = 'icons/obj/stack_objects.dmi'
+	icon_state = "sulfur"
+	item_state = "sulfur"
+	singular_name = "sulfur"
+	grind_results = list(/datum/reagent/sulfur = 10)
+	points = 1
+	scan_state = "rock_sulfur"
+	custom_materials = list(/datum/material/glass=MINERAL_MATERIAL_AMOUNT)
+	w_class = WEIGHT_CLASS_TINY
+
+/obj/item/stack/ore/sulfur/attackby(obj/item/weapon as obj, mob/user as mob, params)
+	if(weapon.get_temperature() > 300)//If the temperature of the object is over 300, then ignite
+		var/turf/current_turf = get_turf(src)
+		message_admins("Sulfur ignited by [ADMIN_LOOKUPFLW(user)] in [ADMIN_VERBOSEJMP(current_turf)]")
+		log_game("Sulfur ignited by [key_name(user)] in [AREACOORD(current_turf)]")
+		fire_act(weapon.get_temperature())
+	else
+		return ..()
+
+/obj/item/stack/ore/sulfur/attackby/ex_act(severity, target)
+	. = ..()
+	fire_act()
+
+/obj/item/stack/ore/sulfur/fire_act(exposed_temperature, exposed_volume)
+	var/turf/current_turf = get_turf(src)
+	if(isopenturf(current_turf))
+		current_turf.IgniteTurf(1*amount, "blue")
+	qdel(src)
+
+
+/obj/item/stack/ore/copper
+	name = "copper ore"
+	icon_state = "copper_ore"
+	item_state = "Copper ore"
+	singular_name = "Copper ore chunk"
+	points = 5
+	custom_materials = list(/datum/material/copper=MINERAL_MATERIAL_AMOUNT)
+	refined_type = /obj/item/stack/sheet/mineral/copper
+	scan_state = "rock_copper"
+	spreadChance = 5
+
+/obj/item/stack/ore/lead
+	name = "lead ore"
+	icon_state = "lead_ore"
+	item_state = "lead_ore"
+	singular_name = "copper ore chunk"
+	points = 5
+	custom_materials = list(/datum/material/copper=MINERAL_MATERIAL_AMOUNT)
+	refined_type = /obj/item/stack/sheet/mineral/lead
+	scan_state = "rock_lead"
+	spreadChance = 5
 
 /*****************************Coin********************************/
 
