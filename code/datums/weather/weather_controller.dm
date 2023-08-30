@@ -90,6 +90,9 @@
 /datum/weather_controller/desert
 	possible_weathers = list(/datum/weather/sandstorm = 100)
 
+/datum/weather_controller/desert_yellow
+	possible_weathers = list(/datum/weather/sandstorm/desert = 100)
+
 /datum/weather_controller/lush
 	possible_weathers = list(
 		/datum/weather/rain = 30,
@@ -112,4 +115,10 @@
 		/datum/weather/sandstorm/rockplanet/harmless = 80,
 		/datum/weather/sandstorm/rockplanet = 20,
 		/datum/weather/snowfall = 5,
+	)
+
+/datum/weather_controller/waterplanet
+	possible_weathers = list(
+		/datum/weather/rain/heavy/storm = 50,
+		/datum/weather/rain/heavy/storm/blocking = 30,
 	)

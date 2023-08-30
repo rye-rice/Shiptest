@@ -154,6 +154,8 @@
 		token.desc += " It may not still be here if you leave it."
 		token.update_appearance()
 
+/datum/overmap/dynamic/proc/choose_random_asteroid()
+
 /datum/overmap/dynamic/proc/gen_planet_name()
 	. = ""
 	switch(rand(1,10))
@@ -282,6 +284,15 @@
 	sound_environment = SOUND_ENVIRONMENT_FOREST
 	ambientsounds = BEACH
 
+/area/overmap_encounter/planetoid/waterplanet
+	name = "\improper Water Planetoid"
+	sound_environment = SOUND_ENVIRONMENT_FOREST
+	ambientsounds = MINING
+
+/area/overmap_encounter/planetoid/rockplanet/explored//for use in ruins
+	area_flags = UNIQUE_AREA
+	area_flags = VALID_TERRITORY | UNIQUE_AREA
+
 /area/overmap_encounter/planetoid/beachplanet/explored
 	area_flags = VALID_TERRITORY
 
@@ -299,6 +310,26 @@
 	area_flags = HIDDEN_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED //allows jaunters to work
 	ambientsounds = REEBE
 
+/area/overmap_encounter/planetoid/desert
+	name = "\improper Desert Planetoid"
+	sound_environment = SOUND_ENVIRONMENT_MOUNTAINS
+	ambientsounds = DESERT
+
+/area/overmap_encounter/planetoid/shrouded
+	name = "\improper Shrouded Planetoid"
+	sound_environment = SOUND_ENVIRONMENT_MOUNTAINS
+	ambientsounds = DESERT
+
+/area/overmap_encounter/planetoid/moon
+	name = "\improper Planetoid Moon"
+	ambientsounds = SPACE
+	sound_environment = SOUND_AREA_SPACE
+
+/datum/overmap/dynamic/empty
+	name = "Empty Space"
+
+/datum/overmap/dynamic/empty/choose_level_type()
+	return
 /area/overmap_encounter/planetoid/asteroid
 	name = "\improper Asteroid Field"
 	sound_environment = SOUND_ENVIRONMENT_QUARRY

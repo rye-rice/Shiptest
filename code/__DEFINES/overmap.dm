@@ -29,8 +29,16 @@
 #define DYNAMIC_WORLD_BEACHPLANET "beachplanet"
 #define DYNAMIC_WORLD_WASTEPLANET "wasteplanet"
 
+#define DYNAMIC_WORLD_WATERPLANET "waterplanet" //minor planets
+#define DYNAMIC_WORLD_DESERT "desertplanet"
+#define DYNAMIC_WORLD_SHROUDED "shroudedplanet"
+#define DYNAMIC_WORLD_BLOBPLANET "blobplanet"
+#define DYNAMIC_WORLD_DUSTBALL "dustball"
+#define DYNAMIC_WORLD_MOON "moon"
+
 #define DYNAMIC_WORLD_REEBE "reebe" //celestial bodies
 #define DYNAMIC_WORLD_ASTEROID "asteroid"
+#define DYNAMIC_WORLD_MINOR_PLANET "minor"
 #define DYNAMIC_WORLD_SPACERUIN "space"
 #define DYNAMIC_WORLD_GAS_GIANT "gas giant"
 #define DYNAMIC_WORLD_PLASMA_GIANT "plasma giant"
@@ -48,7 +56,11 @@
 	DYNAMIC_WORLD_ASTEROID,\
 	DYNAMIC_WORLD_SPACERUIN,\
 	DYNAMIC_WORLD_GAS_GIANT,\
-	DYNAMIC_WORLD_PLASMA_GIANT)
+	DYNAMIC_WORLD_PLASMA_GIANT,\
+	DYNAMIC_WORLD_WATERPLANET,\
+	DYNAMIC_WORLD_DESERT,\
+	DYNAMIC_WORLD_SHROUDED,\
+	DYNAMIC_WORLD_MOON)
 
 //Possible ship states
 #define OVERMAP_SHIP_IDLE "idle"
