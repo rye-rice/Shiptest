@@ -19,6 +19,9 @@
 	wound_bonus = -20
 	bare_wound_bonus = 10
 
+/obj/projectile/beam/throw_atom_into_space()
+	return
+
 
 /obj/projectile/beam/laser
 	tracer_type = /obj/effect/projectile/tracer/laser

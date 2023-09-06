@@ -10,6 +10,7 @@ import {
 } from '../components';
 import { Window } from '../layouts';
 import { createSearch, decodeHtmlEntities } from 'common/string';
+import { logger } from '../logging';
 
 export const ShipSelect = (props, context) => {
   const { act, data } = useBackend(context);
@@ -17,7 +18,7 @@ export const ShipSelect = (props, context) => {
   const ships = data.ships || {};
   const templates = data.templates || [];
 
-  const [tab, setTab] = useLocalState(context, 'tab', 1);
+  const [currentTab, setCurrentTab] = useLocalState(context, 'tab', 1);
   const [selectedShip, setSelectedShip] = useLocalState(
     context,
     'selectedShip',
@@ -34,10 +35,6 @@ export const ShipSelect = (props, context) => {
     { name: 'Ship Select', tab: 1 },
     { name: 'Ship Purchase', tab: 3 },
   ]);
-  // const formatShipName = (name) => {
-  //   // replace all &#34 with "/ because the json data we get is funky otherwise
-  //   return name.replace(/&#34;/g, '"');
-  // };
   const searchFor = (searchText) =>
     createSearch(searchText, (thing) => thing.name);
 
@@ -50,32 +47,38 @@ export const ShipSelect = (props, context) => {
           {shownTabs.map((tabbing, index) => (
             <Tabs.Tab
               key={`${index}-${tabbing.name}`}
-              selected={tab === tabbing.tab}
-              onClick={() => setTab(tabbing.tab)}
+              selected={currentTab === tabbing.tab}
+              onClick={() => setCurrentTab(tabbing.tab)}
             >
               {tabbing.name}
             </Tabs.Tab>
           ))}
         </Tabs>
-        {tab === 1 && (
+        {currentTab === 1 && (
           <Section
             title="Active Ship Selection"
             buttons={
-              <Button
-                content="Purchase Ship"
-                tooltip={
-                  /* worth noting that disabled ship spawn doesn't cause the
+              <>
+                <Button
+                  content="Purchase Ship"
+                  tooltip={
+                    /* worth noting that disabled ship spawn doesn't cause the
                   button to be disabled, as we want to let people look around */
-                  (data.purchaseBanned &&
-                    'You are banned from purchasing ships.') ||
-                  (!data.shipSpawnAllowed &&
-                    'No more ships may be spawned at this time.')
-                }
-                disabled={data.purchaseBanned}
-                onClick={() => {
-                  setTab(3);
-                }}
-              />
+                    (data.purchaseBanned &&
+                      'You are banned from purchasing ships.') ||
+                    (!data.shipSpawnAllowed &&
+                      'No more ships may be spawned at this time.')
+                  }
+                  disabled={data.purchaseBanned}
+                  onClick={() => {
+                    setCurrentTab(3);
+                  }}
+                />
+                <Button
+                  content="?"
+                  tooltip={"Hover over a ship's name to see its faction."}
+                />
+              </>
             }
           >
             <Table>
@@ -86,6 +89,7 @@ export const ShipSelect = (props, context) => {
               </Table.Row>
               {Object.values(ships).map((ship) => {
                 const shipName = decodeHtmlEntities(ship.name);
+                const shipFaction = ship.faction;
                 return (
                   <Table.Row key={shipName}>
                     <Table.Cell>
@@ -100,21 +104,29 @@ export const ShipSelect = (props, context) => {
                         }
                         onClick={() => {
                           setSelectedShip(ship);
-                          setTab(2);
-                          // Add a new tab to the list of shown tabs, on index 1
+                          setCurrentTab(2);
+                          const newTab = {
+                            name: 'Job Select',
+                            tab: 2,
+                          };
+                          // check if the tab already exists
+                          const tabExists = shownTabs.some(
+                            (tab) =>
+                              tab.name === newTab.name && tab.tab === newTab.tab
+                          );
+                          if (tabExists) {
+                            return;
+                          }
                           setShownTabs((tabs) => {
+                            logger.log(tabs);
                             const newTabs = [...tabs];
-                            const newTab = {
-                              name: 'Job Select',
-                              tab: 2,
-                            };
                             newTabs.splice(1, 0, newTab);
                             return newTabs;
                           });
                         }}
                       />
                     </Table.Cell>
-                    <Table.Cell>{shipName}</Table.Cell>
+                    <Table.Cell title={shipFaction}>{shipName}</Table.Cell>
                     <Table.Cell>{ship.class}</Table.Cell>
                   </Table.Row>
                 );
@@ -122,7 +134,7 @@ export const ShipSelect = (props, context) => {
             </Table>
           </Section>
         )}
-        {tab === 2 && (
+        {currentTab === 2 && (
           <>
             <Section
               title={`Ship Details - ${decodeHtmlEntities(selectedShip.name)}`}
@@ -130,6 +142,9 @@ export const ShipSelect = (props, context) => {
               <LabeledList>
                 <LabeledList.Item label="Ship Class">
                   {selectedShip.class}
+                </LabeledList.Item>
+                <LabeledList.Item label="Ship Faction">
+                  {selectedShip.faction}
                 </LabeledList.Item>
                 <LabeledList.Item label="Ship Join Status">
                   {selectedShip.joinMode}
@@ -156,7 +171,7 @@ export const ShipSelect = (props, context) => {
                 <Button
                   content="Back"
                   onClick={() => {
-                    setTab(1);
+                    setCurrentTab(1);
                   }}
                 />
               }
@@ -202,7 +217,7 @@ export const ShipSelect = (props, context) => {
             </Section>
           </>
         )}
-        {tab === 3 && (
+        {currentTab === 3 && (
           <Section
             title="Ship Purchase"
             buttons={
@@ -216,7 +231,7 @@ export const ShipSelect = (props, context) => {
                 <Button
                   content="Back"
                   onClick={() => {
-                    setTab(1);
+                    setCurrentTab(1);
                   }}
                 />
               </>
@@ -260,6 +275,9 @@ export const ShipSelect = (props, context) => {
                 <LabeledList>
                   <LabeledList.Item label="Description">
                     {template.desc || 'No Description'}
+                  </LabeledList.Item>
+                  <LabeledList.Item label="Ship Faction">
+                    {template.faction}
                   </LabeledList.Item>
                   <LabeledList.Item label="Ship Tags">
                     {(template.tags && template.tags.join(', ')) ||

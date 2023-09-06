@@ -17,12 +17,13 @@
 			return TRUE
 	return FALSE
 
-
 //an incision but with greater bleed, and a 90% base success chance
 /datum/surgery_step/incise_heart
 	name = "incise heart"
-	implements = list(TOOL_SCALPEL = 90, /obj/item/melee/transforming/energy/sword = 45, /obj/item/kitchen/knife = 45,
-		/obj/item/shard = 25)
+	implements = list(
+		TOOL_SCALPEL = 90,
+		/obj/item/kitchen/knife = 40,
+		/obj/item/shard = 33)
 	time = 1.6 SECONDS
 	preop_sound = 'sound/surgery/scalpel1.ogg'
 	success_sound = 'sound/surgery/scalpel2.ogg'
@@ -42,7 +43,7 @@
 				"")
 			var/obj/item/bodypart/BP = H.get_bodypart(target_zone)
 			BP.generic_bleedstacks += 10
-			H.adjustBruteLoss(10)
+			target.apply_damage(15, BRUTE, "[target_zone]")
 	return ..()
 
 /datum/surgery_step/incise_heart/failure(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -54,12 +55,15 @@
 		var/obj/item/bodypart/BP = H.get_bodypart(target_zone)
 		BP.generic_bleedstacks += 10
 		H.adjustOrganLoss(ORGAN_SLOT_HEART, 10)
-		H.adjustBruteLoss(10)
+		target.apply_damage(15, BRUTE, "[target_zone]")
 
 //grafts a coronary bypass onto the individual's heart, success chance is 90% base again
 /datum/surgery_step/coronary_bypass
 	name = "graft coronary bypass"
-	implements = list(TOOL_HEMOSTAT = 90, TOOL_WIRECUTTER = 35, /obj/item/stack/packageWrap = 15, /obj/item/stack/cable_coil = 5)
+	implements = list(
+		TOOL_HEMOSTAT = 90,
+		TOOL_WIRECUTTER = 40,
+		/obj/item/stack/cable_coil = 5)
 	time = 9 SECONDS
 	preop_sound = 'sound/surgery/hemostat1.ogg'
 	success_sound = 'sound/surgery/hemostat1.ogg'

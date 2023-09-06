@@ -134,9 +134,9 @@
 		owner.set_usable_hands(owner.usable_hands + 1)
 
 	if(owner.hud_used)
-		var/atom/movable/screen/inventory/hand/L = owner.hud_used.hand_slots["[held_index]"]
-		if(L)
-			L.update_icon()
+		var/atom/movable/screen/inventory/hand/hand_screen_object = owner.hud_used.hand_slots["[held_index]"]
+		if(hand_screen_object)
+			hand_screen_object?.update_appearance()
 
 /obj/item/bodypart/l_arm/monkey
 	icon = 'icons/mob/animal_parts.dmi'
@@ -237,9 +237,9 @@
 		owner.set_usable_hands(owner.usable_hands + 1)
 
 	if(owner.hud_used)
-		var/atom/movable/screen/inventory/hand/R = owner.hud_used.hand_slots["[held_index]"]
-		if(R)
-			R.update_icon()
+		var/atom/movable/screen/inventory/hand/hand_screen_object = owner.hud_used.hand_slots["[held_index]"]
+		if(hand_screen_object)
+			hand_screen_object.update_appearance()
 
 /obj/item/bodypart/r_arm/monkey
 	icon = 'icons/mob/animal_parts.dmi'

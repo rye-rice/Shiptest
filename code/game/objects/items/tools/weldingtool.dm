@@ -50,7 +50,7 @@
 	create_reagents(max_fuel)
 	if(start_full)
 		reagents.add_reagent(/datum/reagent/fuel, max_fuel)
-	update_icon()
+	update_appearance()
 
 /obj/item/weldingtool/ComponentInitialize()
 	. = ..()
@@ -62,7 +62,7 @@
 		item_state = "[initial(item_state)]1"
 	else
 		item_state = "[initial(item_state)]"
-
+	return ..()
 
 /obj/item/weldingtool/update_overlays()
 	. = ..()
@@ -79,7 +79,7 @@
 		if(0)
 			force = 3
 			damtype = "brute"
-			update_icon()
+			update_appearance()
 			if(!can_off_process)
 				STOP_PROCESSING(SSobj, src)
 			return
@@ -90,16 +90,10 @@
 			++burned_fuel_for
 			if(burned_fuel_for >= WELDER_FUEL_BURN_INTERVAL)
 				use(1)
-			update_icon()
+			update_appearance()
 
 	//This is to start fires. process() is only called if the welder is on.
 	open_flame()
-
-
-/obj/item/weldingtool/suicide_act(mob/user)
-	user.visible_message("<span class='suicide'>[user] welds [user.p_their()] every orifice closed! It looks like [user.p_theyre()] trying to commit suicide!</span>")
-	return (FIRELOSS)
-
 
 /obj/item/weldingtool/attackby(obj/item/I, mob/user, params)
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
@@ -108,7 +102,7 @@
 		flamethrower_rods(I, user)
 	else
 		. = ..()
-	update_icon()
+	update_appearance()
 
 /obj/item/weldingtool/proc/explode()
 	var/turf/T = get_turf(loc)
@@ -153,7 +147,7 @@
 	if(!status && O.is_refillable())
 		reagents.trans_to(O, reagents.total_volume, transfered_by = user)
 		to_chat(user, "<span class='notice'>You empty [src]'s fuel tank into [O].</span>")
-		update_icon()
+		update_appearance()
 
 /obj/item/weldingtool/attack_qdeleted(atom/O, mob/user, proximity)
 	. = ..()
@@ -176,7 +170,7 @@
 		explode()
 	switched_on(user)
 
-	update_icon()
+	update_appearance()
 
 
 // Ah fuck, I can't believe you've done this
@@ -219,7 +213,7 @@
 	if(get_fuel() <= 0 && welding)
 		set_light_on(FALSE)
 		switched_on(user)
-		update_icon()
+		update_appearance()
 		return 0
 	return 1
 
@@ -236,7 +230,7 @@
 			force = 15
 			damtype = "fire"
 			hitsound = 'sound/items/welder.ogg'
-			update_icon()
+			update_appearance()
 			START_PROCESSING(SSobj, src)
 		else
 			to_chat(user, "<span class='warning'>You need more fuel!</span>")
@@ -253,7 +247,7 @@
 	force = 3
 	damtype = "brute"
 	hitsound = "swing_hit"
-	update_icon()
+	update_appearance()
 
 
 /obj/item/weldingtool/examine(mob/user)
