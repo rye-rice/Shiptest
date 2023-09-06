@@ -39,10 +39,10 @@
 
 /obj/item/stack/medical/attack(mob/living/target, mob/user)
 	. = ..()
-	heal(target, user)
+	try_heal(target, user)
 
 /// In which we print the message that we're starting to heal someone, then we try healing them. Does the do_after whether or not it can actually succeed on a targeted mob
-/obj/item/stack/medical/proc/heal(mob/living/patient, mob/user, silent = FALSE)
+/obj/item/stack/medical/proc/try_heal(mob/living/patient, mob/user, silent = FALSE)
 	if(patient.stat == DEAD)
 		to_chat(user, "<span class='warning'>[patient] is dead! You can not help [patient.p_them()].</span>")
 		return
@@ -194,7 +194,7 @@
 	grind_results = list(/datum/reagent/medicine/spaceacillin = 2)
 	merge_type = /obj/item/stack/medical/suture
 
-/obj/item/stack/medical/suture/heal(mob/living/target, mob/user)
+/obj/item/stack/medical/suture/try_heal(mob/living/target, mob/user)
 	. = ..()
 	if(target.stat == DEAD)
 		to_chat(user, "<span class='warning'>[target] is dead! You can not help [target.p_them()].</span>")
@@ -281,7 +281,7 @@
 		return ..()
 	icon_state = "regen_mesh_closed"
 
-/obj/item/stack/medical/mesh/heal(mob/living/target, mob/user)
+/obj/item/stack/medical/mesh/try_heal(mob/living/target, mob/user)
 	. = ..()
 	if(target.stat == DEAD)
 		to_chat(user, "<span class='warning'>[target] is dead! You can not help [target.p_them()].</span>")
@@ -354,13 +354,13 @@
 	grind_results = list(/datum/reagent/consumable/aloejuice = 1)
 	merge_type = /obj/item/stack/medical/aloe
 
-/obj/item/stack/medical/aloe/heal(mob/living/target, mob/user)
+/obj/item/stack/medical/aloe/try_heal(mob/living/target, mob/user)
 	. = ..()
 	if(target.stat == DEAD)
 		to_chat(user, "<span class='warning'>[target] is dead! You can not help [target.p_them()].</span>")
 		return FALSE
 	if(iscarbon(target))
-		return heal_carbon(target, user, heal, heal)
+		return heal_carbon(target, user, heal_brute, heal_burn)
 	if(isanimal(target))
 		var/mob/living/simple_animal/critter = target
 		if (!(critter.healable))
@@ -370,7 +370,7 @@
 			to_chat(user, "<span class='notice'>[target] is at full health.</span>")
 			return FALSE
 		user.visible_message("<span class='green'>[user] applies \the [src] on [target].</span>", "<span class='green'>You apply \the [src] on [target].</span>")
-		target.heal_bodypart_damage(heal, heal)
+		target.heal_bodypart_damage(heal_brute, heal_burn)
 		return TRUE
 
 	to_chat(user, "<span class='warning'>You can't heal [target] with the \the [src]!</span>")
@@ -393,29 +393,6 @@
 /obj/item/stack/medical/bone_gel/attack(mob/living/M, mob/user)
 	to_chat(user, "<span class='warning'>Bone gel can only be used on fractured limbs!</span>")
 	return
-
-/obj/item/stack/medical/bone_gel/suicide_act(mob/user)
-	if(!iscarbon(user))
-		return
-	var/mob/living/carbon/C = user
-	C.visible_message("<span class='suicide'>[C] is squirting all of [src] into [C.p_their()] mouth! That's not proper procedure! It looks like [C.p_theyre()] trying to commit suicide!</span>")
-	if(!do_after(C, 2 SECONDS))
-		C.visible_message("<span class='suicide'>[C] screws up like an idiot and still dies anyway!</span>")
-		return (BRUTELOSS)
-
-	C.emote("scream")
-	for(var/i in C.bodyparts)
-		var/obj/item/bodypart/bone = i
-		var/datum/wound/blunt/severe/oof_ouch = new
-		oof_ouch.apply_wound(bone)
-		var/datum/wound/blunt/critical/oof_OUCH = new
-		oof_OUCH.apply_wound(bone)
-
-	for(var/i in C.bodyparts)
-		var/obj/item/bodypart/bone = i
-		bone.receive_damage(brute=60)
-	use(1)
-	return (BRUTELOSS)
 
 /obj/item/stack/medical/bone_gel/four
 	amount = 4
