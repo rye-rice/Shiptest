@@ -11,7 +11,8 @@
 
 /obj/structure/water_basin/attackby(obj/item/I, mob/living/user, params)
 	if(istype(I, /obj/item/forging/tongs))
-		var/obj/item/forging/incomplete/search_incomplete = locate(/obj/item/forging/incomplete) in I.contents
+		var/obj/item/forging/tongs/current_tongs
+		var/obj/item/forging/incomplete/search_incomplete = current_tongs.held_item
 		if(search_incomplete?.times_hit < search_incomplete.average_hits)
 			to_chat(user, "<span class='warning'>You cool down [search_incomplete] but it's not ready yet!/<span>")
 			COOLDOWN_RESET(search_incomplete, heating_remainder)
@@ -24,7 +25,7 @@
 			var/obj/item/forging/complete/spawn_item = search_incomplete.spawn_item
 			new spawn_item(get_turf(src))
 			qdel(search_incomplete)
-			I.icon_state = "tong_empty"
+			current_tongs.icon_state = "tong_empty"
 		return
 
 	if(I.tool_behaviour == TOOL_WRENCH)

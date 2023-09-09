@@ -1,3 +1,26 @@
+GLOBAL_LIST_INIT(allowed_forging_materials, list(
+	/datum/material/iron,
+	/datum/material/silver,
+	/datum/material/gold,
+	/datum/material/uranium,
+	/datum/material/bananium,
+	/datum/material/titanium,
+	/datum/material/runite,
+	/datum/material/adamantine,
+	/datum/material/mythril,
+	/datum/material/metalhydrogen,
+	/datum/material/runedmetal,
+	/datum/material/bronze,
+	/datum/material/hauntium,
+	/datum/material/alloy/plasteel,
+	/datum/material/alloy/plastitanium,
+	/datum/material/alloy/alien,
+	/datum/material/cobolterium,
+	/datum/material/copporcitite,
+	/datum/material/tinumium,
+	/datum/material/brussite,
+))
+
 /obj/item/forging
 	icon = 'icons/obj/forge_items.dmi'
 	var/work_time = 2 SECONDS
@@ -9,14 +32,42 @@
 	desc = "A set of tongs specifically crafted for use in forging. A wise man once said 'I lift things up and put them down.'"
 	icon = 'icons/obj/forge_items.dmi'
 	icon_state = "tong_empty"
+	var/obj/held_item
+	var/list/holdable_items(
+		/obj/item/stack,\
+		/obj/item/forging/incomplete\
+		)
 
 /obj/item/forging/tongs/attack_self(mob/user, modifiers)
 	. = ..()
-	var/obj/search_obj = locate(/obj) in contents
-	if(search_obj)
-		search_obj.forceMove(get_turf(src))
+	if(held_item)
+		held_item.forceMove(get_turf(src))
+		held_item = null
 		icon_state = "tong_empty"
 		return
+
+/obj/item/forging/tongs/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(!istype(target, in holdable_items))
+		return
+	if(held_item)
+		to_chat(user, "<span class='warning'>The tongs are already holding something!</span>")
+		return
+	var/obj/item/stack/material_to_pick_up
+	if(!(material_to_pick_up.material_type in GLOB.allowed_forging_materials))
+		user.balloon_alert(user, "can only forge metal!")
+		to_chat(user, "<span class='warning'>You can only forge metal!</span>")
+		return
+	if(!material_to_pick_up.material_type && !material_to_pick_up.custom_materials)
+		user.balloon_alert(user, "invalid material!")
+		to_chat(user, "<span class='warning'>This material cannot be used!</span>")
+		return
+
+	target.forceMove(src)
+	held_item = target
+	icon_state = "tong_full"
+	return
+
 
 /obj/item/forging/hammer
 	name = "forging hammer"
