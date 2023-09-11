@@ -39,7 +39,7 @@
 	slot_flags = ITEM_SLOT_BELT | ITEM_SLOT_BACK
 	w_class = WEIGHT_CLASS_BULKY
 	resistance_flags = FIRE_PROOF
-	sharpness = IS_SHARP
+	sharpness = SHARP_EDGED
 	max_integrity = 150
 
 /obj/item/forging/forged_weapon/katana
@@ -54,7 +54,7 @@
 	slot_flags = ITEM_SLOT_BELT | ITEM_SLOT_BACK
 	w_class = WEIGHT_CLASS_BULKY
 	resistance_flags = FIRE_PROOF
-	sharpness = IS_SHARP
+	sharpness = SHARP_EDGED
 
 /obj/item/forging/forged_weapon/dagger
 	name = "forged dagger"
@@ -67,7 +67,7 @@
 	slot_flags = ITEM_SLOT_BELT | ITEM_SLOT_BACK
 	w_class = WEIGHT_CLASS_SMALL
 	resistance_flags = FIRE_PROOF
-	sharpness = IS_SHARP
+	sharpness = SHARP_POINTY
 
 /obj/item/forging/forged_weapon/dagger/attack(mob/living/M, mob/living/user, params)
 	. = ..()
@@ -101,7 +101,7 @@
 	resistance_flags = FIRE_PROOF
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	reach = 2
-	sharpness = IS_SHARP
+	sharpness = SHARP_POINTY
 
 /obj/item/forging/forged_weapon/spear/ComponentInitialize()
 	. = ..()
@@ -120,7 +120,7 @@
 	slot_flags = ITEM_SLOT_BACK
 	w_class = WEIGHT_CLASS_BULKY
 	resistance_flags = FIRE_PROOF
-	sharpness = IS_SHARP
+	sharpness = SHARP_EDGED
 
 /obj/item/forging/forged_weapon/hammer
 	name = "forged hammer"
