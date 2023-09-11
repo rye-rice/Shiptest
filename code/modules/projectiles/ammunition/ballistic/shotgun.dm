@@ -13,6 +13,25 @@
 	icon_state = "[initial(icon_state)][BB ? "" : "-spent"]"
 	return ..()
 
+/obj/item/ammo_casing/shotgun/executioner
+	name = "executioner slug"
+	desc = "A 12 gauge lead slug purpose built to annihilate flesh on impact."
+	icon_state = "stunshell"
+	projectile_type = /obj/projectile/bullet/shotgun_slug/executioner
+
+/obj/item/ammo_casing/shotgun/pulverizer
+	name = "pulverizer slug"
+	desc = "A 12 gauge lead slug purpose built to annihilate bones on impact."
+	icon_state = "stunshell"
+	projectile_type = /obj/projectile/bullet/shotgun_slug/pulverizer
+
+/obj/item/ammo_casing/shotgun/beanbag
+	name = "beanbag slug"
+	desc = "A weak beanbag slug for riot control."
+	icon_state = "gshell"
+	custom_materials = list(/datum/material/iron=250)
+	projectile_type = /obj/projectile/bullet/shotgun_beanbag
+
 /obj/item/ammo_casing/shotgun/buckshot
 	name = "buckshot shell"
 	desc = "A 12 gauge buckshot shell."

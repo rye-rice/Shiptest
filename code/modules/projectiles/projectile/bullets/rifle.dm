@@ -4,6 +4,7 @@
 	name = "5.56x45mm bullet"
 	damage = 25
 	armour_penetration = 20
+	wound_bonus = -40
 
 // 7.62 (Nagant Rifle)
 
@@ -11,6 +12,8 @@
 	name = "7.62x54mmR bullet"
 	damage = 30
 	armour_penetration = 40
+	wound_bonus = -35
+	wound_falloff_tile = 0
 
 /obj/projectile/bullet/a300
 	name = ".300 Magnum bullet"

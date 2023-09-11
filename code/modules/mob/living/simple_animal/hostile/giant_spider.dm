@@ -53,6 +53,7 @@
 	gold_core_spawnable = HOSTILE_SPAWN
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	footstep_type = FOOTSTEP_MOB_CLAW
+	sharpness = SHARP_POINTY
 	mob_size = MOB_SIZE_LARGE
 	var/playable_spider = FALSE
 	var/datum/action/innate/spider/lay_web/lay_web

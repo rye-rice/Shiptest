@@ -469,8 +469,10 @@
 	new /obj/item/circular_saw(src)
 	new /obj/item/surgicaldrill(src)
 	new /obj/item/cautery(src)
+	new /obj/item/bonesetter(src)
 	new /obj/item/clothing/mask/surgical(src)
 	new /obj/item/razor(src)
+	new /obj/item/stack/sticky_tape/surgical(src)
 
 /obj/item/storage/backpack/duffelbag/sec
 	name = "security duffel bag"
@@ -487,9 +489,11 @@
 	new /obj/item/hemostat(src)
 	new /obj/item/retractor(src)
 	new /obj/item/circular_saw(src)
+	new /obj/item/bonesetter(src)
 	new /obj/item/surgicaldrill(src)
 	new /obj/item/cautery(src)
 	new /obj/item/clothing/mask/surgical(src)
+	new /obj/item/stack/sticky_tape/surgical(src)
 
 /obj/item/storage/backpack/duffelbag/engineering
 	name = "industrial duffel bag"
@@ -570,9 +574,11 @@
 	new /obj/item/surgicaldrill/advanced(src)
 	new /obj/item/scalpel/advanced(src)
 	new /obj/item/retractor/advanced(src)
+	new /obj/item/bonesetter(src)
 	new /obj/item/clothing/suit/straight_jacket(src)
 	new /obj/item/clothing/mask/muzzle(src)
 	new /obj/item/mmi/syndie(src)
+	new /obj/item/stack/medical/bone_gel(src)
 
 /obj/item/storage/backpack/duffelbag/syndie/ammo
 	name = "ammunition duffel bag"

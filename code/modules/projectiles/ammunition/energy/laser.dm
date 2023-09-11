@@ -17,6 +17,13 @@
 	fire_sound = 'sound/weapons/gun/laser/heavy_laser.ogg'
 	e_cost = 12500
 	delay = 1 SECONDS
+/obj/item/ammo_casing/energy/laser/hellfire
+	projectile_type = /obj/projectile/beam/laser/hellfire
+	e_cost = 130
+	select_name = "maim"
+
+/obj/item/ammo_casing/energy/laser/hellfire/antique
+	e_cost = 830
 
 /obj/item/ammo_casing/energy/lasergun
 	projectile_type = /obj/projectile/beam/laser

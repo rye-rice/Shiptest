@@ -11,6 +11,8 @@
 	px_y = 0
 	stam_damage_coeff = 1
 	max_stamina_damage = 120
+	grind_results = null
+	wound_resistance = 10
 	is_dimorphic = TRUE
 	var/obj/item/cavity_item
 	var/acceptable_bodytype = BODYTYPE_HUMANOID
@@ -35,6 +37,7 @@
 	icon_state = "default_monkey_chest"
 	limb_id = SPECIES_MONKEY
 	animal_origin = MONKEY_BODYPART
+	wound_resistance = -10
 
 /obj/item/bodypart/chest/alien
 	icon = 'icons/mob/animal_parts.dmi'
@@ -132,14 +135,15 @@
 
 	if(owner.hud_used)
 		var/atom/movable/screen/inventory/hand/hand_screen_object = owner.hud_used.hand_slots["[held_index]"]
-		hand_screen_object?.update_appearance()
-
+		if(hand_screen_object)
+			hand_screen_object?.update_appearance()
 
 /obj/item/bodypart/l_arm/monkey
 	icon = 'icons/mob/animal_parts.dmi'
 	icon_state = "default_monkey_l_arm"
 	limb_id = SPECIES_MONKEY
 	animal_origin = MONKEY_BODYPART
+	wound_resistance = -10
 	px_x = -5
 	px_y = -3
 
@@ -234,14 +238,15 @@
 
 	if(owner.hud_used)
 		var/atom/movable/screen/inventory/hand/hand_screen_object = owner.hud_used.hand_slots["[held_index]"]
-		hand_screen_object?.update_appearance()
-
+		if(hand_screen_object)
+			hand_screen_object.update_appearance()
 
 /obj/item/bodypart/r_arm/monkey
 	icon = 'icons/mob/animal_parts.dmi'
 	icon_state = "default_monkey_r_arm"
 	limb_id = SPECIES_MONKEY
 	animal_origin = MONKEY_BODYPART
+	wound_resistance = -10
 	px_x = 5
 	px_y = -3
 
@@ -334,6 +339,7 @@
 	icon_state = "default_monkey_l_leg"
 	limb_id = SPECIES_MONKEY
 	animal_origin = MONKEY_BODYPART
+	wound_resistance = -10
 	px_y = 4
 
 /obj/item/bodypart/leg/left/alien
@@ -427,6 +433,7 @@
 	icon_state = "default_monkey_r_leg"
 	limb_id = SPECIES_MONKEY
 	animal_origin = MONKEY_BODYPART
+	wound_resistance = -10
 	px_y = 4
 
 /obj/item/bodypart/leg/right/alien

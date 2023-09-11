@@ -52,9 +52,16 @@
 	COOLDOWN_START(src, pulse_cooldown, pulse_delay)
 	for(var/mob/living/carbon/carbon in orange(effectrange/2, src))
 		if(carbon.run_armor_check(attack_flag = "melee") >= 40)
-			carbon.break_random_bone()
+			for(var/i in carbon.bodyparts)
+				var/obj/item/bodypart/squish_part = i
+				var/type_wound = pick(list(/datum/wound/blunt/moderate))
+				if(prob(20))
+					squish_part.force_wound_upwards(type_wound)
 		if(carbon.run_armor_check(attack_flag = "melee") >= 60)
-			carbon.break_all_bones() //crunch
+			for(var/i in carbon.bodyparts)
+				var/obj/item/bodypart/squish_part = i
+				var/type_wound = pick(list(/datum/wound/blunt/severe))
+				squish_part.force_wound_upwards(type_wound)
 		carbon.apply_damage(10, BRUTE)
 
 /obj/effect/anomaly/grav/proc/on_entered(datum/source, atom/movable/AM)
@@ -77,10 +84,17 @@
 		if(iscarbon(Guy))
 			for(var/mob/living/carbon/carbon in range(0,src))
 				if(carbon.run_armor_check(attack_flag = "melee") >= 20)
-					carbon.break_random_bone()
+					for(var/i in carbon.bodyparts)
+						var/obj/item/bodypart/squish_part = i
+						var/type_wound = pick(list(/datum/wound/blunt/moderate))
+						if(prob(20))
+							squish_part.force_wound_upwards(type_wound)
 				else if(carbon.run_armor_check(attack_flag = "melee") >= 40)
-					carbon.break_all_bones() //crunch
-				carbon.apply_damage(10, BRUTE)
+					for(var/i in carbon.bodyparts)
+						var/obj/item/bodypart/squish_part = i
+						var/type_wound = pick(list(/datum/wound/blunt/severe))
+						squish_part.force_wound_upwards(type_wound)
+						carbon.apply_damage(10, BRUTE)
 
 /obj/effect/anomaly/grav/high
 	effectrange = 5

@@ -30,3 +30,8 @@
 	desc = "A 7.12x82mm bullet casing of exceptionally high grade. A skilled marksman could pull off deadly richochet shots with this."
 	projectile_type = /obj/projectile/bullet/mm712x82_match
 	bullet_skin = "rubber"
+
+/obj/item/ammo_casing/mm712x82/bouncy
+	name = "7.12x82mm rubber bullet casing"
+	desc = "A 7.12x82mm rubber bullet casing manufactured to unfailingly disastrous standards, you could piss off a lot of people spraying this down a hallway."
+	projectile_type = /obj/projectile/bullet/mm712x82_bouncy

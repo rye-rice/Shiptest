@@ -27,6 +27,13 @@
 	juice_results = list(/datum/reagent/consumable/banana = 0)
 	distill_reagent = /datum/reagent/consumable/ethanol/bananahonk
 
+/obj/item/reagent_containers/food/snacks/grown/banana/generate_trash(atom/location)
+	. = ..()
+	var/obj/item/grown/bananapeel/peel = .
+	if(istype(peel))
+		peel.grind_results = list(/datum/reagent/medicine/coagulant/banana_peel = seed.potency * 0.2)
+		peel.juice_results = list(/datum/reagent/medicine/coagulant/banana_peel = seed.potency * 0.2)
+
 //Banana Peel
 /obj/item/grown/bananapeel
 	seed = /obj/item/seeds/banana

@@ -41,7 +41,7 @@
 	else
 		return ..()
 
-/obj/item/grenade/c4/prime()
+/obj/item/grenade/c4/prime(mob/living/lanced_by)
 	if(QDELETED(src))
 		return
 
@@ -61,7 +61,7 @@
 			explosion(get_step(T, aim_dir), boom_sizes[1], boom_sizes[2], boom_sizes[3])
 		else
 			explosion(location, boom_sizes[1], boom_sizes[2], boom_sizes[3])
-	resolve()
+	qdel(src)
 
 //assembly stuff
 /obj/item/grenade/c4/receive_signal()
