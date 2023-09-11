@@ -140,6 +140,7 @@
 	slot_flags = ITEM_SLOT_BACK
 	mag_type = /obj/item/ammo_box/magazine/swiss
 	actions_types = list(/datum/action/item_action/toggle_firemode)
+	manufacturer = MANUFACTURER_SOLARARMORIES
 
 /obj/item/gun/ballistic/automatic/assualt/swiss_cheese/ComponentInitialize()
 	. = ..()
@@ -168,3 +169,109 @@
 	update_appearance()
 	for(var/datum/action/action as anything in actions)
 		action.UpdateButtonIcon()
+
+/obj/item/gun/ballistic/automatic/assualt/e40
+	name = "\improper E-40 Hybrid Rifle"
+	desc = "A Hybrid Assault Rifle, best known for being having a dual ballistic and laser system. Chambered in .229 Eoehoma caseless, and uses energy for lasers."
+	icon = 'icons/obj/guns/48x32guns.dmi'
+	icon_state = "e40"
+	item_state = "e40"
+	mag_type = /obj/item/ammo_box/magazine/e40
+	can_suppress = FALSE
+	actions_types = list(/datum/action/item_action/toggle_firemode)
+	var/obj/item/gun/energy/laser/e40_laser_secondary/secondary
+
+	weapon_weight = WEAPON_MEDIUM
+	w_class = WEIGHT_CLASS_BULKY
+	slot_flags = ITEM_SLOT_BACK
+
+	mag_display = TRUE
+	empty_indicator = TRUE
+	fire_sound = 'sound/weapons/gun/laser/e40_bal.ogg'
+	manufacturer = MANUFACTURER_EOEHOMA
+
+/obj/item/gun/ballistic/automatic/assualt/e40/Initialize()
+	. = ..()
+	secondary = new /obj/item/gun/energy/laser/e40_laser_secondary(src)
+	AddComponent(/datum/component/automatic_fire, 0.2 SECONDS)
+	RegisterSignal(secondary, COMSIG_ATOM_UPDATE_ICON, .proc/secondary_update_icon)
+	SEND_SIGNAL(secondary, COMSIG_GUN_DISABLE_AUTOFIRE)
+	update_appearance()
+
+/obj/item/gun/ballistic/automatic/assualt/e40/do_autofire(datum/source, atom/target, mob/living/shooter, params)
+	if(select == 2)
+		secondary.do_autofire(source, target, shooter, params)
+	else
+		return ..()
+
+/obj/item/gun/ballistic/automatic/assualt/e40/process_fire(atom/target, mob/living/user, message, params, zone_override, bonus_spread)
+	. = ..()
+	if(select == 2)
+		secondary.process_fire(target, user, message, params, zone_override, bonus_spread)
+	else
+		return ..()
+
+
+/obj/item/gun/ballistic/automatic/assualt/e40/afterattack(atom/target, mob/living/user, flag, params)
+	if(select == 2)
+		secondary.afterattack(target, user, flag, params)
+	else
+		return ..()
+
+/obj/item/gun/ballistic/automatic/assualt/e40/attackby(obj/item/attack_obj, mob/user, params)
+	if(istype(attack_obj, /obj/item/stock_parts/cell/gun) ||(istype(attack_obj, /obj/item/screwdriver)))
+		secondary.attack_self()
+		secondary.attackby(attack_obj, user, params)
+	else
+		..()
+
+/obj/item/gun/ballistic/automatic/assualt/e40/proc/secondary_update_icon()
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/assualt/e40/update_overlays()
+	. = ..()
+	//handle laser gunn overlays
+	if(!secondary)
+		return
+	var/ratio = secondary.get_charge_ratio()
+	if(ratio == 0)
+		. += "[icon_state]_chargeempty"
+	else
+		. += "[icon_state]_charge[ratio]"
+	if(secondary.cell)
+		. += "[icon_state]_cell"
+
+
+/obj/item/gun/ballistic/automatic/assualt/e40/burst_select()
+	var/mob/living/carbon/human/user = usr
+	switch(select)
+		if(0)
+			select = 1
+			to_chat(user, "<span class='notice'>You switch to full automatic ballistic.</span>")
+		if(1)
+			select = 2
+			to_chat(user, "<span class='notice'>You switch to full auto laser.</span>")
+			SEND_SIGNAL(src, COMSIG_GUN_DISABLE_AUTOFIRE)
+			SEND_SIGNAL(secondary, COMSIG_GUN_ENABLE_AUTOFIRE)
+		if(2)
+			select = 1
+			to_chat(user, "<span class='notice'>You switch to full automatic ballistic.</span>")
+			SEND_SIGNAL(src, COMSIG_GUN_ENABLE_AUTOFIRE)
+			SEND_SIGNAL(secondary, COMSIG_GUN_DISABLE_AUTOFIRE)
+	playsound(user, 'sound/weapons/empty.ogg', 100, TRUE)
+	update_icon()
+	return
+
+//laser
+
+/obj/item/gun/energy/laser/e40_laser_secondary
+	name = "secondary e40 laser gun"
+	desc = "The laser component of a E-40 Hybrid Rifle. You probably shouldn't see this."
+	fire_sound = 'sound/weapons/gun/laser/e40_las.ogg'
+	w_class = WEIGHT_CLASS_NORMAL
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/assault)
+	fire_delay = 2
+
+/obj/item/gun/energy/laser/e40_laser_secondary/Initialize()
+	. = ..()
+	AddComponent(/datum/component/automatic_fire, 0.2 SECONDS)
