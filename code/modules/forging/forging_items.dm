@@ -8,17 +8,8 @@ GLOBAL_LIST_INIT(allowed_forging_materials, list(
 	/datum/material/runite,
 	/datum/material/adamantine,
 	/datum/material/mythril,
-	/datum/material/metalhydrogen,
 	/datum/material/runedmetal,
 	/datum/material/bronze,
-	/datum/material/hauntium,
-	/datum/material/alloy/plasteel,
-	/datum/material/alloy/plastitanium,
-	/datum/material/alloy/alien,
-	/datum/material/cobolterium,
-	/datum/material/copporcitite,
-	/datum/material/tinumium,
-	/datum/material/brussite,
 ))
 
 /obj/item/forging
@@ -33,10 +24,7 @@ GLOBAL_LIST_INIT(allowed_forging_materials, list(
 	icon = 'icons/obj/forge_items.dmi'
 	icon_state = "tong_empty"
 	var/obj/held_item
-	var/list/holdable_items(
-		/obj/item/stack,\
-		/obj/item/forging/incomplete\
-		)
+	var/list/holdable_items = list(/obj/item/stack, /obj/item/forging/incomplete)
 
 /obj/item/forging/tongs/attack_self(mob/user, modifiers)
 	. = ..()
@@ -48,7 +36,7 @@ GLOBAL_LIST_INIT(allowed_forging_materials, list(
 
 /obj/item/forging/tongs/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
-	if(!istype(target, in holdable_items))
+	if(!istype(target, holdable_items))
 		return
 	if(held_item)
 		to_chat(user, "<span class='warning'>The tongs are already holding something!</span>")
@@ -63,8 +51,8 @@ GLOBAL_LIST_INIT(allowed_forging_materials, list(
 		to_chat(user, "<span class='warning'>This material cannot be used!</span>")
 		return
 
-	target.forceMove(src)
-	held_item = target
+	material_to_pick_up.forceMove(src)
+	held_item = material_to_pick_up
 	icon_state = "tong_full"
 	return
 
