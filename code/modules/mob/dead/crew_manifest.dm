@@ -19,5 +19,4 @@
 
 /datum/crew_manifest/ui_static_data(mob/user)
 	return list(
-		"manifest" = SSovermap.get_manifest()
 	)

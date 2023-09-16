@@ -268,16 +268,7 @@
 
 /datum/world_topic/manifest/Run(list/input)
 	. = list()
-	var/list/manifest = SSovermap.get_manifest()
-	for(var/department in manifest)
-		var/list/entries = manifest[department]
-		var/list/dept_entries = list()
-		for(var/entry in entries)
-			var/list/entry_list = entry
-			dept_entries += "[entry_list["name"]]: [entry_list["rank"]]"
-		.[department] = dept_entries
-
-	return list2params(.)
+	return
 
 /datum/world_topic/reload_admins
 	keyword = "reload_admins"
