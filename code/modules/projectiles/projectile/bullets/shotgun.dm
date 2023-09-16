@@ -1,6 +1,6 @@
 /obj/projectile/bullet/shotgun_slug
 	name = "12g shotgun slug"
-	damage = 60
+	damage = 65
 	armour_penetration = -10
 	sharpness = SHARP_POINTY
 	wound_bonus = 0
@@ -25,7 +25,7 @@
 
 /obj/projectile/bullet/incendiary/shotgun
 	name = "incendiary slug"
-	damage = 20
+	damage = 25
 	armour_penetration = -10
 
 /obj/projectile/bullet/incendiary/shotgun/dragonsbreath
@@ -86,7 +86,7 @@
 
 /obj/projectile/bullet/pellet/shotgun_buckshot
 	name = "buckshot pellet"
-	damage = 10
+	damage = 20
 	wound_bonus = 5
 	bare_wound_bonus = 5
 	wound_falloff_tile = -2.5 // low damage + additional dropoff will already curb wounding potential anything past point blank

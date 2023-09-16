@@ -6,7 +6,7 @@
 	armour_penetration = 20
 	wound_bonus = -40
 
-// 7.62 (Nagant Rifle)
+// 7.62x54mmR (Illestren Rifle)
 
 /obj/projectile/bullet/a762
 	name = "7.62x54mmR bullet"
@@ -17,8 +17,9 @@
 
 /obj/projectile/bullet/a300
 	name = ".300 Magnum bullet"
-	damage = 60
+	damage = 40
 	stamina = 10
+	armour_penetration = 40
 
 /obj/projectile/bullet/a762_enchanted
 	name = "enchanted 7.62x54mmR bullet"
@@ -37,7 +38,7 @@
 /obj/projectile/bullet/aac_300blk
 	name = ".300 Blackout bullet"
 	damage = 30
-	dismemberment = 20
+	armour_penetration = 20
 
 //7.62x39mm (SVG-67)
 
@@ -53,7 +54,7 @@
 	damage = 30
 	armour_penetration = 40
 
-// 8x58 (SG-whatever)
+// 8x58mm caseless (SG-669)
 
 /obj/projectile/bullet/a858
 	name = "8x58mm caseless bullet"

@@ -11,6 +11,7 @@
 
 	QDEL_LIST(hand_bodyparts)
 	QDEL_LIST(internal_organs)
+	internal_organs_slot.Cut()
 	QDEL_LIST(bodyparts)
 	QDEL_LIST(implants)
 	for(var/wound in all_wounds) // these LAZYREMOVE themselves when deleted so no need to remove the list here

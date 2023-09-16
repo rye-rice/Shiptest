@@ -69,10 +69,13 @@
 	current_overmap.overmap_objects -= src
 	SSovermap.overmap_objects -= src
 	if(docked_to)
-		Undock(TRUE)
-	current_overmap.overmap_container[x][y] -= src
+		docked_to.post_undocked()
+		docked_to.contents -= src
+	if(isnum(x) && isnum(y))
+		current_overmap.overmap_container[x][y] -= src
 	token.parent = null
 	QDEL_NULL(token)
+	QDEL_LIST(contents)
 	return ..()
 
 /**
@@ -334,7 +337,7 @@
 	docked_to.contents -= src
 	var/datum/overmap/old_docked_to = docked_to
 	docked_to = null
-	token.Move(OVERMAP_TOKEN_TURF(x, y, current_overmap))
+	token.forceMove(OVERMAP_TOKEN_TURF(x, y, current_overmap))
 	INVOKE_ASYNC(old_docked_to, .proc/post_undocked, src)
 	docking = FALSE
 	SEND_SIGNAL(src, COMSIG_OVERMAP_UNDOCK, old_docked_to)

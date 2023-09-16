@@ -14,7 +14,9 @@
 	wound_bonus = CANT_WOUND // can't wound by default
 	//The sound this plays on impact.
 	var/hitsound = 'sound/weapons/pierce.ogg'
-	var/hitsound_wall = ""
+	var/hitsound_non_living = ""
+	var/ricochet_sound = ""
+	var/near_miss_sound = ""
 
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	var/def_zone = ""	//Aiming at
@@ -168,17 +170,16 @@
 	///How much we want to drop the embed_chance value, if we can embed, per tile, for falloff purposes
 	var/embed_falloff_tile
 
+	var/static/list/projectile_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
 
 /obj/projectile/Initialize()
 	. = ..()
 	decayedRange = range
 	if(embedding)
 		updateEmbedding()
-
-	var/static/list/loc_connections = list(
-		COMSIG_ATOM_ENTERED = .proc/on_entered
-	)
-	AddElement(/datum/element/connect_loc, loc_connections)
+	AddElement(/datum/element/connect_loc, projectile_connections)
 
 /obj/projectile/proc/Range()
 	range--
@@ -249,11 +250,11 @@
 	if(!isliving(target))
 		if(impact_effect_type && !hitscan)
 			new impact_effect_type(target_loca, hitx, hity)
-		if(isturf(target) && hitsound_wall)
+		if(hitsound_non_living)
 			var/volume = clamp(vol_by_damage() + 20, 0, 100)
 			if(suppressed)
 				volume = 5
-			playsound(loc, hitsound_wall, volume, TRUE, -1)
+			playsound(loc, hitsound_non_living, volume, TRUE, -1)
 		return BULLET_ACT_HIT
 
 	var/mob/living/L = target
@@ -290,8 +291,7 @@
 			to_chat(L, "<span class='userdanger'>You're shot by \a [src][organ_hit_text]!</span>")
 		else
 			if(hitsound)
-				var/volume = vol_by_damage()
-				playsound(src, hitsound, volume, TRUE, -1)
+				playsound(get_turf(L), hitsound, 100, TRUE, -1)
 			L.visible_message("<span class='danger'>[L] is hit by \a [src][organ_hit_text]!</span>", \
 					"<span class='userdanger'>You're hit by \a [src][organ_hit_text]!</span>", null, COMBAT_MESSAGE_RANGE)
 		L.on_hit(src)
@@ -360,7 +360,7 @@
 	if(!trajectory)
 		qdel(src)
 		return FALSE
-	if(impacted[A])		// NEVER doublehit
+	if(LAZYISIN(impacted, A))		// NEVER doublehit
 		return FALSE
 	var/datum/point/pcache = trajectory.copy_to()
 	var/turf/T = get_turf(A)
@@ -368,7 +368,7 @@
 		ricochets++
 		if(A.handle_ricochet(src))
 			on_ricochet(A)
-			impacted = list() // Shoot a x-ray laser at a pair of mirrors I dare you
+			impacted = null // Shoot a x-ray laser at a pair of mirrors I dare you
 			ignore_source_check = TRUE // Firer is no longer immune
 			decayedRange = max(0, decayedRange - reflect_range_decrease)
 			ricochet_chance *= ricochet_decay_chance
@@ -376,6 +376,8 @@
 			range = decayedRange
 			if(hitscan)
 				store_hitscan_collision(pcache)
+			if(ricochet_sound)
+				playsound(get_turf(src), ricochet_sound, 120, TRUE, 2) //make it loud, we want to make it known when a ricochet happens. for aesthetic reasons mostly
 			return TRUE
 
 	var/distance = get_dist(T, starting) // Get the distance between the turf shot from and the mob we hit and use that for the calculations.
@@ -409,7 +411,7 @@
 	if(QDELETED(src) || !T || !target)
 		return
 	// 2.
-	impacted[target] = TRUE		//hash lookup > in for performance in hit-checking
+	LAZYSET(impacted, target, TRUE)	//hash lookup > in for performance in hit-checking
 	// 3.
 	var/mode = prehit_pierce(target)
 	if(mode == PROJECTILE_DELETE_WITHOUT_HITTING)
@@ -485,7 +487,7 @@
 //Returns true if the target atom is on our current turf and above the right layer
 //If direct target is true it's the originally clicked target.
 /obj/projectile/proc/can_hit_target(atom/target, direct_target = FALSE, ignore_loc = FALSE)
-	if(QDELETED(target) || impacted[target])
+	if(QDELETED(target) || LAZYISIN(impacted, target))
 		return FALSE
 	if(!ignore_loc && (loc != target.loc) && !(can_hit_turfs && direct_target && loc == target))
 		return FALSE
@@ -559,8 +561,8 @@
  * Projectile can pass through
  * Used to not even attempt to Bump() or fail to Cross() anything we already hit.
  */
-/obj/projectile/CanPassThrough(atom/blocker, turf/target, blocker_opinion)
-	return impacted[blocker]? TRUE : ..()
+/obj/projectile/CanPassThrough(atom/blocker, movement_dir, blocker_opinion)
+	return LAZYISIN(impacted, blocker) ? TRUE : ..()
 
 /**
  * Projectile moved:
@@ -784,8 +786,6 @@
 		process_homing()
 	var/forcemoved = FALSE
 	for(var/i in 1 to SSprojectiles.global_iterations_per_move)
-		if(QDELETED(src))
-			return
 		trajectory.increment(trajectory_multiplier)
 		var/turf/T = trajectory.return_turf()
 		if(!istype(T))
@@ -806,6 +806,8 @@
 		else if(T != loc)
 			step_towards(src, T)
 			hitscan_last = loc
+		if(QDELETED(src))
+			return
 	if(!hitscanning && !forcemoved)
 		pixel_x = trajectory.return_px() - trajectory.mpx * trajectory_multiplier * SSprojectiles.global_iterations_per_move
 		pixel_y = trajectory.return_py() - trajectory.mpy * trajectory_multiplier * SSprojectiles.global_iterations_per_move
@@ -897,13 +899,14 @@
 		finalize_hitscan_and_generate_tracers()
 	STOP_PROCESSING(SSprojectiles, src)
 	cleanup_beam_segments()
-	qdel(trajectory)
+	if(trajectory)
+		QDEL_NULL(trajectory)
 	return ..()
 
 /obj/projectile/proc/cleanup_beam_segments()
 	QDEL_LIST_ASSOC(beam_segments)
 	beam_segments = list()
-	QDEL_NULL(beam_index) //WS edit - Hitscan emitters
+	QDEL_NULL(beam_index)
 
 /obj/projectile/proc/finalize_hitscan_and_generate_tracers(impacting = TRUE)
 	if(trajectory && beam_index)

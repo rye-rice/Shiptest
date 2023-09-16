@@ -1,7 +1,5 @@
 /datum/job/cargo_tech
 	name = "Cargo Technician"
-	total_positions = 3
-	spawn_positions = 2
 	wiki_page = "Cargo_technician" //WS Edit - Wikilinks/Warning
 
 	skills = list(/datum/skill/mining = SKILL_EXP_NOVICE)

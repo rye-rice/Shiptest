@@ -28,6 +28,14 @@
 	pb_knockback = 2
 	manufacturer = MANUFACTURER_HUNTERSPRIDE
 
+	wield_slowdown = 0.35
+	wield_delay = 0.6 SECONDS //Shotguns are really easy to put up to fire, since they are designed for CQC (at least compared to a rifle)
+
+	spread = 4
+	spread_unwielded = 10
+	recoil = 2
+	recoil_unwielded = 4
+
 /obj/item/gun/ballistic/shotgun/blow_up(mob/user)
 	. = 0
 	if(chambered && chambered.BB)
@@ -47,8 +55,16 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/riot
 	sawn_desc = "Come with me if you want to live."
 	can_be_sawn_off  = TRUE
+	rack_sound = 'sound/weapons/gun/shotgun/rack_alt.ogg'
 
 // Automatic Shotguns//
+/obj/item/gun/ballistic/shotgun/automatic
+	spread = 4
+	spread_unwielded = 16
+	recoil = 1
+	recoil_unwielded = 4
+	wield_slowdown = 0.35
+	wield_delay = 0.65 SECONDS
 
 /obj/item/gun/ballistic/shotgun/automatic
 	manufacturer = MANUFACTURER_NANOTRASEN
@@ -150,6 +166,13 @@
 	tac_reloads = TRUE
 	pickup_sound =  'sound/items/handling/rifle_pickup.ogg'
 	manufacturer = MANUFACTURER_SCARBOROUGH
+
+	spread = 4
+	spread_unwielded = 16
+	recoil = 1
+	recoil_unwielded = 4
+	wield_slowdown = 0.35
+	wield_delay = 0.65 SECONDS
 
 /obj/item/gun/ballistic/shotgun/bulldog/unrestricted
 	pin = /obj/item/firing_pin
@@ -380,6 +403,7 @@
 	attack_verb = list("bludgeoned", "smashed")
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/sex
 	burst_size = 6
+	fire_delay = 0.1
 	pb_knockback = 12
 	unique_reskin = null
 	recoil = 10
@@ -429,9 +453,20 @@
 	inhand_y_dimension = 32
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/winchester
 	fire_sound = 'sound/weapons/gun/rifle/shot.ogg'
-	rack_sound = 'sound/weapons/gun/rifle/winchester_cocked.ogg'
+	rack_sound = 'sound/weapons/gun/rifle/ak47_cocked.ogg'
 	bolt_wording = "lever"
 	cartridge_wording = "bullet"
+
+	spread = -5
+	spread_unwielded = 7
+	recoil = 0
+	recoil_unwielded = 2
+	wield_slowdown = 0.6
+
+/obj/item/gun/ballistic/shotgun/winchester/rack(mob/user = null)
+	. = ..()
+	if(!wielded)
+		SpinAnimation(7,1)
 
 /obj/item/gun/ballistic/shotgun/winchester/mk1
 	name = "Winchester MK.1"

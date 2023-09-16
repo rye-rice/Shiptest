@@ -20,12 +20,8 @@
 
 /obj/projectile/bullet/c38
 	name = ".38 bullet"
-	damage = 20
+	damage = 25
 	armour_penetration = -20
-	ricochets_max = 2
-	ricochet_chance = 50
-	ricochet_auto_aim_angle = 10
-	ricochet_auto_aim_range = 3
 	wound_bonus = -20
 	bare_wound_bonus = 10
 	embedding = list(embed_chance=15, fall_chance=2, jostle_chance=2, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=3, jostle_pain_mult=5, rip_time=10)
@@ -133,7 +129,7 @@
 
 /obj/projectile/bullet/a4570
 	name = ".45-70 bullet"
-	damage = 40 //crits in 3-4 taps depending on armor
+	damage = 45 //crits in 3-4 taps depending on armor
 
 /obj/projectile/bullet/a4570/match
 	name = ".45-70 match bullet"
