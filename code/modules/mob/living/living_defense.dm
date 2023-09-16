@@ -53,8 +53,8 @@
 	var/armor = run_armor_check(def_zone, P.flag, P.armour_penetration, silent = TRUE)
 	var/on_hit_state = P.on_hit(src, armor, piercing_hit)
 	if(!P.nodamage && on_hit_state != BULLET_ACT_BLOCK && !QDELETED(src)) //QDELETED literally just for the instagib rifle. Yeah.
-		apply_damage(P.damage, P.damage_type, def_zone, armor, wound_bonus=P.wound_bonus, bare_wound_bonus=P.bare_wound_bonus, sharpness = P.sharpness)
-		recoil_camera(src, clamp(P.damage-armor,1,10), clamp(P.damage-armor,1,10), P.damage/5, P.Angle)
+		apply_damage(P.damage, P.damage_type, def_zone, armor)
+		recoil_camera(src, clamp((P.damage-armor)/2,1,10), clamp((P.damage-armor)/2,1,10), P.damage/7, P.Angle)
 		apply_effects(P.stun, P.knockdown, P.unconscious, P.irradiate, P.slur, P.stutter, P.eyeblur, P.drowsy, armor, P.stamina, P.jitter, P.paralyze, P.immobilize)
 		if(P.dismemberment)
 			check_projectile_dismemberment(P, def_zone)

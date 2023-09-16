@@ -17,7 +17,7 @@
 	wield_delay = 1 SECONDS
 	spread = 0
 	spread_unwielded = 13
-	recoil = 0.3
+	recoil = 0
 	recoil_unwielded = 4
 	wield_slowdown = 0.35
 
@@ -46,7 +46,7 @@
 		fire_delay = initial(fire_delay)
 		to_chat(user, "<span class='notice'>You switch to [burst_size]-rnd burst.</span>")
 
-	playsound(user, 'sound/weapons/empty.ogg', 100, TRUE)
+	playsound(user, 'sound/weapons/gun/general/selector.ogg', 100, TRUE)
 	update_appearance()
 	for(var/X in actions)
 		var/datum/action/A = X
