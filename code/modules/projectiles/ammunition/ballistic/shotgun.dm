@@ -32,7 +32,7 @@
 	desc = "A weak beanbag slug for riot control."
 	icon_state = "gshell"
 	custom_materials = list(/datum/material/iron=250)
-	projectile_type = /obj/projectile/bullet/shotgun_beanbag
+	projectile_type = /obj/projectile/bullet/slug/beanbag
 
 /obj/item/ammo_casing/shotgun/buckshot
 	name = "buckshot shell"
