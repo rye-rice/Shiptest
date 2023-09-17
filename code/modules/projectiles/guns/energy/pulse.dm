@@ -16,6 +16,8 @@
 	ammo_x_offset = 2
 	charge_sections = 6
 
+	spread_unwielded = 25
+
 /obj/item/gun/energy/pulse/emp_act(severity)
 	return
 
