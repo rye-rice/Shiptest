@@ -466,6 +466,8 @@
 #define COMSIG_BODYPART_SPLINTED "bodypart_splinted" // from /datum/bodypart_aid/splint/New() //When a splint is applied
 #define COMSIG_BODYPART_SPLINT_DESTROYED "bodypart_desplinted" // from /datum/bodypart_aid/gauze/Destroy() //When a splint is removed
 
+///When a carbon mob has their tail pulled, this is called on the carbon that is the target. (mob/living/tailpuller)
+#define COMSIG_CARBON_TAILPULL "carbon_tailpulled"
 ///When a carbon slips. Called on /turf/open/handle_slip()
 #define COMSIG_ON_CARBON_SLIP "carbon_slip"
 ///When a carbon gets a vending machine tilted on them
