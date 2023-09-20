@@ -1815,6 +1815,7 @@
 	taste_description = "primordial essence"
 	reagent_state = LIQUID
 
+/* //have our own special version
 /datum/reagent/genesis/expose_turf(turf/T, reac_volume)
 	if(istype(T, /turf/open/floor/grass))//prevents spamming effect via. smoke or such
 		return
@@ -1826,6 +1827,7 @@
 		if(prob(75))
 			new /obj/effect/spawner/lootdrop/flora(T)
 	..()
+*/
 
 /datum/reagent/genesis/on_hydroponics_apply(obj/item/seeds/myseed, datum/reagents/chems, obj/machinery/hydroponics/mytray, mob/user)
 	. = ..()
