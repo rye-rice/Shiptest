@@ -167,6 +167,14 @@
 		light_power = 0.80
 		update_light()
 
+/turf/open/floor/plating/asteroid/whitesands/dried
+	var/current_water = 0 //yeah
+
+/turf/open/floor/plating/asteroid/whitesands/dried/examine(mob/user)
+	. = ..()
+	if(ismob(user, /datum/species/pod))
+		. += "<span class='notice'>It could hold water, maybe 50 units per meter could do the trick. Currently, it has <i>[current_water]</i> units.</span>"
+
 /turf/open/floor/plating/asteroid/sand/terraform
 	light_color = LIGHT_COLOR_TUNGSTEN
 	var/update_lighting_on_init = TRUE
@@ -181,6 +189,9 @@
 		light_power = 0.80
 		update_light()
 
+/turf/closed/mineral/random/volcanic/terraformed
+	turf_type = /turf/open/floor/plating/asteroid/dirt
+	baseturfs = /turf/open/floor/plating/asteroid/dirt
 
 //the ultimate fertilizer
 /datum/reagent/genesis
@@ -218,6 +229,7 @@
 				terraform_target.ChangeTurf(/turf/open/floor/plating/asteroid/whitesands/dried, flags = CHANGETURF_INHERIT_AIR)
 			terraform_target.visible_message("<span class='notice'>As the serum touches [terraform_target.name], it all starts drying up, leaving a dry basin behind!</span>")
 			playsound(exposed_turf, 'sound/effects/bubbles.ogg', 50)
+			dirty_rocks(exposed_turf, reac_volume)
 			return ..()
 
 		if(istype(terraform_target, /turf/open/floor/plating/asteroid/basalt/lava_land_surface/basin) || istype(terraform_target, /turf/open/floor/plating/asteroid/whitesands/dried)|| istype(terraform_target, /turf/open/floor/plating/asteroid/sand)) //if basin, replace with water
@@ -227,12 +239,14 @@
 			terraform_target.ChangeTurf(/turf/open/floor/plating/asteroid/sand/terraform, flags = CHANGETURF_INHERIT_AIR)
 			terraform_target.visible_message("<span class='notice'>The chemicals in the sand disolve, and the sand looks more natural.</span>")
 			playsound(exposed_turf, 'sound/effects/bubbles.ogg', 50)
+			dirty_rocks(exposed_turf, reac_volume)
 			return ..()
 
 		if(!istype(terraform_target, /turf/open/floor/plating/asteroid/dirt)) // if not dirt, acutally terraform
 			terraform_target.ChangeTurf(/turf/open/floor/plating/asteroid/dirt, flags = CHANGETURF_INHERIT_AIR)
 			terraform_target.visible_message("<span class='notice'>The harsh land becomes fertile dirt, but more work needs to be done for it to be growable and breathable. Perhaps add grass?</span>")
 			playsound(exposed_turf, 'sound/effects/bubbles.ogg', 50)
+			dirty_rocks(exposed_turf, reac_volume)
 			return ..()
 
 
@@ -253,6 +267,12 @@
 				new /obj/effect/spawner/lootdrop/flora(exposed_turf)
 
 	return ..()
+
+
+/datum/reagent/genesis/proc/dirty_rocks(turf/exposed_turf, reac_volume)
+	for(var/turf/closed/mineral/random/thing in range(5, exposed_turf))
+		if(istype(thing, /turf/closed/mineral/random/volcanic))
+			thing.ChangeTurf(list(/turf/closed/mineral/random/volcanic/terraformed))
 
 /datum/reagent/water/expose_turf(turf/exposed_turf, reac_volume)
 	if(!isopenturf(exposed_turf))
