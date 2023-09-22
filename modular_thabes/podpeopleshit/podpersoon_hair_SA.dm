@@ -305,3 +305,90 @@
 	. = ..()
 	if(ismob(user, /datum/species/pod))
 		. += "<span class='notice'>If I pour some <i>water</i> onto it, maybe it can cool down?</span>"
+
+/// actual event content
+
+/obj/machinery/cryopod/podperson
+	name = "overgrown hydroponic tray"
+	desc = "A hydroponic tray with the cover on, covering a large and humanlike figure inside."
+	icon = 'modular_thabes/podpeopleshit/seed_vault.dmi'
+	icon_state = "cryotray"
+	open_state = "cryotray"
+	close_state = "cryotray"
+
+/obj/machinery/cryopod/podperson/apply_effects_to_mob(mob/living/carbon/sleepyhead)
+	//it always sucks a little to get up
+	sleepyhead.SetSleeping(10 SECONDS) //if you read this comment and feel like shitting together something to adjust elzu and IPC charge on wakeup, be my guest.
+	//so much worse
+	if(!ispodperson(sleepyhead))
+		sleepyhead.set_species(/datum/species/pod)
+	if(ishuman(sleepyhead))
+		var/mob/living/carbon/human/current_human = sleepyhead
+		current_human.underwear = "Nude" //You're a plant, partner
+		current_human.undershirt = "Nude"
+		current_human.socks = "Nude"
+		current_human.update_body()
+	to_chat(sleepyhead, "<span class='boldnotice'>A strange but soothing feeling comes down on you as you are given life!")
+
+/obj/machinery/cryopod/podperson/join_player_here(mob/M)
+	. = ..()
+	close_machine(M, TRUE)
+	open_machine()
+	new/obj/structure/fluff/empty_terrarium/podperson(get_turf(src))
+	qdel(src)
+
+/obj/structure/fluff/empty_terrarium/podperson //Empty terrariums are created when a preserved terrarium in a lavaland seed vault is activated.
+	name = "overgrown hydroponic tray"
+	desc = "A rusty and broken hydroponic tray. The lights are going off, showing a malfunction of some kind."
+	icon = 'modular_thabes/podpeopleshit/seed_vault.dmi'
+	icon_state = "cryotray-open"
+	density = TRUE
+
+/obj/item/paper/fluff/ruins/podperson_1
+	name = "Read this, new ones."
+	default_raw_text = "<b>*Welcome to being alive, lifebringers!*</b><br><br>Please get yourself oreinted and familiar with this strange new state. It may be confusing, but I'm sure you'll get the hang of it! \
+	Once you are ready, proceed to the next room!"
+
+/obj/item/paper/fluff/ruins/podperson_2
+	name = "How to use the Holopad."
+	default_raw_text = "<b>*Using the holopad is quite easy!*</b><br><br>Simply pick up the disk and insert it into the device, and hit 'PLAY', easy!"
+
+/datum/preset_holoimage/lifebringer
+	outfit_type = /datum/outfit/job/rd/rig
+
+/obj/item/disk/holodisk/podperson
+	name = "Introduction to your vault"
+	desc = "A holodisk containing critical information about your mission."
+	preset_image_type = /datum/preset_holoimage/lifebringer
+	preset_record_text = {"
+	NAME The Lifebringer
+	SAY Welcome, fellow lifebringers.
+	DELAY 45
+	SAY You may be confused, or even scared. But allow me to explain.
+	DELAY 40
+	SAY Many centuries or eons ago, there was something called 'life.'
+	DELAY 40
+	SAY There is no easy way to explain what 'life' is. But just take one look at yourself. This is 'life'.
+	DELAY 45
+	SAY Unfortunately, for one reason or another, it has all disapeared. You are all that is left.
+	DELAY 45
+	SAY I have created you with the purpose of bringinng life back to the galaxy. Scattered across the galaxy are various vaults like this to assist with your task.
+	DELAY 65
+	SAY I have imprinted some of my vast knowledge into your DNA. But this may not be enough. So allow me to explain.
+	DELAY 50
+	SAY The critical ingredient is Genesis Serum. You may make it by growing 'World Peas' or through the biogenerator included in your vault.
+	DELAY 65
+	SAY By pouring it on bare ground, a miracle happens. Bare ground turns into fetile ground.
+	DELAY 50
+	SAY However of course, you need to plant some grass for it to produce breathable air.
+	DELAY 45
+	SAY After this, pouring the serum again allows plants to sprout out spontaniously.
+	DELAY 50
+	SAY Pouring it on various differnt objects has different effects. Be sure to experiment!
+	DELAY 50
+	SAY Now then, enough talking from me, Ill let you get on with it. Best of luck lifebringers!
+	DELAY 55
+	"}
+
+/datum/outfit/naked //so linters dont scream at me
+	name = "Naked"
