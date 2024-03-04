@@ -33,10 +33,6 @@
 			"outfit": "/datum/outfit/job/clip/minutemen/vehicle_pilot",
 			"slots": 4
 		},
-		"Mech Technician": {
-			"outfit": "/datum/outfit/job/clip/minutemen/vehicle_crew",
-			"slots": 2
-		},
 		"Minuteman": {
 			"outfit": "/datum/outfit/job/clip/minutemen/grunt",
 			"slots": 2
