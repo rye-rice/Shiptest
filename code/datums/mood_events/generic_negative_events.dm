@@ -312,6 +312,7 @@
 	description = "<span class='warning'>Someone booped my nose... ACK!</span>\n"
 	mood_change = -3
 	timeout = 4 MINUTES
+
 /datum/mood_event/joywire_emp
 	description = span_boldwarning("IT'S GONE!! IT'S GONE!!\n")
 	mood_change = -30
