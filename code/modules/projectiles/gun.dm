@@ -297,6 +297,7 @@
 						vision_distance = COMBAT_MESSAGE_RANGE,
 						ignored_mobs = user
 				)
+	return TRUE
 
 /obj/item/gun/emp_act(severity)
 	. = ..()
@@ -441,7 +442,7 @@
 		return FALSE
 	//Are we PBing someone? If so, set pointblank to TRUE
 	shoot_live_shot(user, (get_dist(user, target) <= 1), target, message) //Making sure whether the target is in vicinity for the pointblank shot
-
+	. = TRUE // we already shot
 	//process the chamber...
 	process_chamber(shooter = user)
 	update_appearance()
