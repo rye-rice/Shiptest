@@ -42,6 +42,13 @@
 	clothing_flags = SNUG_FIT
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR
 
+	equip_sound = 'sound/items/equip/armor_equip.ogg'
+	equipping_sound = EQUIP_SOUND_SHORT_GENERIC
+	unequipping_sound = UNEQUIP_SOUND_SHORT_GENERIC
+	equip_delay_self = EQUIP_DELAY_HELMET
+	equip_delay_other = EQUIP_DELAY_HELMET * 1.5
+	strip_delay = EQUIP_DELAY_HELMET * 1.5
+
 /obj/item/clothing/head/snowman
 	name = "Snowman Head"
 	desc = "A ball of white styrofoam. So festive."
@@ -59,26 +66,6 @@
 	icon_state = "pirate"
 	item_state = "pirate"
 	dog_fashion = /datum/dog_fashion/head/pirate
-
-/obj/item/clothing/head/pirate
-	var/datum/language/piratespeak/L = new
-
-/obj/item/clothing/head/pirate/equipped(mob/user, slot)
-	. = ..()
-	if(!ishuman(user))
-		return
-	if(slot == ITEM_SLOT_HEAD)
-		user.grant_language(/datum/language/piratespeak/, TRUE, TRUE, LANGUAGE_HAT)
-		to_chat(user, "<span class='boldnotice'>You suddenly know how to speak like a pirate!</span>")
-
-/obj/item/clothing/head/pirate/dropped(mob/user)
-	. = ..()
-	if(!ishuman(user))
-		return
-	var/mob/living/carbon/human/H = user
-	if(H.get_item_by_slot(ITEM_SLOT_HEAD) == src && !QDELETED(src)) //This can be called as a part of destroy
-		user.remove_language(/datum/language/piratespeak/, TRUE, TRUE, LANGUAGE_HAT)
-		to_chat(user, "<span class='boldnotice'>You can no longer speak like a pirate.</span>")
 
 /obj/item/clothing/head/pirate/captain
 	name = "pirate captain hat"
@@ -226,18 +213,6 @@
 	icon_state = "intern_hat"
 	item_state = "intern_hat"
 
-/obj/item/clothing/head/maidheadband/syndicate
-	name = "tactical maid headband"
-	desc = "Tacticute."
-	icon_state = "syndieheadband"
-	item_state = "syndieheadband"
-
-/obj/item/clothing/head/maidheadband/inteq
-	name = "inteq maid headband"
-	desc = "Tacticute."
-	icon_state = "inteqheadband"
-	item_state = "inteqheadband"
-
 /obj/item/clothing/head/inteq_peaked
 	name = "inteq peaked cap"
 	desc = "A peaked cap for Vanguards with a commanding authority, emblazoned with the golden badge of the IRMG."
@@ -249,6 +224,7 @@
 	name = "maid headband"
 	desc = "Just like from one of those chinese cartoons!"
 	icon_state = "maid_headband"
+	supports_variations = VOX_VARIATION
 
 /obj/item/clothing/head/cowboy
 	name = "cowboy hat"

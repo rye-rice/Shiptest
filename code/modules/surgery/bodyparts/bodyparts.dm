@@ -61,6 +61,16 @@
 	/// Current limb bleeding, increased when the limb takes brute damage over certain thresholds, decreased through bandages and cauterization
 	var/bleeding = 0
 
+	/// Whether this limb can decay, limiting its' ability to heal
+	var/uses_integrity = FALSE
+	/// How many hit points worth of integrity this limb has lost. 10 integrity = 10 HP
+	var/integrity_loss = 0
+	/// The amount of integrity_loss that this limb can have without any effects.
+	var/integrity_ignored = 20
+	/// If the limb has lost less than this amount of health, integrity loss should not be accrued.
+	/// Ignored if this is is greater or equal to the remaining health of the limb.
+	var/integrity_threshold = 15
+
 	/// So we know if we need to scream if this limb hits max damage
 	var/last_maxed
 	///If disabled, limb is as good as missing.
@@ -124,7 +134,11 @@
 	var/medium_burn_msg = "blistered"
 	var/heavy_burn_msg = "peeling away"
 
-	//band-aid for blood overlays & other external overlays until they get refactored
+	var/light_integrity_msg = "misaligned"
+	var/medium_integrity_msg = "twisted"
+	var/heavy_integrity_msg = "falling apart"
+
+//band-aid for blood overlays & other external overlays until they get refactored
 	var/stored_icon_state
 
 /obj/item/bodypart/Initialize()
@@ -155,9 +169,9 @@
 /obj/item/bodypart/examine(mob/user)
 	. = ..()
 	if(brute_dam > DAMAGE_PRECISION)
-		. += "<span class='warning'>This limb has [brute_dam > 30 ? "severe" : "minor"] bruising.</span>"
+		. += span_warning("This limb has [brute_dam > 30 ? "severe" : "minor"] bruising.")
 	if(burn_dam > DAMAGE_PRECISION)
-		. += "<span class='warning'>This limb has [burn_dam > 30 ? "severe" : "minor"] burns.</span>"
+		. += span_warning("This limb has [burn_dam > 30 ? "severe" : "minor"] burns.")
 
 /obj/item/bodypart/attack(mob/living/carbon/C, mob/user)
 	if(ishuman(C))
@@ -166,14 +180,14 @@
 			if(!H.get_bodypart(body_zone) && !animal_origin)
 				user.temporarilyRemoveItemFromInventory(src, TRUE)
 				if(!attach_limb(C))
-					to_chat(user, "<span class='warning'>[H]'s body rejects [src]!</span>")
+					to_chat(user, span_warning("[H]'s body rejects [src]!"))
 					forceMove(H.loc)
 				if(H == user)
-					H.visible_message("<span class='warning'>[H] jams [src] into [H.p_their()] empty socket!</span>",\
-					"<span class='notice'>You force [src] into your empty socket, and it locks into place!</span>")
+					H.visible_message(span_warning("[H] jams [src] into [H.p_their()] empty socket!"),\
+					span_notice("You force [src] into your empty socket, and it locks into place!"))
 				else
-					H.visible_message("<span class='warning'>[user] jams [src] into [H]'s empty socket!</span>",\
-					"<span class='notice'>[user] forces [src] into your empty socket, and it locks into place!</span>")
+					H.visible_message(span_warning("[user] jams [src] into [H]'s empty socket!"),\
+					span_notice("[user] forces [src] into your empty socket, and it locks into place!"))
 				return
 	..()
 
@@ -181,11 +195,11 @@
 	if(W.get_sharpness())
 		add_fingerprint(user)
 		if(!contents.len)
-			to_chat(user, "<span class='warning'>There is nothing left inside [src]!</span>")
+			to_chat(user, span_warning("There is nothing left inside [src]!"))
 			return
 		playsound(loc, 'sound/weapons/slice.ogg', 50, TRUE, -1)
-		user.visible_message("<span class='warning'>[user] begins to cut open [src].</span>",\
-			"<span class='notice'>You begin to cut open [src]...</span>")
+		user.visible_message(span_warning("[user] begins to cut open [src]."),\
+			span_notice("You begin to cut open [src]..."))
 		if(do_after(user, 54, target = src))
 			drop_organs(user, TRUE)
 	else
@@ -281,6 +295,18 @@
 				. = TRUE
 	return update_bodypart_damage_state() || .
 
+
+// Removes integrity from the limb, if it uses integrity.
+/obj/item/bodypart/proc/take_integrity_damage(loss)
+	if (uses_integrity)
+		integrity_loss = clamp(integrity_loss + loss, 0, max_damage+integrity_ignored)
+
+
+// Heals integrity for the limb, if it uses integrity.
+/obj/item/bodypart/proc/heal_integrity(amount)
+	if (uses_integrity)
+		integrity_loss = clamp(integrity_loss - amount, 0, max_damage)
+
 //Heals brute and burn damage for the organ. Returns 1 if the damage-icon states changed at all.
 //Damage cannot go below zero.
 //Cannot remove negative damage (i.e. apply damage)
@@ -289,6 +315,12 @@
 	if(required_status && !(bodytype & required_status)) //So we can only heal certain kinds of limbs, ie robotic vs organic.
 		return
 
+	if (uses_integrity && (burn > 0 || brute > 0))
+		var/max_heal = max(0, burn_dam + brute_dam - max(0,integrity_loss-integrity_ignored))
+		var/total_heal = min(brute,brute_dam)+min(burn,burn_dam) //in case we're trying to heal nonexistent dmg
+		var/heal_mult = min(1,max_heal/total_heal)
+		brute *= heal_mult
+		burn *= heal_mult
 	if(brute)
 		set_brute_dam(round(max(brute_dam - brute, 0), DAMAGE_PRECISION))
 		adjust_bleeding(-BLOOD_LOSS_DAMAGE_MAXIMUM * brute / max_damage)
@@ -296,7 +328,6 @@
 		set_burn_dam(round(max(burn_dam - burn, 0), DAMAGE_PRECISION))
 	if(stamina)
 		set_stamina_dam(round(max(stamina_dam - stamina, 0), DAMAGE_PRECISION))
-
 	if(owner)
 		if(can_be_disabled)
 			update_disabled()
@@ -365,6 +396,11 @@
 		total = max(total, stamina_dam)
 	return total
 
+///Returns damage that can be healed on a limb.
+/// integrity_cost: Optional, returns how much damage can be healed after losing X integrity
+/obj/item/bodypart/proc/get_curable_damage(integrity_cost=0)
+	var/total = brute_dam + burn_dam - max(0,(integrity_loss+integrity_cost)-integrity_ignored)
+	return total
 
 //Checks disabled status thresholds
 /obj/item/bodypart/proc/update_disabled()
@@ -630,7 +666,6 @@
 			bone_status = BONE_FLAG_NORMAL
 			RegisterSignal(owner, COMSIG_MOVABLE_MOVED, PROC_REF(on_mob_move))
 
-
 		draw_color = mutation_color
 		if(should_draw_greyscale) //Should the limb be colored?
 			draw_color ||= (species_color) || (skin_tone && skintone2hex(skin_tone))
@@ -788,7 +823,7 @@
 //	addtimer(CALLBACK(src, PROC_REF(break_bone_feedback), 1 SECONDS)) testing sommething
 
 ///obj/item/bodypart/proc/break_bone_feedback()
-	owner.visible_message("<span class='danger'>You hear a cracking sound coming from [owner]'s [name].</span>", "<span class='userdanger'>You feel something crack in your [name]!</span>", "<span class='danger'>You hear an awful cracking sound.</span>")
+	owner.visible_message(span_danger("You hear a cracking sound coming from [owner]'s [name]."), span_userdanger("You feel something crack in your [name]!"), span_danger("You hear an awful cracking sound."))
 	playsound(owner, pick(list('sound/health/bone/bone_break1.ogg','sound/health/bone/bone_break2.ogg','sound/health/bone/bone_break3.ogg','sound/health/bone/bone_break4.ogg','sound/health/bone/bone_break5.ogg','sound/health/bone/bone_break6.ogg')), 100, FALSE, -1)
 
 /obj/item/bodypart/proc/fix_bone()
@@ -802,11 +837,12 @@
 	if(bone_status != BONE_FLAG_BROKEN || !owner || istype(owner?.buckled, /obj/structure/bed/roller))
 		return
 
-	if(prob(5))
+	if(prob(owner.m_intent == MOVE_INTENT_RUN ? 5 : 1))
 		if(HAS_TRAIT(owner, TRAIT_ANALGESIA))
 			to_chat(owner, span_notice("[pick("You feel something shifting inside your [name].", "There is something moving inside [name].", "Something inside your [name] slips.")]"))
 		else
-			to_chat(owner, "<span class='danger'>[pick("You feel broken bones moving around in your [name]!", "There are broken bones moving around in your [name]!", "The bones in your [name] are moving around!")]</span>")
+			to_chat(owner, span_danger("[pick("You feel broken bones moving around in your [name]!", "There are broken bones moving around in your [name]!", "The bones in your [name] are moving around!")]"))
 		receive_damage(rand(1, 3))
 		//1-3 damage every 20 tiles for every broken bodypart.
 		//A single broken bodypart will give you an average of 650 tiles to run before you get a total of 100 damage and fall into crit
+

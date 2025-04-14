@@ -285,8 +285,8 @@ NEAR_DEATH_EXPERIENCE
 
 ## ROUNDSTART SILICON LAWS ###
 ## This controls what the AI's laws are at the start of the round.
-## Set to 0/commented out for "off", silicons will just start with Asimov.
-## Set to 1 for "custom", silicons will start with the custom laws defined in silicon_laws.txt. (If silicon_laws.txt is empty, the AI will spawn with asimov and Custom boards will auto-delete.)
+## Set to 0/commented out for "off", silicons will start with no laws.
+## Set to 1 for "custom", silicons will start with the custom laws defined in silicon_laws.txt. (If silicon_laws.txt is empty, the AI will spawn with Asimov and Custom boards will auto-delete.)
 ## Set to 2 for "random", silicons will start with a random lawset picked from random laws specified below.
 ## Set to 3 for "weighted random", using values in "silicon_weights.txt", a law will be selected, with weights specifed in that file.
 DEFAULT_LAWS 0
@@ -424,9 +424,6 @@ OVERFLOW_CAP -1
 ## This is disabled by default to make testing quicker, should be enabled on production servers or testing servers messing with lighting
 #STARLIGHT
 
-## Uncomment to bring back old grey suit assistants instead of the now default rainbow colored assistants.
-#GREY_ASSISTANTS
-
 ## Midround Antag (aka Mulligan antag) config options ###
 
 ## A time, in minutes, after which the midround antag system stops attempting to run and continuous rounds end immediately upon completion.
@@ -497,8 +494,8 @@ MAX_OVERMAP_EVENT_CLUSTERS 6
 ## Put the maximum amount of overmap events here
 MAX_OVERMAP_EVENTS 50
 
-## Put the maximum amount of dynamic overmap locations here
-MAX_OVERMAP_DYNAMIC_EVENTS 10
+## Put the maximum amount of dynamic (runtime loaded) overmap locations here
+MAX_OVERMAP_DYNAMIC_EVENTS 15
 
 ## Size of the overmap squared
 OVERMAP_SIZE 12
@@ -510,6 +507,9 @@ OVERMAP_GENERATOR_TYPE solar_system
 ## Size of overmap encounters, vertical and width with a 3 tile border
 OVERMAP_ENCOUNTER_SIZE 127
 
+## Max dynamic mission count active per ship
+MAX_DYNAMIC_MISSIONS 1
+
 ## The time required before a ship is allowed to bluespace jump. -1 disables it entirely
 ## In deciseconds, valid values are -1 to INFINITY
 BLUESPACE_JUMP_WAIT 12000
@@ -519,3 +519,7 @@ BLUESPACE_JUMP_WAIT 12000
 
 ## If admins are allowed to use the authentication server as a regular server for testing
 AUTH_ADMIN_TESTING
+
+## HEART COMMENDATIONS ###
+## Uncomment this if you'd like to enable commendation pollings for this percentage of players near the end of the round (5% suggested)
+COMMENDATION_PERCENT_POLL 0.05

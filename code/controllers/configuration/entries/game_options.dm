@@ -280,7 +280,6 @@
 	min_val = -1
 
 /datum/config_entry/flag/starlight
-/datum/config_entry/flag/grey_assistants
 
 /datum/config_entry/flag/allow_random_events	// Enables random events mid-round when set
 
@@ -383,3 +382,17 @@
 	max_val = 255
 	config_entry_value = 127
 	min_val = 127
+
+/datum/config_entry/number/max_dynamic_missions
+	config_entry_value = 1
+	min_val = 0
+
+/datum/config_entry/number/commendation_percent_poll
+	integer = FALSE
+
+/datum/config_entry/flag/auto_ship_spawn_locking
+	config_entry_value = TRUE
+
+//When the auto ship locking will start counting up, in minutes
+/datum/config_entry/number/ship_locking_starts
+	config_entry_value = 30

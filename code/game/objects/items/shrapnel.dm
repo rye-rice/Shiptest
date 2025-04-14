@@ -28,7 +28,7 @@
 	name = "\improper .38 bullet"
 
 /obj/item/shrapnel/bullet/c38/dumdum // .38 DumDum round
-	name = "\improper .38 DumDum bullet"
+	name = "\improper .38 prism bullet"
 	embedding = list(embed_chance=70, fall_chance=7, jostle_chance=7, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=5, jostle_pain_mult=6, rip_time=10, embed_chance_turf_mod=-100)
 
 /obj/item/shrapnel/bullet/tracker
@@ -56,8 +56,8 @@
 /obj/item/shrapnel/bullet/tracker/a858
 	name = "8x58mm Tracker"
 
-/obj/item/shrapnel/bullet/tracker/a65clip
-	name = "6.5x57mm Tracker"
+/obj/item/shrapnel/bullet/tracker/a75clip
+	name = "7.5x64mm Tracker"
 
 /obj/item/shrapnel/bullet/tracker/a308
 	name = ".308 Tracker"
@@ -153,7 +153,7 @@
 /obj/item/ammo_casing/caseless/shrapnel
 	name = "directional shrapnel burst :D"
 	desc = "I May Have Overreacted"
-	pellets = 4
+	pellets = 5
 	variance = 70
 	projectile_type = /obj/projectile/bullet/shrapnel/claymore
 	randomspread = TRUE
@@ -161,7 +161,7 @@
 /obj/item/ammo_casing/caseless/shrapnel/shred
 	name = "point blank directional shrapnel burst"
 	desc = "Claymores are lethal to armored infantry at point blank range."
-	pellets = 3
+	pellets = 4
 	variance = 50
 	projectile_type = /obj/projectile/bullet/shrapnel/claymore/pointbl
 	randomspread = TRUE

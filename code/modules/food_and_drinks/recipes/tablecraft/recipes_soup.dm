@@ -81,15 +81,15 @@
 	result = /obj/item/reagent_containers/food/snacks/soup/coldchili
 	subcategory = CAT_SOUP
 
-/datum/crafting_recipe/food/clownchili
-	name = "Chili con carnival"
+/datum/crafting_recipe/food/meatchili
+	name = "Chili con carne"
 	reqs = list(
 		/obj/item/reagent_containers/glass/bowl = 1,
 		/obj/item/reagent_containers/food/snacks/meat/cutlet = 2,
 		/obj/item/reagent_containers/food/snacks/grown/chili = 1,
 		/obj/item/reagent_containers/food/snacks/grown/tomato = 1,
 	)
-	result = /obj/item/reagent_containers/food/snacks/soup/clownchili
+	result = /obj/item/reagent_containers/food/snacks/soup/meatchili
 	subcategory = CAT_SOUP
 
 /datum/crafting_recipe/food/tomatosoup
@@ -221,7 +221,7 @@
 		/datum/reagent/water = 10,
 		/datum/reagent/consumable/sugar = 5,
 		/obj/item/reagent_containers/glass/bowl = 1,
-		/obj/item/reagent_containers/food/snacks/grown/potato/sweet = 2
+		/obj/item/reagent_containers/food/snacks/grown/sweet_potato = 2
 	)
 	result = /obj/item/reagent_containers/food/snacks/soup/sweetpotato
 	subcategory = CAT_SOUP

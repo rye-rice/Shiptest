@@ -35,7 +35,11 @@
 	del_on_death = 1
 	minbodytemp = 0
 	maxbodytemp = 600
-	loot = list(/obj/effect/decal/cleanable/robot_debris)
+	loot = list(
+		/obj/effect/decal/cleanable/robot_debris,
+		/obj/effect/spawner/random/waste/hivebot,
+		/obj/effect/spawner/random/waste/hivebot/part,
+		)
 
 	//yeah so it turns out that /simple_animal/hostile gets upset when you call say because say contains a sleep. so we have to do this on subtypes.
 	var/list/aggro_blurb = list("INFILTRATOR WITHIN AO!!", "TERMINATE HOSTILE!!", "DEFEND TERMINUS!!", "CODE 7-34!!")
@@ -75,7 +79,6 @@
 
 /mob/living/simple_animal/hostile/hivebot/death(gibbed)
 	do_sparks(3, TRUE, src)
-	new /obj/effect/spawner/random/waste/hivebot(loc)
 	..(TRUE)
 
 /mob/living/simple_animal/hostile/hivebot/ranged
@@ -87,10 +90,17 @@
 	ranged = TRUE
 	retreat_distance = 5
 	minimum_distance = 5
+	loot = list(
+		/obj/effect/decal/cleanable/robot_debris,
+		/obj/effect/spawner/random/waste/hivebot,
+		/obj/effect/spawner/random/waste/hivebot/part,
+		/obj/effect/spawner/random/waste/hivebot/part,
+		)
 
 /mob/living/simple_animal/hostile/hivebot/ranged/rapid
 	ranged = TRUE
 	rapid = 3
+	rapid_fire_delay = 4
 	casingtype = /obj/item/ammo_casing/c57x39mm
 	projectilesound = 'sound/weapons/gun/smg/sidewinder.ogg'
 
@@ -108,7 +118,14 @@
 	projectilesound = 'sound/weapons/gun/rifle/hydra.ogg'
 	melee_damage_lower = 12
 	melee_damage_upper = 20
-	move_to_delay = 7
+	move_to_delay = 10
+	loot = list(
+		/obj/effect/decal/cleanable/robot_debris,
+		/obj/effect/spawner/random/waste/hivebot/more,
+		/obj/effect/spawner/random/waste/hivebot/part/heavy,
+		/obj/effect/spawner/random/waste/hivebot/part,
+		/obj/effect/spawner/random/waste/hivebot/part,
+		)
 
 /mob/living/simple_animal/hostile/hivebot/defender //slave to the system
 	name = "core hivebot"
@@ -124,6 +141,7 @@
 	casingtype = /obj/item/ammo_casing/mm712x82
 	projectilesound = 'sound/weapons/gun/rifle/hydra.ogg'
 	rapid = 3
+	rapid_fire_delay = 4
 
 	retreat_distance = 3
 	minimum_distance = 5
@@ -131,7 +149,22 @@
 	melee_damage_lower = 15
 	melee_damage_upper = 28
 
-	move_to_delay = 15
+	move_to_delay = 20
+
+	loot = list(
+		/obj/effect/decal/cleanable/robot_debris,
+		/obj/effect/spawner/random/waste/hivebot/more,
+		/obj/effect/spawner/random/waste/hivebot/part/superheavy,
+		/obj/effect/spawner/random/waste/hivebot/part/heavy,
+		/obj/effect/spawner/random/waste/hivebot/part/heavy,
+		)
+
+/mob/living/simple_animal/hostile/hivebot/defender/death(gibbed)
+	//once we get better sprites i want this to be like the claw's death. aka fucking cool.
+	radiation_pulse(src, 500)
+	explosion(src, 0,1,3,3,)
+	..(TRUE)
+
 
 /mob/living/simple_animal/hostile/hivebot/defender/Initialize(mapload)
 	. = ..()
@@ -158,24 +191,24 @@
 	if(istype(target, /obj/machinery))
 		var/obj/machinery/fixable = target
 		if(fixable.obj_integrity >= fixable.max_integrity)
-			to_chat(src, "<span class='warning'>Diagnostics indicate that this machine is at peak integrity.</span>")
+			to_chat(src, span_warning("Diagnostics indicate that this machine is at peak integrity."))
 			return
-		to_chat(src, "<span class='warning'>You begin repairs...</span>")
+		to_chat(src, span_warning("You begin repairs..."))
 		if(do_after(src, 50, target = fixable))
 			fixable.obj_integrity = fixable.max_integrity
 			do_sparks(3, TRUE, fixable)
-			to_chat(src, "<span class='warning'>Repairs complete.</span>")
+			to_chat(src, span_warning("Repairs complete."))
 		return
 	if(istype(target, /mob/living/simple_animal/hostile/hivebot))
 		var/mob/living/simple_animal/hostile/hivebot/fixable = target
 		if(fixable.health >= fixable.maxHealth)
-			to_chat(src, "<span class='warning'>Diagnostics indicate that this unit is at peak integrity.</span>")
+			to_chat(src, span_warning("Diagnostics indicate that this unit is at peak integrity."))
 			return
-		to_chat(src, "<span class='warning'>You begin repairs...</span>")
+		to_chat(src, span_warning("You begin repairs..."))
 		if(do_after(src, 50, target = fixable))
 			fixable.revive(full_heal = TRUE, admin_revive = TRUE)
 			do_sparks(3, TRUE, fixable)
-			to_chat(src, "<span class='warning'>Repairs complete.</span>")
+			to_chat(src, span_warning("Repairs complete."))
 		return
 	return ..()
 
@@ -190,12 +223,12 @@
 	var/mob/living/simple_animal/hostile/hivebot/H = owner
 	var/turf/T = get_turf(H)
 	if(T.density)
-		to_chat(H, "<span class='warning'>There's already something on this tile!</span>")
+		to_chat(H, span_warning("There's already something on this tile!"))
 		return
-	to_chat(H, "<span class='warning'>You begin to create a foam wall at your position...</span>")
+	to_chat(H, span_warning("You begin to create a foam wall at your position..."))
 	if(do_after(H, 50, target = H))
 		for(var/obj/structure/foamedmetal/FM in T.contents)
-			to_chat(H, "<span class='warning'>There's already a foam wall on this tile!</span>")
+			to_chat(H, span_warning("There's already a foam wall on this tile!"))
 			return
 		new /obj/structure/foamedmetal(H.loc)
 		playsound(get_turf(H), 'sound/effects/extinguish.ogg', 50, TRUE, -1)

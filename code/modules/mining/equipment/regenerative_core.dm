@@ -4,7 +4,7 @@
 	icon = 'icons/obj/chemical/medicine.dmi'
 	icon_state = "bottle19"
 	desc = "Inject certain types of monster organs with this stabilizer to preserve their healing powers indefinitely."
-	w_class = WEIGHT_CLASS_TINY
+	w_class = WEIGHT_CLASS_NORMAL
 	custom_price = 400
 
 /obj/item/hivelordstabilizer/afterattack(obj/item/organ/M, mob/user, proximity)
@@ -13,11 +13,11 @@
 		return
 	var/obj/item/organ/regenerative_core/C = M
 	if(!istype(C, /obj/item/organ/regenerative_core))
-		to_chat(user, "<span class='warning'>The stabilizer only works on certain types of monster organs, generally regenerative in nature.</span>")
+		to_chat(user, span_warning("The stabilizer only works on certain types of monster organs, generally regenerative in nature."))
 		return
 
 	C.preserved()
-	to_chat(user, "<span class='notice'>You inject the [M] with the stabilizer. It will no longer go inert.</span>")
+	to_chat(user, span_notice("You inject the [M] with the stabilizer. It will no longer go inert."))
 	qdel(src)
 
 /************************Hivelord core*******************/
@@ -27,6 +27,7 @@
 	icon_state = "roro core 2"
 	item_flags = NOBLUDGEON
 	slot = ORGAN_SLOT_REGENERATIVE_CORE
+	organ_flags = null
 	force = 0
 	actions_types = list(/datum/action/item_action/organ_action/use)
 	var/inert = 0
@@ -60,7 +61,7 @@
 
 /obj/item/organ/regenerative_core/ui_action_click()
 	if(inert)
-		to_chat(owner, "<span class='notice'>[src] breaks down as it tries to activate.</span>")
+		to_chat(owner, span_notice("[src] breaks down as it tries to activate."))
 	else
 		owner.adjustBruteLoss(-100) //previously heal proc
 		owner.adjustFireLoss(-100)
@@ -85,10 +86,10 @@
 		if(inert)
 			to_chat(user, span_notice("[src] has decayed past usabality."))
 			return
-		else
-			if(H.stat == DEAD)
-				to_chat(user, span_notice("[src] is useless on the dead."))
-				return
+		if(H.stat == DEAD)
+			to_chat(user, span_notice("[src] is useless on the dead."))
+			return
+		if(do_after(user, 10, target))
 			if(H != user)
 				H.visible_message(span_notice("[user] smears [src] across [H]... malignant black tendrils entangle and reinforce [H.p_their()] flesh!"))
 				SSblackbox.record_feedback("nested tally", "hivelord_core", 1, list("[type]", "used", "other"))
@@ -96,6 +97,7 @@
 				to_chat(user, span_notice("You smear [src] across your body. Malignant black tendrils start to grow around the application site, reinforcing your flesh!"))
 				SSblackbox.record_feedback("nested tally", "hivelord_core", 1, list("[type]", "used", "self"))
 			H.apply_status_effect(STATUS_EFFECT_REGENERATIVE_CORE)
+			H.reagents.add_reagent(/datum/reagent/medicine/soulus,15)
 			H.force_scream()
 			SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "core", /datum/mood_event/healsbadman)
 			qdel(src)
@@ -113,11 +115,11 @@
 	. = ..()
 	if(!preserved && !inert)
 		preserved(TRUE)
-		owner.visible_message("<span class='notice'>[src] stabilizes as it's inserted.</span>")
+		owner.visible_message(span_notice("[src] stabilizes as it's inserted."))
 
 /obj/item/organ/regenerative_core/Remove(mob/living/carbon/M, special = 0)
 	if(!inert && !special)
-		owner.visible_message("<span class='notice'>[src] rapidly decays as it's removed.</span>")
+		owner.visible_message(span_notice("[src] rapidly decays as it's removed."))
 		go_inert()
 	return ..()
 
