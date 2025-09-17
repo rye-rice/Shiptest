@@ -7,6 +7,8 @@
 	var/parallax_movedir
 	/// Weather controller for this level
 	var/datum/weather_controller/weather_controller
+	/// Linked day and night controller for this level
+	var/datum/day_night_controller/day_night_controller
 	/// List of all virtual levels this map zone contains
 	var/list/virtual_levels = list()
 
