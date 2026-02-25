@@ -268,11 +268,19 @@
 
 	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city, /datum/cargo_market/general_store)
 
-/datum/supply_pack/ammo/a4570_box/match
+/datum/supply_pack/ammo/a4570_match
 	name = ".45-70 Match Crate"
 	desc = "Contains a 24-round box containing devastatingly powerful .45-70 caliber ammunition, that travels faster, pierces armour better, and ricochets off targets."
 	contains = list(/obj/item/storage/box/ammo/a4570_match)
 	cost = 235
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city, /datum/cargo_market/general_store)
+
+/datum/supply_pack/ammo/a4570_hp
+	name = ".45-70 Hollow Point Ammo Box Crate"
+	desc = "Contains a 24-round box containing devastatingly powerful .45-70 hollow point caliber ammunition."
+	contains = list(/obj/item/storage/box/ammo/a4570_hp)
+	cost = 260
 
 	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city, /datum/cargo_market/general_store)
 

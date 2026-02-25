@@ -118,6 +118,13 @@
 	faction_discount = 50 //this shouldnt be 3k but if it is...
 	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
+/datum/supply_pack/medical/filter
+	name = "Blood Filter Crate"
+	desc = "A tool for use in a surgery to filter toxins out of a patient."
+	cost = 500
+	contains = list(/obj/item/blood_filter)
+	crate_name ="surgical supplies crate"
+
 /datum/supply_pack/medical/disk
 	name = "Advanced Surgical Procedure Disk"
 	desc = "A disk containing Advanced T2 surgical procedures for wound tending. Requires an Operating Console."
@@ -174,40 +181,6 @@
 	faction_discount = 25
 	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
-/datum/supply_pack/medical/surplus
-	name = "Medical Surplus Crate"
-	desc = "Contains an assortment of medical supplies haphazardly pulled from storage. German doctor not included."
-	cost = 3000
-	contains = list(/obj/item/reagent_containers/glass/bottle/charcoal,
-					/obj/item/reagent_containers/glass/bottle/epinephrine,
-					/obj/item/reagent_containers/glass/bottle/morphine,
-					/obj/item/reagent_containers/glass/bottle/toxin,
-					/obj/item/reagent_containers/glass/beaker/large,
-					/obj/item/reagent_containers/pill/insulin,
-					/obj/item/stack/medical/gauze,
-					/obj/item/storage/box/beakers,
-					/obj/item/storage/box/medigels,
-					/obj/item/storage/box/syringes,
-					/obj/item/storage/box/bodybags,
-					/obj/item/storage/firstaid/regular,
-					/obj/item/storage/firstaid/o2,
-					/obj/item/storage/firstaid/toxin,
-					/obj/item/storage/firstaid/brute,
-					/obj/item/storage/firstaid/fire,
-					/obj/item/defibrillator/loaded,
-					/obj/item/reagent_containers/blood/OMinus,
-					/obj/item/reagent_containers/pill/neurine,
-					/obj/item/vending_refill/medical)
-	crate_name = "medical surplus crate"
-	faction = /datum/faction/syndicate/suns
-	faction_discount = 25
-	markets = list(/datum/cargo_market/outpost)
-
-/datum/supply_pack/medical/surplus/fill(obj/structure/closet/crate/C)
-	for(var/i in 1 to 7)
-		var/item = pick(contains)
-		new item(C)
-
 /datum/supply_pack/medical/salglucanister
 	name = "Heavy-Duty Saline Canister"
 	desc = "Contains a bulk supply of saline-glucose condensed into a single canister that should last a long time, with a large pump to fill containers with. Direct injection of saline should be left to medical professionals as the pump is capable of overdosing patients."
@@ -229,6 +202,12 @@
 	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 
+/datum/supply_pack/medical/medigel_crate
+	name = "Empty Medical Gel Crate"
+	desc = "Contains a box of seven empty medical gels, for applying your own chemical mixes."
+	cost = 700
+	contains = list(/obj/item/storage/box/medigels)
+	crate_name = "empty medical gel crate"
 
 /* Hypospray supplies */
 
