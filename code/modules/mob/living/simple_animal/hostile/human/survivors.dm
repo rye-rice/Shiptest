@@ -38,6 +38,7 @@
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	melee_damage_lower = 15
 	melee_damage_upper = 15
+	should_create_copy = FALSE
 
 /mob/living/simple_animal/hostile/human/hermit/survivor/passive
 	name = "Hermit Villager"
@@ -72,7 +73,7 @@
 	l_hand = /obj/item/shield/buckler
 	projectile_deflect_chance = 25
 
-/mob/living/simple_animal/hostile/asteroid/whitesands/survivor/Initialize(mapload)
+/mob/living/simple_animal/hostile/human/hermit/survivor/Initialize(mapload)
 	. = ..()
 	var/mob/living/carbon/human/ai_boarder/hermit/survivor/newhermit = new(loc)
 	newhermit.faction = faction.Copy()
@@ -94,6 +95,7 @@
 	desc ="A wild-eyed figure. Watch out- he has a shotgun, and he remembers just enough of his old life to use it!"
 	mob_spawner = /obj/effect/mob_spawn/human/corpse/damaged/whitesands
 	r_hand = /obj/item/gun/ballistic/rifle/polymer
+	should_create_copy = FALSE
 
 /mob/living/simple_animal/hostile/human/hermit/ranged/hunter/sentry
 	name = "Hermit Sentry"
@@ -134,6 +136,7 @@
 	casingtype = /obj/item/ammo_casing/c46x30mm/recycled
 	mob_spawner = /obj/effect/mob_spawn/human/corpse/damaged/whitesands
 	r_hand = /obj/item/gun/ballistic/automatic/smg/skm_carbine
+	should_create_copy = FALSE
 
 /mob/living/simple_animal/hostile/human/hermit/ranged/gunslinger/Initialize(mapload)
 	. = ..()
@@ -153,6 +156,13 @@
 	projectiletype = /obj/projectile/beam/laser/eoehoma/hermit
 	mob_spawner = /obj/effect/mob_spawn/human/corpse/damaged/whitesands
 	r_hand = /obj/item/gun/energy/e_gun/e11
+	should_create_copy = FALSE
+
+/mob/living/simple_animal/hostile/human/hermit/ranged/e11/Initialize(mapload)
+	. = ..()
+	var/mob/living/carbon/human/ai_boarder/hermit/e11/newhermit = new(loc)
+	newhermit.faction = faction.Copy()
+	return INITIALIZE_HINT_QDEL
 
 /mob/living/simple_animal/hostile/human/hermit/ranged/tesla_rifle
 	name = "Hermit Guardsman"
@@ -166,11 +176,7 @@
 	r_hand = /obj/item/gun/ballistic/automatic/smg/skm_carbine
 	mob_spawner = /obj/effect/mob_spawn/human/corpse/damaged/whitesands
 
-/mob/living/simple_animal/hostile/human/hermit/ranged/e11/Initialize(mapload)
-	. = ..()
-	var/mob/living/carbon/human/ai_boarder/hermit/e11/newhermit = new(loc)
-	newhermit.faction = faction.Copy()
-	return INITIALIZE_HINT_QDEL
+
 
 //survivor corpses
 

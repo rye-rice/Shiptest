@@ -54,9 +54,11 @@
 	///Steals the armor datum from this type of armor
 	var/obj/item/clothing/armor_base
 
+	var/should_create_copy = TRUE
+
 /mob/living/simple_animal/hostile/human/Initialize(mapload)
 	. = ..()
-	if(mob_spawner)
+	if(mob_spawner && should_create_copy)
 		var/mob/living/carbon/human/ai_boarder/simplemob/newhuman = new(loc)
 		newhuman.faction = faction.Copy()
 
@@ -78,6 +80,8 @@
 				O.backpack_contents += our_gun.default_ammo_type
 		O.equip(newhuman)
 
+		ADD_TRAIT(src, TRAIT_NOBREATH, "knpc")
+
 		return INITIALIZE_HINT_QDEL
 /*
 		apply_dynamic_human_appearance(src, mob_spawn_path = mob_spawner, r_hand = r_hand, l_hand = l_hand)
@@ -98,13 +102,13 @@
 		else if(ispath(l_hand, /obj/item/gun))
 			var/obj/item/gun/our_gun = l_hand
 			spread = our_gun.spread
-
+*/
 	if(ispath(armor_base, /obj/item/clothing))
 		//sigh. if only we could get the initial() value of list vars
 		var/obj/item/clothing/instance = new armor_base()
 		armor = instance.armor
 		qdel(instance)
-*/
+
 /mob/living/simple_animal/hostile/human/drop_loot()
 	. = ..()
 	if(QDELING(src))

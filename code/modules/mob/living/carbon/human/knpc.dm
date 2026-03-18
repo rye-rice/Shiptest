@@ -332,7 +332,7 @@ GLOBAL_LIST_EMPTY(knpcs)
 			/obj/item/stack/sheet/sinew = 5,
 			/obj/item/stack/sheet/bone = 5,
 			/obj/item/melee/knife/combat = 3,
-			/obj/item/reagent_containers/food/snacks/ration/pack = 30
+			/obj/effect/spawner/random/food_or_drink/ration = 30
 			)
 		)
 	if (prob(25)) //mayhaps a medkit
@@ -353,14 +353,14 @@ GLOBAL_LIST_EMPTY(knpcs)
 	//pockets
 	if(survivor_type == "survivor") //could also use fleshing out
 		if(prob(30))
-			l_pocket = /obj/item/reagent_containers/food/snacks/meat/steak/goliath
+			l_pocket = /obj/item/food/meat/steak/goliath
 		else
 			l_pocket = /obj/item/tank/internals/emergency_oxygen/engi
 
 	if(survivor_type == "hunter" || survivor_type == "e11")
 		l_pocket = /obj/item/tank/internals/emergency_oxygen/double
 		if (prob(20))
-			l_pocket = /obj/item/reagent_containers/food/snacks/meat/steak/goliath
+			l_pocket = /obj/item/food/meat/steak/goliath
 
 	if(survivor_type == "gunslinger" || survivor_type == "commando")
 		if(prob(50))
@@ -375,7 +375,7 @@ GLOBAL_LIST_EMPTY(knpcs)
 	picked = pick_weight(list(
 		/obj/item/clothing/mask/gas = 40,
 		/obj/item/clothing/mask/gas/explorer = 20,
-		/obj/item/clothing/mask/gas/explorer/old = 20,
+		/obj/item/clothing/mask/gas/explorer = 20,
 		/obj/item/clothing/mask/gas/syndicate = 20,
 		/obj/item/clothing/mask/breath = 5,
 		/obj/item/clothing/mask/breath/medical = 5,
@@ -444,10 +444,11 @@ GLOBAL_LIST_EMPTY(knpcs)
 			))
 			head =	pick_weight(list(
 				/obj/item/clothing/head/helmet/bulletproof/x11 = 40,
-				/obj/item/clothing/head/helmet/bulletproof/m10 = 40,
+				/obj/item/clothing/head/helmet/bulletproof/x11/clip = 40,
+				/obj/item/clothing/head/helmet/bulletproof/x11/nanotrasen = 40,
+				/obj/item/clothing/head/helmet/bulletproof/x11/ramzi = 40,
 
 				/obj/item/clothing/head/helmet/swat = 20,
-				/obj/item/clothing/head/helmet/swat/nanotrasen = 20,
 				/obj/item/clothing/head/helmet/gezena = 20,
 
 			))
@@ -469,7 +470,10 @@ GLOBAL_LIST_EMPTY(knpcs)
 				/obj/item/gun/ballistic/automatic/pistol/spitter = 20,
 				/obj/item/gun/ballistic/automatic/smg/pounder = 4,
 				/obj/item/gun/ballistic/automatic/smg/firestorm = 4,
-				/obj/item/gun/ballistic/automatic/smg/vector = 4,
+				/obj/item/gun/ballistic/automatic/smg/resolution = 4,
+				/obj/item/gun/ballistic/automatic/smg/sidewinder = 4,
+				/obj/item/gun/ballistic/automatic/smg/cobra/indie = 4,
+				/obj/item/gun/ballistic/automatic/smg/expedition = 4,
 				/obj/item/gun/ballistic/automatic/smg/cm5 = 4,
 				/obj/item/gun/ballistic/automatic/smg/skm_carbine/inteq = 4,
 				/obj/item/gun/ballistic/automatic/smg/cobra = 4,
@@ -1046,7 +1050,7 @@ This is to account for sec Ju-Jitsuing boarding commandos.
 						target.attackby(A, H)
 						A.afterattack(target, H, TRUE)
 						proc_fist = FALSE
-			else
+			else if (A)
 				target.attackby(A, H)
 				A.afterattack(target, H, TRUE)
 				proc_fist = FALSE
@@ -1090,7 +1094,7 @@ This is to account for sec Ju-Jitsuing boarding commandos.
 
 			else
 				//So they actually execute the curbstomp.
-				if(dist <= 1)
+				if(dist <= 1 || get_turf(target))
 					H.forceMove(get_turf(target))
 				H.zone_selected = BODY_ZONE_HEAD
 				//Curbstomp!
