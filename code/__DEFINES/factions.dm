@@ -12,8 +12,10 @@
 	#define FACTION_VIGILITAS "Vigilitas Interstellar"
 #define FACTION_FRONTIERSMEN "Frontiersmen Fleet"
 #define FACTION_PGF "Pan-Gezena Federation"
+#define FACTION_ZOHIL "Zohil Explorat"
 #define FACTION_INDEPENDENT "Independent"
 #define FACTION_RAMZI "Ramzi Clique"
+#define FACTION_UNKNOWN "Unknown"
 
 #define PREFIX_SYNDICATE list("SEV", "SSV")
 	#define PREFIX_NGR list("NGRV")
@@ -29,9 +31,11 @@
 	#define PREFIX_VIGILITAS list("VISV")
 #define PREFIX_FRONTIERSMEN list("FFV")
 #define PREFIX_PGF list("PGF", "PGFMC", "PGFN", "PGFS")
+#define PREFIX_ZOHIL list("ZESV")
 #define PREFIX_INDEPENDENT list("SV", "IMV", "ISV", "MSV")
 #define PREFIX_RAMZI list("RCSV")
 #define PREFIX_NONE list()
 
-#define FACTION_SORT_DEFAULT 0
-#define FACTION_SORT_INDEPENDENT 100
+#define FACTION_SORT_INDEPENDENT 100 // Independents first because of majority
+#define FACTION_SORT_DEFAULT 50 // Everything else in the middle
+#define FACTION_SORT_ASPAWN 0 // Frontiersmen and Ramzi on the bottom because of rarity
