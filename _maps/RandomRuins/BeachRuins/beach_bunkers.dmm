@@ -1362,7 +1362,6 @@
 /turf/open/floor/concrete/reinforced,
 /area/ruin/beach/bunker/side_two)
 "re" = (
-/mob/living/basic/mouse/rat,
 /obj/item/reagent_containers/food/drinks/bottle/moonshine{
 	pixel_y = 3;
 	pixel_x = -8
@@ -1374,6 +1373,11 @@
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/effect/decal/cleanable/blood/gibs{
 	pixel_y = -5
+	},
+/obj/item/food/deadmouse{
+	layer = 2.9;
+	pixel_x = 8;
+	pixel_y = 6
 	},
 /turf/open/floor/concrete/slab_4,
 /area/ruin/beach/bunker/side_one)
@@ -3649,7 +3653,6 @@
 /turf/open/floor/concrete/reinforced,
 /area/ruin/beach/bunker/side_one)
 "US" = (
-/mob/living/basic/mouse/rat,
 /obj/item/food/deadmouse{
 	pixel_y = 5
 	},
@@ -3657,6 +3660,10 @@
 	icon_state = "vomit_3"
 	},
 /obj/effect/decal/cleanable/dirt/dust,
+/obj/item/food/deadmouse{
+	pixel_y = 13;
+	pixel_x = -7
+	},
 /turf/open/floor/concrete/slab_4,
 /area/ruin/beach/bunker/side_one)
 "Vb" = (

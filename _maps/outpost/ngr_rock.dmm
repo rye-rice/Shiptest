@@ -2530,6 +2530,12 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/dirt/dust,
+/obj/structure/fluff{
+	name = "vehicle battery";
+	desc = "An old, battery-acid crusted vehicle cell, completely useless, and probably a hazard to even breath next to.";
+	icon = 'icons/obj/power.dmi';
+	icon_state = "bg-cell"
+	},
 /turf/open/floor/plating{
 	icon_state = "platingdmg1"
 	},
@@ -9212,6 +9218,12 @@
 "tH" = (
 /obj/effect/turf_decal/techfloor{
 	dir = 4
+	},
+/obj/structure/fluff{
+	name = "vehicle battery";
+	desc = "An old, battery-acid crusted vehicle cell, completely useless, and probably a hazard to even breath next to.";
+	icon = 'icons/obj/power.dmi';
+	icon_state = "bg-cell"
 	},
 /turf/open/floor/plating/rust,
 /area/outpost/vacant_rooms/office)
@@ -18201,15 +18213,6 @@
 	},
 /turf/open/floor/plasteel/tech,
 /area/outpost/operations)
-"Ns" = (
-/obj/structure/fluff{
-	name = "vehicle battery";
-	desc = "An old, battery-acid crusted vehicle cell, completely useless, and probably a hazard to even breath next to.";
-	icon = 'icons/obj/power.dmi';
-	icon_state = "bg-cell"
-	},
-/turf/open/water/tar,
-/area/outpost/vacant_rooms/office)
 "Nu" = (
 /obj/effect/turf_decal/borderfloorblack{
 	dir = 1
@@ -26629,7 +26632,7 @@ uj
 MP
 tO
 fx
-Ns
+WX
 WX
 NX
 Ur
@@ -26865,7 +26868,7 @@ bd
 qU
 WT
 jj
-Ns
+WX
 AZ
 AZ
 OO
