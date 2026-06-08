@@ -9,6 +9,8 @@
 	pixel_shift_y = 4
 	wield_delay = 0.1 SECONDS
 
+	//var/datum/simple_beam/target_beam
+
 /obj/item/attachment/laser_sight/toggle_attachment(obj/item/gun/gun, mob/user)
 	. = ..()
 
@@ -30,6 +32,8 @@
 	return FALSE
 
 /obj/item/attachment/laser_sight/proc/make_laser(obj/item/gun/gun, user, pointblank, atom/pbtarget, message, params)
+	//target_beam = new(src, null, 'icons/effects/beam.dmi', "1-full", COLOR_RED, 127)
+
 	var/obj/projectile/beam/beam_rifle/hitscan/aiming_beam/fake_laser_projectile = new
 	fake_laser_projectile.gun = src
 
@@ -43,4 +47,5 @@
 	else
 		fake_laser_projectile.preparePixelProjectile(targloc, user, mouse_modifiers, 0)
 
+	fake_laser_projectile.parent_object = src
 	fake_laser_projectile.fire()

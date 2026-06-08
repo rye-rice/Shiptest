@@ -838,3 +838,6 @@
 
 //from base of [/obj/item/organ/lungs/check_breath]: (datum/gas_mixture/breath, received_pressure_mult)
 #define COMSIG_CARBON_INHALED_GAS "carbon_inhaled_gas"
+
+/// From base of datum/element/movetype_handler/on_movement_type_trait_loss: (flag)
+#define COMSIG_LASERATTACH_DESTROY_BEAM "laserattatch_destroy_beam"

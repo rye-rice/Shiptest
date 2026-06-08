@@ -388,6 +388,8 @@
 	var/mutable_appearance/emissive_look = emissive_appearance(icon, icon_state, layer)
 	add_overlay(emissive_look)
 
+/obj/effect/temp_visual/impact_effect/laser_sight/proc/parent_requests_destroy()
+	qdel(src)
 
 /obj/effect/temp_visual/heart
 	name = "heart"
