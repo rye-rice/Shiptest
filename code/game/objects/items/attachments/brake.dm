@@ -35,9 +35,9 @@
 
 /obj/item/attachment/muzzle_brake/proc/handle_movement(obj/projectile/projectile)
 	var/actualrange = -(projectile.range - projectile.decayedRange)
-	if(actualrange >= 3)
+	if(actualrange >= 2)
 		projectile.alpha = 150
-	if(actualrange > 4)
+	if(actualrange > 3)
 		projectile.alpha = projectile::alpha
 		projectile.set_light_on(TRUE)
 		projectile.UnregisterSignal(src, COMSIG_MOVABLE_MOVED)
