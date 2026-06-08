@@ -383,10 +383,11 @@
 	duration = 1 SECONDS
 	layer = ABOVE_MOB_LAYER
 
-/obj/effect/temp_visual/impact_effect/laser_sight/Initialize(mapload, x, y)
+/obj/effect/temp_visual/impact_effect/laser_sight/Initialize(mapload, x, y, obj_to_get_destroyedby)
 	. = ..()
 	var/mutable_appearance/emissive_look = emissive_appearance(icon, icon_state, layer)
 	add_overlay(emissive_look)
+	RegisterSignal(obj_to_get_destroyedby, COMSIG_LASERATTACH_DESTROY_BEAM, PROC_REF(parent_requests_destroy))
 
 /obj/effect/temp_visual/impact_effect/laser_sight/proc/parent_requests_destroy()
 	qdel(src)

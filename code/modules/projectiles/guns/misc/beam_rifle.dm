@@ -538,10 +538,19 @@
 	hitscan_light_color_override = "#FF0000"
 	reflectable = REFLECT_FAKEPROJECTILE
 	near_miss_sound = FALSE
+	var/obj/parent_object
+
+/obj/projectile/beam/beam_rifle/hitscan/aiming_beam/fire(angle, atom/direct_target)
+	if(parent_object)
+		RegisterSignal(parent_object, COMSIG_LASERATTACH_DESTROY_BEAM, PROC_REF(parent_requests_destroy))
+	return ..()
 
 /obj/projectile/beam/beam_rifle/hitscan/aiming_beam/prehit_pierce(atom/target)
 	do_overlay(target)
 	return PROJECTILE_DELETE_WITHOUT_HITTING
+
+/obj/projectile/beam/beam_rifle/hitscan/aiming_beam/proc/parent_requests_destroy()
+	qdel(src)
 
 /obj/projectile/beam/beam_rifle/hitscan/aiming_beam/on_hit(atom/target, blocked = FALSE, piercing_hit = FALSE)
 	qdel(src)
@@ -553,4 +562,4 @@
 	var/x_pixel = target.pixel_x + rand(-8,8)
 	var/y_pixel = target.pixel_y + rand(-8,8)
 
-	new /obj/effect/temp_visual/impact_effect/laser_sight(targloc, x_pixel, y_pixel)
+	new /obj/effect/temp_visual/impact_effect/laser_sight(targloc, x_pixel, y_pixel, parent_object)

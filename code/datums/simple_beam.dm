@@ -41,6 +41,24 @@
 
 	its_beam.transform = translation
 
+/datum/simple_beam/proc/set_origin(new_origin)
+	origin.vis_contents -= its_beam
+	if(target)
+		UnregisterSignal(target, COMSIG_MOVABLE_MOVED)
+		UnregisterSignal(origin, COMSIG_MOVABLE_MOVED)
+
+	origin = new_origin
+	origin.vis_contents += its_beam
+	if(target)
+		its_beam.vis_flags &= ~VIS_HIDE
+		RegisterSignal(target, COMSIG_MOVABLE_MOVED, PROC_REF(draw))
+		RegisterSignal(origin, COMSIG_MOVABLE_MOVED, PROC_REF(draw))
+
+		draw()
+	else
+		its_beam.vis_flags |= VIS_HIDE
+
+
 /datum/simple_beam/proc/set_target(new_target)
 	if(target)
 		UnregisterSignal(target, COMSIG_MOVABLE_MOVED)
