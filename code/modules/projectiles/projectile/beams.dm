@@ -31,10 +31,17 @@
 	ricochets_max = 50	//Honk!
 	ricochet_chance = 90
 	reflectable = REFLECT_NORMAL
+	///are we emissive?
+	var/is_emissive = TRUE
 
 /obj/projectile/beam/throw_atom_into_space()
 	return
 
+/obj/projectile/beam/Initialize()
+	. = ..()
+	if(is_emissive)
+		var/mutable_appearance/emissive_look = emissive_appearance(icon, icon_state, layer)
+		add_overlay(emissive_look)
 
 /obj/projectile/beam/laser
 	tracer_type = /obj/effect/projectile/tracer/laser
@@ -96,17 +103,16 @@
 	pass_flags = PASSTABLE | PASSGRILLE //does not go through glass
 
 /obj/projectile/beam/laser/eoehoma
-	icon_state = "heavylaser"
+	icon_state = "eoehoma_laser"
 	damage = 35
 	armour_penetration = 0
 	speed = 0.8
 
 /obj/projectile/beam/laser/eoehoma/wasp
-	icon_state = "heavylaser"
 	damage = 30
 
 /obj/projectile/beam/laser/eoehoma/heavy
-	icon_state = "heavylaser"
+	icon_state = "eoehoma_laser_heavy"
 	damage = 40
 	speed = 1
 
@@ -116,13 +122,24 @@
 	return BULLET_ACT_HIT
 
 /obj/projectile/beam/laser/assault
-	icon_state = "heavylaser"
+	icon_state = "eoehoma_laser_heavy"
 	damage = 25
 	armour_penetration = 20
 
+/obj/projectile/beam/laser/eoehoma/mining/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!isclosedturf(target))
+		return BULLET_ACT_HIT
+	if(ismineralturf(target))
+		damage *= 4
+	else//wall destryoing niche?
+		damage *= 2
+
+	return BULLET_ACT_HIT
+
 /obj/projectile/beam/laser/heavylaser
 	name = "heavy laser"
-	icon_state = "heavylaser"
+	icon_state = "eoehoma_laser_heavy"
 	damage = 40
 	tracer_type = /obj/effect/projectile/tracer/heavy_laser
 	muzzle_type = /obj/effect/projectile/muzzle/heavy_laser
@@ -203,13 +220,13 @@
 
 /obj/projectile/beam/laser/slug
 	name = "laser slug"
-	icon_state = "heavylaser"
+	icon_state = "eoehoma_laser_heavy"
 	damage = 20
 	armour_penetration = 40
 
 /obj/projectile/beam/scatter
 	name = "laser pellet"
-	icon_state = "scatterlaser"
+	icon_state = "eoehoma_laser_light"
 	damage = 5
 	range = 7
 
@@ -422,10 +439,11 @@
 	muzzle_type = /obj/effect/projectile/muzzle/laser/emitter
 	impact_type = /obj/effect/projectile/impact/laser/emitter
 	impact_effect_type = null
+	var/fire_color = "green"
 
 /obj/projectile/beam/emitter/hitscan/on_hit(atom/target, blocked = FALSE)
 	. = ..()
 	var/turf/targets_turf = target.loc
 	if(!isopenturf(targets_turf))
 		return
-	targets_turf.ignite_turf(rand(8,22), "green")
+	targets_turf.ignite_turf(rand(8,22), fire_color)

@@ -9,7 +9,7 @@
 	size_mod = 1
 	var/zoom_mod = 10
 	var/zoom_out_mod = 3
-	var/min_recoil_mod = 0.1
+	var/min_recoil_mod = 0 //bugfix
 	var/aim_slowdown_mod = 0.4
 
 

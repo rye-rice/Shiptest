@@ -5,7 +5,7 @@
 	var/obj/effect/projectile/tracer/PB = new beam_type
 	if(isnull(light_color_override))
 		light_color_override = color
-	PB.apply_vars(angle_between_points(starting, ending), midpoint.return_px(), midpoint.return_py(), color, pixel_length_between_points(starting, ending) / world.icon_size, midpoint.return_turf(), 0)
+	PB.apply_vars(angle_between_points(starting, ending), midpoint.return_px(), midpoint.return_py(), color, pixel_length_between_points(starting, ending) / world.icon_size, midpoint.return_turf(), 0, TRUE)
 	. = PB
 	if(light_range > 0 && light_intensity > 0)
 		var/list/turf/line = getline(starting.return_turf(), ending.return_turf())
@@ -82,3 +82,6 @@
 
 /obj/effect/projectile/tracer/gauss
 	icon_state = "hc_gauss"
+
+/obj/effect/projectile/tracer/e20hitscan
+	icon_state = "beam_e20"

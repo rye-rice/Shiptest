@@ -31,6 +31,8 @@
 	RegisterSignal(parent, COMSIG_QDELETING, PROC_REF(handle_qdel))
 	RegisterSignal(parent, COMSIG_GUN_TRY_FIRE, PROC_REF(handle_gun_try_fire))
 	RegisterSignal(parent, COMSIG_ITEM_PRE_ATTACK_SECONDARY, PROC_REF(handle_item_pre_attack))
+	RegisterSignal(parent, COMSIG_GUN_BEFORE_FIRING, PROC_REF(handle_gun_before_firing))
+	RegisterSignal(parent, COMSIG_GUN_FIRE_LIVE_SHOT, PROC_REF(handle_gun_fire_live_shot))
 	RegisterSignal(parent, COMSIG_TWOHANDED_WIELD, PROC_REF(handle_item_wield))
 	RegisterSignal(parent, COMSIG_TWOHANDED_UNWIELD, PROC_REF(handle_item_unwield))
 	RegisterSignal(parent, COMSIG_ATOM_ATTACK_HAND_SECONDARY, PROC_REF(handle_hand_attack))
@@ -48,12 +50,13 @@
 
 /datum/component/attachment_holder/proc/handle_overlays(obj/item/parent, list/overlays)
 	SIGNAL_HANDLER
+	var/obj/item/gun/parent_gun = parent
 
 	for(var/obj/item/attachment/attach as anything in attachments)
 		var/slot = SEND_SIGNAL(attach, COMSIG_ATTACHMENT_GET_SLOT)
 		slot = attachment_slot_from_bflag(slot)
 		var/list/attach_overlays = list()
-		SEND_SIGNAL(attach, COMSIG_ATTACHMENT_UPDATE_OVERLAY, attach_overlays)
+		SEND_SIGNAL(attach, COMSIG_ATTACHMENT_UPDATE_OVERLAY, attach_overlays, our_gun=parent_gun)
 		for(var/mutable_appearance/overlay as anything in attach_overlays)
 			if(slot_offsets && slot_offsets[slot])
 				var/matrix/overlay_matrix = new
@@ -128,7 +131,7 @@
 	for(var/obj/item/attach as anything in attachments)
 		SEND_SIGNAL(attach, COMSIG_ATTACHMENT_EXAMINE_MORE, user, examine_list)
 
-/datum/component/attachment_holder/proc/do_attach(obj/item/attachment, mob/user, bypass_checks)
+/datum/component/attachment_holder/proc/do_attach(obj/item/attachment/attachment, mob/user, bypass_checks)
 	var/slot = SEND_SIGNAL(attachment, COMSIG_ATTACHMENT_GET_SLOT)
 	slot = attachment_slot_from_bflag(slot)
 	if(!(is_type_in_typecache(attachment,valid_types)))
@@ -137,6 +140,12 @@
 	if(!slot_room[slot])
 		to_chat(user, span_notice("[parent] does not contain room for [attachment]!"))
 		return
+	if(attachment.attach_sound)
+		playsound(parent, attachment.attach_sound, 50, FALSE)
+	if(!bypass_checks)
+		if(!do_after(user, attachment.attachment_time, parent))
+			to_chat(user, span_warning("Your attaching of the [attachment.name] was interrupted!"))
+			return
 	slot_room[slot]--
 	. = SEND_SIGNAL(attachment, COMSIG_ATTACHMENT_ATTACH, parent, user, bypass_checks)
 	if(.)
@@ -214,6 +223,20 @@
 
 	for(var/obj/item/attach as anything in attachments)
 		if(SEND_SIGNAL(attach, COMSIG_ATTACHMENT_PRE_ATTACK, parent, target_atom, user, params))
+			return TRUE
+
+/datum/component/attachment_holder/proc/handle_gun_before_firing(obj/item/parent, atom/target_atom, mob/user, params)
+	SIGNAL_HANDLER
+
+	for(var/obj/item/attach as anything in attachments)
+		if(SEND_SIGNAL(attach, COMSIG_ATTACHMENT_BEFORE_FIRING, parent, target_atom, user, params))
+			return TRUE
+
+/datum/component/attachment_holder/proc/handle_gun_fire_live_shot(obj/item/parent, user, pointblank, atom/pbtarget, message, params)
+	SIGNAL_HANDLER
+
+	for(var/obj/item/attach as anything in attachments)
+		if(SEND_SIGNAL(attach, COMSIG_ATTACHMENT_FIRE_LIVE_SHOT, parent, user, pointblank, pbtarget, message, params))
 			return TRUE
 
 /datum/component/attachment_holder/proc/handle_item_wield(obj/item/parent, mob/user, params)

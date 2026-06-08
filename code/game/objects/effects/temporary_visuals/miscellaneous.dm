@@ -378,6 +378,17 @@
 	icon_state = "shieldsparkles"
 	duration = 6
 
+/obj/effect/temp_visual/impact_effect/laser_sight
+	icon_state = "impact_laser"
+	duration = 1 SECONDS
+	layer = ABOVE_MOB_LAYER
+
+/obj/effect/temp_visual/impact_effect/laser_sight/Initialize(mapload, x, y)
+	. = ..()
+	var/mutable_appearance/emissive_look = emissive_appearance(icon, icon_state, layer)
+	add_overlay(emissive_look)
+
+
 /obj/effect/temp_visual/heart
 	name = "heart"
 	icon = 'icons/mob/animal.dmi'
@@ -542,3 +553,4 @@
 	. = ..()
 	if(new_icon_state)
 		icon_state = new_icon_state
+	SSvis_overlays.add_vis_overlay(src, icon, icon_state, layer, EMISSIVE_PLANE, dir)

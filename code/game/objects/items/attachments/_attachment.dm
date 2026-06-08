@@ -15,6 +15,10 @@
 	var/list/signals = list()
 	///Component that handles most of the logic of attachments
 	var/datum/component/attachment/attachment_comp
+	///How long does it take to attach this attachment?
+	var/attachment_time = 5 SECONDS
+	///The sound used whlie attaching. Not the same as after attaching
+	var/attach_sound
 
 
 	/// the cell in the gun, if any
@@ -30,8 +34,13 @@
 	///Determines the amount of pixels to move the icon state for the overlay. in the y direction
 	var/pixel_shift_y = 16
 	/// Determines what layer the icon state for the overlay renders on.
-	var/render_layer = FLOAT_LAYER //inhands
-	var/render_plane = FLOAT_PLANE //world
+
+	///If true, then we allow guns to add a prefix to our icon state. If we dont have a set for all 3 "sizes", set this to FALSE please
+	var/allow_icon_state_prefixes = FALSE
+	/// Inhands
+	var/render_layer = FLOAT_LAYER
+	/// World
+	var/render_plane = FLOAT_PLANE
 
 	//Toggle modifers are handled seperatly
 	///Modifier applied to the parent
@@ -56,6 +65,8 @@
 		CALLBACK(src, PROC_REF(toggle_ammo)), \
 		CALLBACK(src, PROC_REF(on_fire_gun)), \
 		CALLBACK(src, PROC_REF(on_preattack)), \
+		CALLBACK(src, PROC_REF(on_beforefire)), \
+		CALLBACK(src, PROC_REF(on_fireliveshot)), \
 		CALLBACK(src, PROC_REF(on_attacked)), \
 		CALLBACK(src, PROC_REF(on_secondary_action)), \
 		CALLBACK(src, PROC_REF(on_ctrl_click)), \
@@ -110,6 +121,12 @@
 	return NONE
 
 /obj/item/attachment/proc/on_preattack(obj/item/gun/gun, atom/target, mob/user, list/params)
+	return FALSE
+
+/obj/item/attachment/proc/on_fireliveshot(obj/item/gun/gun, user, pointblank, atom/pbtarget, message, angle, params)
+	return FALSE
+
+/obj/item/attachment/proc/on_beforefire(obj/item/gun/gun, atom/target, mob/user, list/params)
 	return FALSE
 
 /obj/item/attachment/proc/on_wield(obj/item/gun/gun, mob/user, list/params)
