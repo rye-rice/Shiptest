@@ -1,8 +1,8 @@
 /obj/item/gun/energy/laser
 	name = "laser gun basetype i DEMAND!!!"
 	desc = "that whoever mapped this in be DEMOTED!!! it was the best thing having proper paths and being all like 'what the fuck, are you real' and being 'we are the good github reporter we are the hero in the story'"
-	lefthand_file = 'icons/obj/guns/manufacturer/nanotrasen_sharplite/lefthand.dmi'
-	righthand_file = 'icons/obj/guns/manufacturer/nanotrasen_sharplite/righthand.dmi'
+	lefthand_file = 'icons/obj/guns/manufacturer/warra_sharplite/lefthand.dmi'
+	righthand_file = 'icons/obj/guns/manufacturer/warra_sharplite/righthand.dmi'
 	item_state = "laser"
 	w_class = WEIGHT_CLASS_BULKY
 	custom_materials = list(/datum/material/iron=2000)
