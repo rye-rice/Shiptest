@@ -1,4 +1,4 @@
 author: Ical92
 changes:
-  - {rscadd: table-variant sinks}
+  - {bugfix: fixed corkboard perspective}
 delete-after: true
