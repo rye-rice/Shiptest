@@ -30,3 +30,9 @@
 		return
 
 	set_light_flags(light_flags & ~LIGHT_ATTACHED)
+
+//TODO REMOVE
+/obj/item/attachment/laser_sight
+	name = "laser sight"
+	desc = "Designed to be rail-mounted on a compatible firearm to provide increased accuracy and decreased spread. Not used, map this out. REminder. Reminder"
+	icon_state = "laserpointer"

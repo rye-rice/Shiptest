@@ -7,7 +7,7 @@
 	attach_features_flags = ATTACH_REMOVABLE_HAND|ATTACH_TOGGLE
 	//consider making th is scope only if during testing
 	slot = ATTACHMENT_SLOT_SCOPE
-	pixel_shift_x = 0
+	pixel_shift_x = 1
 	pixel_shift_y = 0
 	size_mod = 0
 	spread_mod = 2

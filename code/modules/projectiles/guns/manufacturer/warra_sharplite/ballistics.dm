@@ -113,6 +113,15 @@ NO_MAG_GUN_HELPER(automatic/pistol/champion)
 		/obj/item/ammo_box/magazine/m46_30_podium,
 	)
 
+	valid_attachments = list(
+		/obj/item/attachment/silencer,
+		/obj/item/attachment/muzzle_brake,
+		/obj/item/attachment/rail_light,
+		/obj/item/attachment/bayonet,
+		/obj/item/attachment/gun,
+		/obj/item/attachment/ammo_counter,
+	)
+
 	fire_sound = 'sound/weapons/gun/pistol/podium.ogg'
 
 	load_sound = 'sound/weapons/gun/pistol/mag_insert.ogg'
@@ -407,7 +416,7 @@ NO_MAG_GUN_HELPER(automatic/smg/expedition)
 	valid_attachments = list(
 		/obj/item/attachment/silencer,
 		/obj/item/attachment/muzzle_brake,
-		/obj/item/attachment/foldable_stock/resolution_inteq
+		/obj/item/attachment/foldable_stock/resolution_inteq,
 		/obj/item/attachment/ammo_counter,
 	)
 
