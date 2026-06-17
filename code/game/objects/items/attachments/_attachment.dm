@@ -48,7 +48,7 @@
 	///Modifier applied to the parent
 	var/spread_unwielded_mod = 0
 	///Modifier applied to the parent, deciseconds
-	var/wield_delay = 0
+	var/wield_delay = 0.1 SECONDS
 	///Modifier applied to the parent
 	var/size_mod = 0
 

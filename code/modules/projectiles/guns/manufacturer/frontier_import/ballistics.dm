@@ -160,6 +160,7 @@
 
 	valid_attachments = list(
 		/obj/item/attachment/silencer,
+		/obj/item/attachment/muzzle_brake,
 
 		/obj/item/attachment/foldable_stock/spitter
 	)

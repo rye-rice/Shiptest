@@ -58,6 +58,8 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/disabler/underbarrel, /obj/item/ammo_casing/energy/laser/underbarrel)
 	spawn_no_ammo = TRUE
 
+//very mixed on if to keep or remove
+
 /obj/item/attachment/gun/energy/e50
 	name = "underbarrel energy cannon"
 	desc = "An aftermarket conversion of Eoehoma Firearms' E-50 emitter cannon stripped down in order to fit on the rail mounts on other weapons. This less than orthodox conversion strips out most of the E-50's safety mechanisms to cut down on weight and size, making it dangerously prone to overheating even at its reduced power. Heat insulated gloves are reccomended."

@@ -18,7 +18,7 @@
 	pixel_shift_x = 3
 	pixel_shift_y = 4
 	spread_mod = 1
-	wield_delay = 0.1 SECONDS
+	wield_delay = 0.2 SECONDS
 
 /obj/item/attachment/bayonet/on_preattack(obj/item/gun/gun, atom/target, mob/living/user, list/params)
 	if(user.a_intent == INTENT_HARM && user.CanReach(target, src, TRUE))

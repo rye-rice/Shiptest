@@ -15,6 +15,9 @@
 	spread = 6
 	spread_unwielded = 10
 
+	//old technology doesnt interface with modern ammo counters. yes its eoehoma, but we can think of this as preceeding when their guns had the proper components
+	refused_attachments = list(/obj/item/attachment/ammo_counter)
+
 	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/eoehoma, /obj/item/ammo_casing/energy/lasergun/eoehoma/heavy)
 	manufacturer = MANUFACTURER_EOEHOMA
 
@@ -30,6 +33,8 @@
 	mob_overlay_icon = 'icons/obj/guns/manufacturer/eoehoma/onmob.dmi'
 	icon_state = "e11"
 	item_state = "e_generickill4"
+
+	refused_attachments = list(/obj/item/attachment/ammo_counter)
 
 	ammo_type = list(/obj/item/ammo_casing/energy/disabler, /obj/item/ammo_casing/energy/laser/eoehoma)
 	ammo_x_offset = 0

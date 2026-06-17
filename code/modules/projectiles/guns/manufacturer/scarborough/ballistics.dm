@@ -1,4 +1,4 @@
-#define SCARBOROUGH_ATTACHMENTS list(/obj/item/attachment/silencer, /obj/item/attachment/muzzle_brake, /obj/item/attachment/laser_sight, /obj/item/attachment/rail_light, /obj/item/attachment/bayonet, /obj/item/attachment/energy_bayonet, /obj/item/attachment/gun, /obj/item/attachment/ammo_counter)
+#define SCARBOROUGH_ATTACHMENTS list(/obj/item/attachment/silencer, /obj/item/attachment/muzzle_brake, /obj/item/attachment/rail_light, /obj/item/attachment/bayonet, /obj/item/attachment/energy_bayonet, /obj/item/attachment/gun, /obj/item/attachment/ammo_counter)
 #define SCARBOROUGH_ATTACH_SLOTS list(ATTACHMENT_SLOT_MUZZLE = 1, ATTACHMENT_SLOT_SCOPE = 1, ATTACHMENT_SLOT_RAIL = 1)
 
 //########### PISTOLS ###########//
@@ -850,8 +850,7 @@ NO_MAG_GUN_HELPER(automatic/assault/hydra/indie)
 
 	valid_attachments = SCARBOROUGH_ATTACHMENTS
 	refused_attachments = list(
-		/obj/item/attachment/silencer,
-		/obj/item/attachment/laser_sight
+		/obj/item/attachment/silencer
 		)
 	slot_available = SCARBOROUGH_ATTACH_SLOTS
 	slot_offsets = list(

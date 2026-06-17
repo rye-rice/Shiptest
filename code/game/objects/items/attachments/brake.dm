@@ -7,21 +7,23 @@
 	slot = ATTACHMENT_SLOT_MUZZLE
 	pixel_shift_x = 0
 	pixel_shift_y = 2
-	spread_mod = -3
+	//spread_mod = -3
 	spread_unwielded_mod = 2
-	wield_delay = 0.1 SECONDS
+	wield_delay = 0.2 SECONDS
 
 /obj/item/attachment/muzzle_brake/apply_attachment(obj/item/gun/gun, mob/user)
 	. = ..()
 	gun.has_muzzle_flash = FALSE
-	gun.recoil_unwielded += 1
+	gun.recoil += 0.3
+	gun.recoil_unwielded += 0.8
 	gun.fire_sound_volume *= 1.7
 	gun.fire_sound_extrarange += 10
 
 /obj/item/attachment/muzzle_brake/remove_attachment(obj/item/gun/gun, mob/user)
 	. = ..()
 	gun.has_muzzle_flash = gun::has_muzzle_flash
-	gun.recoil_unwielded -= 1
+	gun.recoil -= 0.3
+	gun.recoil_unwielded -= 0.8
 	gun.fire_sound_volume = gun::fire_sound_volume
 	gun.fire_sound_extrarange -= 10
 	return TRUE

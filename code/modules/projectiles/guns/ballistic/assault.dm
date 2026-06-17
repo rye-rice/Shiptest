@@ -35,7 +35,6 @@
 	valid_attachments = list(
 		/obj/item/attachment/silencer,
 		/obj/item/attachment/muzzle_brake,
-		/obj/item/attachment/laser_sight,
 		/obj/item/attachment/rail_light,
 		/obj/item/attachment/bayonet,
 		/obj/item/attachment/gun,

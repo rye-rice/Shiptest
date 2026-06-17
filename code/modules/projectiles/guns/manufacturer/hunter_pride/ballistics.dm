@@ -157,7 +157,7 @@ EMPTY_GUN_HELPER(revolver/detective)
 /obj/item/gun/ballistic/revolver/detective/ComponentInitialize()
 	. = ..()
 	AddComponent(/datum/component/ammo_hud/revolver) //note that the hud at the moment only supports 6 round revolvers, 7 or 5 isn't supported rn
-//...why...?
+
 /obj/item/gun/ballistic/revolver/detective/process_fire(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0, burst_firing = FALSE, spread_override = 0, iteration = 0)
 	if(magazine.caliber != initial(magazine.caliber))
 		if(prob(100 - (magazine.ammo_count() * 5)))	//minimum probability of 70, maximum of 95

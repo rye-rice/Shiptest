@@ -14,13 +14,6 @@
 	contains = list(/obj/item/attachment/rail_light)
 	crate_name = "rail light crate"
 
-/datum/supply_pack/attachment/laser_sight
-	name = "Laser Sight Crate"
-	desc = "Contains a single rail light to be mounted on a firearm."
-	cost = 250
-	contains = list(/obj/item/attachment/laser_sight)
-	crate_name = "laser sight crate"
-
 /datum/supply_pack/attachment/bayonet
 	name = "Bayonet Crate"
 	desc = "Contains a single bayonet to be mounted on a firearm."
@@ -54,7 +47,7 @@
 
 /datum/supply_pack/attachment/counter
 	name = "Ammo Counter Crate"
-	desc = "Contains a single ammo counter to mount on a firearm."
+	desc = "Contains a single ammo counter to mount on a firearm, repurposed from a broken E-40. Does not work with 'lower-tech' firearms."
 	cost = 100
 	contains = list(/obj/item/attachment/ammo_counter)
 	crate_name = "ammo counter crate"

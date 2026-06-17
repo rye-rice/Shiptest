@@ -40,9 +40,9 @@
 	var/latch_toggle_delay = 0.6 SECONDS
 
 	valid_attachments = list(
-		/obj/item/attachment/laser_sight,
 		/obj/item/attachment/rail_light,
 		/obj/item/attachment/bayonet,
+		/obj/item/attachment/ammo_counter,
 		/obj/item/attachment/gun
 	)
 	slot_available = list(

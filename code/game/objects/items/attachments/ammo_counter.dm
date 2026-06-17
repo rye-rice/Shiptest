@@ -1,14 +1,16 @@
 /obj/item/attachment/ammo_counter
 	name = "ammunition counter"
-	desc = "A computerized ammunition tracker for use on conventional firearms. Includes a small toggle for telling the user when ammo is depleted. Capable of mounting on both a railing or scope, depending on the user's preference."
+	desc = "A computerized ammunition tracker for use on high-tech firearms, repurposed from a broken E-40. Includes a small toggle for telling the user when ammo is depleted. Capable of mounting on a gun's scope rail; it however blocks the ironsights, which makes it slightly harder to aim when in the scope slot.\
+	\nMany 'lower-tech' firearms do not include the nessary components to interface with it, so it's availbility is limited."
 	icon_state = "ammo_counter"
 
 	attach_features_flags = ATTACH_REMOVABLE_HAND|ATTACH_TOGGLE
-
+	//consider making th is scope only if during testing
 	slot = ATTACHMENT_SLOT_SCOPE
 	pixel_shift_x = 0
 	pixel_shift_y = 0
 	size_mod = 0
+	spread_mod = 2
 	var/alarm_sound_path = 'sound/weapons/gun/general/empty_alarm.ogg' //yes this exists so i can varedit it
 
 /obj/item/attachment/ammo_counter/apply_attachment(obj/item/gun/gun, mob/user)
@@ -35,16 +37,6 @@
 			our_counter.turn_off()
 			qdel(our_counter)
 			return TRUE
-
-/obj/item/attachment/ammo_counter/attack_self(mob/user)
-	. = ..()
-	playsound(src, 'sound/items/flashlight_on.ogg', 25)
-	if(slot == src::slot)
-		slot = ATTACHMENT_SLOT_RAIL
-	else
-		slot = src::slot
-	SEND_SIGNAL(src, COMSIG_ATTACHMENT_CHANGE_SLOT, slot)
-	to_chat(user, span_notice("You adjust [src] to fit on a gun's [slot]."))
 
 /obj/item/attachment/ammo_counter/toggle_attachment(obj/item/gun/gun, mob/user)
 	. = ..()

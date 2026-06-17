@@ -8,6 +8,9 @@
 	pixel_shift_x = 17
 	pixel_shift_y = 18
 
+	//since we are 'integrated' within a gun, we can probably balance this by editing gun vars directly
+	wield_delay = 0 SECONDS
+
 	var/toggled_slowdown = 0.10
 	var/toggled_wield_delay = -0.4 SECONDS
 	var/toggled_recoil_bonus = -2

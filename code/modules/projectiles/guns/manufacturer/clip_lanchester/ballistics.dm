@@ -1,4 +1,4 @@
-#define CLIP_ATTACHMENTS list(/obj/item/attachment/silencer, /obj/item/attachment/muzzle_brake, /obj/item/attachment/laser_sight, /obj/item/attachment/rail_light, /obj/item/attachment/bayonet, /obj/item/attachment/gun)
+#define CLIP_ATTACHMENTS list(/obj/item/attachment/silencer, /obj/item/attachment/muzzle_brake, /obj/item/attachment/rail_light, /obj/item/attachment/bayonet, /obj/item/attachment/gun, /obj/item/attachment/ammo_counter,)
 #define CLIP_ATTACHMENT_POINTS list(ATTACHMENT_SLOT_MUZZLE = 1,ATTACHMENT_SLOT_RAIL = 1,ATTACHMENT_SLOT_SCOPE=1)
 
 
@@ -27,8 +27,6 @@
 	load_empty_sound = 'sound/weapons/gun/pistol/candor_reload.ogg'
 	eject_sound = 'sound/weapons/gun/pistol/candor_unload.ogg'
 	eject_empty_sound = 'sound/weapons/gun/pistol/candor_unload.ogg'
-
-	default_attachments = list(/obj/item/attachment/laser_sight)
 
 	slot_available = list(
 		ATTACHMENT_SLOT_MUZZLE = 1,
@@ -411,6 +409,8 @@ NO_MAG_GUN_HELPER(automatic/marksman/f4/inteq)
 	lefthand_file = 'icons/obj/guns/manufacturer/frontier_import/lefthand.dmi'
 	righthand_file = 'icons/obj/guns/manufacturer/frontier_import/righthand.dmi'
 	mob_overlay_icon = 'icons/obj/guns/manufacturer/frontier_import/onmob.dmi'
+
+	refused_attachments = list(/obj/item/attachment/ammo_counter) //less modern
 
 	icon_state = "f4_indie"
 	item_state = "f4_indie"
