@@ -17,6 +17,7 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	"[FREQ_CENTCOM]" = "centcomradio",
 	"[FREQ_SOLGOV]" = "solgovradio",
 	"[FREQ_WIDEBAND]" = "widebandradio",
+	"[FREQ_PHONE]" = "purple",
 	))
 
 GLOBAL_LIST_INIT(freqcolor, list())

@@ -3222,6 +3222,8 @@
 #include "code\modules\paperwork\photocopier.dm"
 #include "code\modules\paperwork\stamps.dm"
 #include "code\modules\paperwork\ticketmachine.dm"
+#include "code\modules\phonestuff\internal_phone.dm"
+#include "code\modules\phonestuff\phone.dm"
 #include "code\modules\photography\_pictures.dm"
 #include "code\modules\photography\camera\camera.dm"
 #include "code\modules\photography\camera\camera_image_capturing.dm"
@@ -3831,4 +3833,3 @@
 #include "interface\menu.dm"
 #include "interface\stylesheet.dm"
 #include "interface\skin.dmf"
-// END_INCLUDE
