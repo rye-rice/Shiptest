@@ -32,6 +32,10 @@
 	display_name = "jumpskirt, recolorable"
 	path = /obj/item/clothing/under/color/jumpskirt
 
+/datum/gear/uniform/fatigues
+	display_name = "fatigues, recolorable"
+	path = /obj/item/clothing/under/rank/security/officer/camo
+
 //Shorts
 
 /datum/gear/uniform/athshorts
@@ -49,6 +53,10 @@
 /datum/gear/uniform/explorershorts
 	display_name = "explorer shorts"
 	path = /obj/item/clothing/under/shorts/explorer
+
+/datum/gear/uniform/brownjorts
+	display_name = "brown jorts"
+	path = /obj/item/clothing/under/shorts/brownjorts
 
 //Pants
 /datum/gear/uniform/pants
@@ -74,9 +82,9 @@
 	display_name = "green pajama pants"
 	path = /obj/item/clothing/under/pants/pajamagreen
 
-/datum/gear/uniform/pants/tan
-	display_name = "tan pants"
-	path = /obj/item/clothing/under/pants/tan
+/datum/gear/uniform/pants/brown
+	display_name = "brown pants"
+	path = /obj/item/clothing/under/pants/brown
 
 /datum/gear/uniform/pants/white
 	display_name = "white pants"
@@ -101,6 +109,10 @@
 /datum/gear/uniform/pants/camo
 	display_name = "camo pants"
 	path = /obj/item/clothing/under/pants/camo
+
+/datum/gear/uniform/pants/sweat
+	display_name = "sweatpants"
+	path = /obj/item/clothing/under/pants/sweat
 
 //JUMPSUIT "SUITS"
 
@@ -131,13 +143,25 @@
 	display_name = "suit, navy"
 	path = /obj/item/clothing/under/suit/navy
 
+/datum/gear/uniform/suit/navyskirt
+	display_name = "skirt, navy"
+	path = /obj/item/clothing/under/suit/navy/skirt
+
 /datum/gear/uniform/suit/burgundy
 	display_name = "suit, burgundy"
 	path = /obj/item/clothing/under/suit/burgundy
 
+/datum/gear/uniform/suit/burgundyskirt
+	display_name = "skirt, burgundy"
+	path = /obj/item/clothing/under/suit/burgundy/skirt
+
 /datum/gear/uniform/suit/charcoal
 	display_name = "suit, charcoal"
 	path = /obj/item/clothing/under/suit/charcoal
+
+/datum/gear/uniform/suit/charcoalskirt
+	display_name = "skirt, charcoal"
+	path = /obj/item/clothing/under/suit/charcoal/skirt
 
 /datum/gear/uniform/suit/white_skirt
 	display_name = "suitskirt, white shirt"
@@ -294,3 +318,12 @@
 /datum/gear/uniform/overalls_brown
 	display_name = "overalls, brown"
 	path = /obj/item/clothing/under/overalls/brown
+
+// skirts
+/datum/gear/uniform/shortskirt
+	display_name = "short skirt (colorable)"
+	path = /obj/item/clothing/under/shorts/skirt
+
+/datum/gear/uniform/miniskirt
+	display_name = "mini skirt (colorable)"
+	path = /obj/item/clothing/under/shorts/miniskirt

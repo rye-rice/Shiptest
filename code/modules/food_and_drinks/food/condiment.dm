@@ -91,7 +91,7 @@
 		M.visible_message(span_warning("[user] fed [M] from [src]."), \
 			span_warning("[user] fed you from [src]."))
 		log_combat(user, M, "fed", reagents.log_list())
-	reagents.trans_to(M, 10, transfered_by = user, method = INGEST)
+	reagents.trans_to(M, 10, transfered_by = user, methods = INGEST)
 	playsound(M.loc,'sound/items/drink.ogg', rand(10,50), TRUE)
 	return 1
 
@@ -132,6 +132,11 @@
 	desc = "Used in cooking various dishes."
 	icon_state = "enzyme"
 	list_reagents = list(/datum/reagent/consumable/enzyme = 50)
+
+/obj/item/reagent_containers/condiment/enzyme/small
+	name = "small universal enzyme"
+	icon_state = "small_enzyme"
+	list_reagents = list(/datum/reagent/consumable/enzyme = 15)
 
 /obj/item/reagent_containers/food/condiment/enzyme/examine(mob/user)
 	. = ..()

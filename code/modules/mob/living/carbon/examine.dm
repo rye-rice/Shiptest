@@ -55,16 +55,15 @@
 			var/datum/wound/W = i
 			msg += "[W.get_examine_description(user)]\n"
 
-	for(var/zone in bodyparts)
-		limb = bodyparts[zone]
-		if(!limb)
-			continue
+	for(var/obj/item/bodypart/body_part in disabled)
 		var/damage_text
-		if(!(limb.get_damage(include_stamina = FALSE) >= limb.max_damage)) //Stamina is disabling the limb
+		if(HAS_TRAIT(body_part, TRAIT_DISABLED_BY_WOUND))
+			continue // skip if it's disabled by a wound (cuz we'll be able to see the bone sticking out!)
+		if(!(body_part.get_damage(include_stamina = FALSE) >= body_part.max_damage)) //we don't care if it's stamcritted
 			damage_text = "limp and lifeless"
 		else
-			damage_text = (limb.brute_dam >= limb.burn_dam) ? limb.heavy_brute_msg : limb.heavy_burn_msg
-		msg += "<B>[capitalize(t_his)] [limb.name] is [damage_text]!</B>\n"
+			damage_text = (body_part.brute_dam >= body_part.burn_dam) ? body_part.heavy_brute_msg : body_part.heavy_burn_msg
+		msg += "<B>[capitalize(t_his)] [body_part.plaintext_zone] is [damage_text]!</B>\n"
 
 	for(var/t in missing)
 		if(t==BODY_ZONE_HEAD)
@@ -103,17 +102,6 @@
 
 	if(HAS_TRAIT(src, TRAIT_DUMB))
 		msg += "[t_He] seem[p_s()] to be clumsy and unable to think.\n"
-
-	switch(fire_stacks)
-		if(1 to INFINITY)
-			msg += "[t_He] [t_is] covered in something flammable.\n"
-		if(0)
-			EMPTY_BLOCK_GUARD
-		if(-15 to -1)
-			msg += "[t_He] look[p_s()] a little soaked.\n"
-		if(-20 to -15)
-			msg += "[t_He] look[p_s()] completely sopping.\n"
-
 
 	if(pulledby && pulledby.grab_state)
 		msg += "[t_He] [t_is] restrained by [pulledby]'s grip.\n"
@@ -159,7 +147,7 @@
 
 	. += "</span>"
 
-	SEND_SIGNAL(src, COMSIG_PARENT_EXAMINE, user, .)
+	SEND_SIGNAL(src, COMSIG_ATOM_EXAMINE, user, .)
 
 /mob/living/carbon/examine_more(mob/user)
 	. = ..()

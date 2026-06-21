@@ -180,7 +180,7 @@
 
 /obj/item/gun/ballistic/automatic/assault/e40/toggle_safety(mob/user, silent=FALSE)
 	. = ..()
-	secondary.toggle_safety(user, silent=TRUE)
+	secondary.safety = safety
 
 /obj/item/gun/ballistic/automatic/assault/e40/fire_select(mob/living/carbon/human/user)
 	. = ..()
@@ -211,6 +211,9 @@
 	caliber = ".299 caseless"
 	max_ammo = 30
 	multiple_sprites = AMMO_BOX_FULL_EMPTY
+
+/obj/item/ammo_box/magazine/e40/empty
+	start_empty = TRUE
 
 //laser
 
