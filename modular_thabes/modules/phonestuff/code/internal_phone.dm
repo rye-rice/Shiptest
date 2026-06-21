@@ -99,7 +99,7 @@ GLOBAL_LIST_EMPTY_TYPED(radio_packs, /obj/item/storage/backpack/radio)
 		icon_state = "[base_icon_state]_ear"
 		return
 
-	if(internal_transmitter.caller)
+	if(internal_transmitter.phone_caller)
 		icon_state = "[base_icon_state]_ring"
 	else
 		icon_state = base_icon_state

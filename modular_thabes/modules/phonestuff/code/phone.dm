@@ -18,7 +18,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 	var/obj/item/telephone_receiver/attached_to
 
 	var/obj/structure/telephone_transmitter/calling
-	var/obj/structure/telephone_transmitter/caller
+	var/obj/structure/telephone_transmitter/phone_caller
 
 	var/ringtone = 'modular_thabes/modules/phonestuff/sound/telephone/touchtone_ring.ogg'
 
@@ -43,7 +43,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 		base_icon_state = icon_state
 
 	attached_to = new phone_type(src)
-	RegisterSignal(attached_to, COMSIG_PARENT_PREQDELETED, .proc/override_delete)
+	RegisterSignal(attached_to, COMSIG_PREQDELETED, .proc/override_delete)
 	update_icon()
 
 	if(!get_turf(src))
@@ -61,7 +61,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 /obj/structure/telephone_transmitter/examine(mob/user)
 	. = ..()
 	if(caller)
-		. += "<span class='bold'>Caller ID: [caller.phone_id]</span>"
+		. += "<span class='bold'>Caller ID: [phone_caller.phone_id]</span>"
 	if(calling)
 		. += "<span class='bold'>Caller ID: [calling.phone_id]</span>"
 	. += "<span class='notice'>You can use a multitool on it to change it's name and category.</span>"
@@ -172,7 +172,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 		return
 
 	calling = T
-	T.caller = src
+	T.phone_caller = src
 	T.update_icon()
 
 	to_chat(user, span_purple("[icon2html(src, user)] Dialing [calling_phone_id].."))
@@ -244,12 +244,12 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 				to_chat(M, span_purple("[icon2html(src, M)] You have hung up on [T.phone_id]."))
 
 	if(calling)
-		calling.caller = null
+		calling.phone_caller = null
 		calling = null
 
 	if(caller)
-		caller.calling = null
-		caller = null
+		phone_caller.calling = null
+		phone_caller = null
 
 	if(timeout_timer_id)
 		deltimer(timeout_timer_id)
@@ -275,7 +275,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 			if(next_ring < world.time)
 				playsound(loc, ringtone, 75)
 				visible_message(span_warning("[src] rings vigorously!"))
-				playsound(caller.attached_to, 'modular_thabes/modules/phonestuff/sound/telephone/ringback.ogg', 20, FALSE, 14)
+				playsound(phone_caller.attached_to, 'modular_thabes/modules/phonestuff/sound/telephone/ringback.ogg', 20, FALSE, 14)
 				next_ring = world.time + 3 SECONDS
 
 	else if(calling)
@@ -369,7 +369,7 @@ GLOBAL_LIST_EMPTY_TYPED(transmitters, /obj/structure/telephone_transmitter)
 /obj/structure/telephone_transmitter/Destroy()
 	if(attached_to)
 		if(attached_to.loc == src)
-			UnregisterSignal(attached_to, COMSIG_PARENT_PREQDELETED)
+			UnregisterSignal(attached_to, COMSIG_PREQDELETED)
 			qdel(attached_to)
 		else
 			attached_to.attached_to = null
