@@ -107,6 +107,7 @@
 	damage = 35
 	armour_penetration = 0
 	speed = 0.8
+	pass_flags = PASSTABLE | PASSGRILLE //does not go through glass
 
 /obj/projectile/beam/laser/eoehoma/wasp
 	damage = 30
@@ -224,7 +225,7 @@
 	damage = 20
 	armour_penetration = 40
 
-/obj/projectile/beam/scatter
+/obj/projectile/beam/laser/eoehoma/scatter
 	name = "laser pellet"
 	icon_state = "eoehoma_laser_light"
 	damage = 5

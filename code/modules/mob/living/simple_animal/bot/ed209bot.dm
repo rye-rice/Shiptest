@@ -26,7 +26,7 @@
 	maxHealth = 60
 	icon_state = "red209"
 	shoot_sound = 'sound/weapons/laser.ogg'
-	projectile = /obj/projectile/beam/scatter
+	projectile = /obj/projectile/beam/laser/eoehoma/scatter
 	emagged = 2
 	remote_disabled = 1
 	locked = TRUE

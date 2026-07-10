@@ -123,7 +123,7 @@
 	harmful = FALSE
 
 /obj/item/ammo_casing/energy/laser/scatter
-	projectile_type = /obj/projectile/beam/scatter
+	projectile_type = /obj/projectile/beam/laser/eoehoma/scatter
 	pellets = 10
 	variance = 40
 	e_cost = 1598 //12 shots upgraded cell, 6 with normal cell

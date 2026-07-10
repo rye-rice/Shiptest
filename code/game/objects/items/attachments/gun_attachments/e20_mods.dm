@@ -20,7 +20,8 @@
 	gun.icon_state = gun_icon_state
 	gun.update_appearance()
 
-//hard coding the values like this is bad practice, however, the one gun that should have this anyways is the E-20, so I can't be assed
+//Note to people learning from the code:
+//hard coding the values like this is bad practice, however, the one gun that should have this anyways is the E-20, so I can't be bothered to do somethign nicer
 /obj/item/attachment/e20mod/remove_attachment(obj/item/gun/gun, mob/user)
 	. = ..()
 	gun.desc = gun::desc

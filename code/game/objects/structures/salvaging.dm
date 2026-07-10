@@ -225,7 +225,7 @@
 			visible_message(span_danger("You flinch as the [src]'s laser apparatus lights up, but your tool destroys it before it activates..."))
 		if(61 to 79)
 			visible_message(span_danger("You see a dim light from the [src] before the laser reactivates in your face!"))
-			shoot_projectile(user, /obj/projectile/beam/scatter)
+			shoot_projectile(user, /obj/projectile/beam/laser/eoehoma/scatter)
 		if(80 to 89)
 			visible_message(span_danger("You see a bright light from the [src] before the laser reactivates in your face!"))
 			shoot_projectile(user, /obj/projectile/beam)
