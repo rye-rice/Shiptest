@@ -137,11 +137,9 @@ NO_MAG_GUN_HELPER(shotgun/automatic/bulldog/inteq)
 	name = "improvised shotgun"
 	desc = "A length of pipe and miscellaneous bits of scrap fashioned into a rudimentary single-shot shotgun."
 	icon = 'icons/obj/guns/manufacturer/hermits/48x32.dmi'
-	lefthand_file = 'icons/mob/inhands/weapons/64x_guns_left.dmi'
-	righthand_file = 'icons/mob/inhands/weapons/64x_guns_right.dmi'
+	lefthand_file = 'icons/obj/guns/manufacturer/hermits/lefthand.dmi'
+	righthand_file = 'icons/obj/guns/manufacturer/hermits/righthand.dmi'
 	mob_overlay_icon = 'icons/obj/guns/manufacturer/hermits/onmob.dmi'
-	inhand_x_dimension = 64
-	inhand_y_dimension = 64
 	base_icon_state = "ishotgun"
 	icon_state = "ishotgun"
 	item_state = "ishotgun"
@@ -186,11 +184,6 @@ NO_MAG_GUN_HELPER(shotgun/automatic/bulldog/inteq)
 		wield_slowdown = wield_slowdown-0.1
 		wield_delay = 0.3 SECONDS //OP? maybe
 
-		lefthand_file = 'icons/obj/guns/manufacturer/hermits/lefthand.dmi'
-		righthand_file = 'icons/obj/guns/manufacturer/hermits/righthand.dmi'
-		inhand_x_dimension = 32
-		inhand_y_dimension = 32
-
 		spread = 8
 		spread_unwielded = 15
 		recoil = 3 //or not
@@ -200,12 +193,6 @@ NO_MAG_GUN_HELPER(shotgun/automatic/bulldog/inteq)
 		mob_overlay_state = item_state
 
 /obj/item/gun/ballistic/shotgun/doublebarrel/improvised/sawn
-	icon = 'icons/obj/guns/manufacturer/hermits/48x32.dmi'
-	lefthand_file = 'icons/obj/guns/manufacturer/hermits/lefthand.dmi'
-	righthand_file = 'icons/obj/guns/manufacturer/hermits/righthand.dmi'
-	mob_overlay_icon = 'icons/obj/guns/manufacturer/hermits/onmob.dmi'
-	inhand_x_dimension = 32
-	inhand_y_dimension = 32
 	icon_state = "ishotgun_sawn"
 	item_state = "ishotgun_sawn"
 	weapon_weight = WEAPON_MEDIUM
