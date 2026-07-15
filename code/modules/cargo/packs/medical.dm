@@ -2,6 +2,8 @@
 	category = "Medical"
 	crate_type = /obj/structure/closet/crate/medical
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /*
 		First aid kits
 */
@@ -11,12 +13,14 @@
 	desc = "An order for a single basic health analyzer."
 	cost = 125
 	contains = list(/obj/item/healthanalyzer)
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/firstaid_single
 	name = "First Aid Kit Single-Pack"
 	desc = "Contains one first aid kit for healing most types of wounds."
 	cost = 400
 	contains = list(/obj/item/storage/firstaid/regular)
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/firstaidbruises_single
 	name = "Bruise Treatment Kit Single-Pack"
@@ -24,11 +28,15 @@
 	cost = 500
 	contains = list(/obj/item/storage/firstaid/brute)
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/firstaidburns_single
 	name = "Burn Treatment Kit Single-Pack"
 	desc = "Contains one first aid kit focused on healing severe burns."
 	cost = 500
 	contains = list(/obj/item/storage/firstaid/fire)
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/firstaidoxygen_single
 	name = "Oxygen Deprivation Kit Single-Pack"
@@ -36,17 +44,23 @@
 	cost = 500
 	contains = list(/obj/item/storage/firstaid/o2)
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/firstaidtoxins_single
 	name = "Toxin Treatment Kit Single-Pack"
 	desc = "Contains one first aid kit focused on healing damage dealt by heavy toxins."
 	cost = 500
 	contains = list(/obj/item/storage/firstaid/toxin)
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/firstaid_rad_single
 	name = "Radiation Treatment Kit Single-Pack"
 	desc = "Contains one first aid kit focused on reducing the damage done by radiation."
 	cost = 500
 	contains = list(/obj/item/storage/firstaid/radiation)
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/firstaidroumain_single
 	name = "Roumain Medical Kit Single-Pack"
@@ -56,17 +70,23 @@
 	faction = /datum/faction/srm
 	faction_discount = 10
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/advancedfirstaid
 	name = "Advanced First Aid Kit Single-Pack"
 	desc = "Contains one advanced first aid kit, with treatment options for advanced and severe injuries."
 	cost = 600
 	contains = list(/obj/item/storage/firstaid/advanced)
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/salbutamol_canister
 	name = "Salbutamol Inhaler Canister Single-Pack"
 	desc = "Contains one inhaler canister filled with aerosolized salbutamol, a potent bronchodilator."
 	cost = 100
 	contains = list(/obj/item/reagent_containers/inhaler_canister/salbutamol)
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
 
 /*
 		Tools
@@ -86,6 +106,8 @@
 	faction = /datum/faction/suns
 	faction_discount = 25
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/painkillers/fill(obj/structure/closet/crate/cargo_crate)
 	. = ..()
 	if(prob(5))
@@ -98,12 +120,17 @@
 	contains = list(/obj/machinery/iv_drip)
 	crate_name = "iv drip crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
+
 /datum/supply_pack/medical/defibs
 	name = "Defibrillator Crate"
 	desc = "Contains a defibrillator for bringing the recently deceased back to life."
 	cost = 750
 	contains = list(/obj/item/defibrillator/loaded)
 	crate_name = "defibrillator crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/surgery
 	name = "Surgical Supplies Crate"
@@ -115,6 +142,7 @@
 	crate_name = "surgical supplies crate"
 	faction = /datum/faction/suns
 	faction_discount = 50 //this shouldnt be 3k but if it is...
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/filter
 	name = "Blood Filter Crate"
@@ -130,12 +158,17 @@
 	contains = list(/obj/item/disk/surgery/t2)
 	crate_name = "surgical supplies crate"
 
+	markets = list(/datum/cargo_market/outpost)
+
+
 /datum/supply_pack/medical/console
 	name = "Operating Console Crate"
 	desc = "Contains a console board to construct an Operating Console. Required to install surgical disks and gives basic diagnostics on the patients vitals."
 	cost = 500
 	contains = list(/obj/item/circuitboard/computer/operating)
 	crate_name = "surgical supplies crate"
+
+	markets = list(/datum/cargo_market/outpost)
 
 /datum/supply_pack/medical/anesthetic
 	name = "Anesthetics Crate"
@@ -146,6 +179,8 @@
 	crate_name = "anesthetics crate"
 	faction = /datum/faction/suns
 	faction_discount = 25
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /*
 		Bundles and supplies
@@ -170,6 +205,7 @@
 	crate_type = /obj/structure/closet/crate/freezer
 	faction = /datum/faction/suns
 	faction_discount = 25
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/medical/salglucanister
 	name = "Heavy-Duty Saline Canister"
@@ -180,12 +216,17 @@
 	crate_type = /obj/structure/closet/crate/large
 	no_bundle = TRUE
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/medical/epipen_crate
 	name = "Bulk Epipen Crate"
 	desc = "Contains a spare box of epinephrine medipens, for when the going gets tough."
 	cost = 600
 	contains = list(/obj/item/storage/box/medipens)
 	crate_name = "epinephrine medipen crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 
 /datum/supply_pack/medical/medigel_crate
 	name = "Empty Medical Gel Crate"
@@ -204,6 +245,8 @@
 	crate_name = "mk.II hypospray crate"
 	faction = /datum/faction/warra
 
+	markets = list(/datum/cargo_market/outpost)
+
 /datum/supply_pack/medical/mkiii_hypo
 	name = "mk.III Hypospray kit"
 	desc = "Contains a Matahari Pharmaceutical mk.III Hypospray, for on the field medical care. Comes with an assortment of Ready-To-Go Vials"
@@ -214,6 +257,8 @@
 	faction_locked = TRUE
 	faction_discount = 0
 
+	markets = list(/datum/cargo_market/outpost)
+
 /datum/supply_pack/medical/mkiii_hypo/cybersun
 	desc = "Contains a mk.III Cybersun Hypospray, for on the field medical care. Comes with an assortment of Ready-To-Go Vials"
 	faction = /datum/faction/syndicate/cybersun
@@ -221,6 +266,7 @@
 /datum/supply_pack/medical/vials
 	faction = /datum/faction/warra
 	faction_discount = 50
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
 
 /datum/supply_pack/medical/vials/empty_vial
 	name = "Empty Vial Crate"
@@ -230,6 +276,8 @@
 		/obj/item/reagent_containers/glass/bottle/vial/small)
 	crate_name = "empty vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/indo_vial
 	name = "Indomide Vial Crate"
 	desc = "Contains a spare indomide vial, for usage in a Hypospray."
@@ -238,6 +286,8 @@
 		/obj/item/reagent_containers/glass/bottle/vial/small/preloaded/indomide,
 	)
 	crate_name = "indomide vial crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
 
 /datum/supply_pack/medical/vials/hadr_vial
 	name = "Hadrakine Vial Crate"
@@ -266,6 +316,8 @@
 	)
 	crate_name = "alvitane vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/quar_vial
 	name = "Quardexane Vial Crate"
 	desc = "Contains a spare quardexane vial, for usage in a Hypospray."
@@ -293,6 +345,8 @@
 	)
 	crate_name = "pancrazine vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/gjal_vial
 	name = "Gjalrazine Vial Crate"
 	desc = "Contains a spare gjalrazine vial, for usage in a Hypospray."
@@ -311,6 +365,8 @@
 	)
 	crate_name = "dexalin vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/tric_vial
 	name = "Cureall Vial Crate"
 	desc = "Contains a spare cureall vial, for usage in a Hypospray."
@@ -319,6 +375,8 @@
 		/obj/item/reagent_containers/glass/bottle/vial/small/preloaded/cureall,
 	)
 	crate_name = "cureall vial crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
 
 /datum/supply_pack/medical/vials/morb_vial
 	name = "Morphine Vial Crate"
@@ -329,6 +387,8 @@
 	)
 	crate_name = "morphine vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/atro_vial
 	name = "Atropine Vial Crate"
 	desc = "Contains a spare atropine vial, for usage in a Hypospray."
@@ -337,6 +397,7 @@
 		/obj/item/reagent_containers/glass/bottle/vial/small/preloaded/atropine,
 	)
 	crate_name = "atropine vial crate"
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
 
 /datum/supply_pack/medical/vials/stas_vial
 	name = "Stasis Vial Crate"
@@ -347,6 +408,8 @@
 	)
 	crate_name = "stasis vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/erp_vial
 	name = "Radiation Purgant Vial Crate"
 	desc = "Contains one spare radiation purgant vial, for usage in a Hypospray."
@@ -354,6 +417,8 @@
 	contains = list(
 		/obj/item/reagent_containers/glass/bottle/vial/small/preloaded/erp)
 	crate_name = "radiation purgant vial crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
 
 /datum/supply_pack/medical/vials/sal_vial
 	name = "SalGlu Vial Crate"
@@ -363,6 +428,8 @@
 		/obj/item/reagent_containers/glass/bottle/vial/small/preloaded/salclu)
 	crate_name = "SalGlu vial crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)
+
 /datum/supply_pack/medical/vials/chit_vial
 	name = "Chitosan Vial Crate"
 	desc = "Contains one spare Chitosan vial, for usage in a Hypospray."
@@ -370,3 +437,5 @@
 	contains = list(
 		/obj/item/reagent_containers/glass/bottle/vial/small/preloaded/chitosan)
 	crate_name = "chitosan vial crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store)

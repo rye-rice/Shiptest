@@ -4,6 +4,8 @@
 	crate_name = "magazine crate"
 	faction_discount = 0
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 
 /* VI */
 
@@ -14,12 +16,16 @@
 	cost = 150
 	faction = /datum/faction/warra
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/smgm9mm_mag
 	name = "9mm SMG Magazine Crate"
 	desc = "Contains a 9mm magazine for the Vector and Saber SMGs, with a capacity of thirty rounds."
 	contains = list(/obj/item/ammo_box/magazine/m9mm_expedition/empty)
 	cost = 250
 	faction = /datum/faction/warra
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /* Hunter's Pride */
 
@@ -31,6 +37,8 @@
 	faction_discount = 20
 	faction = /datum/faction/srm
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/m45_mag
 	name = ".45 ACP Candor Magazine Crate"
 	desc = "Contains a .45 ACP magazine for the Candor pistol, with a capacity of eight rounds."
@@ -38,12 +46,16 @@
 	cost = 100
 	faction = /datum/faction/srm
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/a44roum_speedloader
 	name = ".44 Roumain Speedloader Crate"
 	desc = "Contains a .44 Roumain speedloader for the HP Montagne, with a capacity of six rounds."
 	contains = list(/obj/item/ammo_box/a44roum_speedloader/empty)
 	cost = 100
 	faction = /datum/faction/srm
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/firestorm_mag
 
@@ -76,11 +88,15 @@
 	contains = list(/obj/item/ammo_box/magazine/m17/empty)
 	cost = 100
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/m12_mag
 	name = "Sporter Magazine Crate"
 	desc = "Contains a .22lr magazine for the Sporter Rifle, with a capacity of 25 rounds."
 	contains = list(/obj/item/ammo_box/magazine/m12_sporter/empty)
 	cost = 200
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/m15_mag
 	name = "Super Sporter Magazine Crate"
@@ -88,17 +104,23 @@
 	contains = list(/obj/item/ammo_box/magazine/m15/empty)
 	cost = 300
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/woodsman_mag
 	name = "Woodsman Magazine Crate"
 	desc = "Contains an 8x50mmR magazine for the Woodsman Rifle, with a capacity of five rounds."
 	contains = list(/obj/item/ammo_box/magazine/m23/empty)
 	cost = 200
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/m20_auto_elite
 	name = "Auto Elite Magazine Crate"
 	desc = "Contains a .44 Roumain magazine for the Auto Elite pistol, with a capacity of nine rounds."
 	contains = list(/obj/item/ammo_box/magazine/m20_auto_elite/empty)
 	cost = 250
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /* Scarbie */
 
@@ -108,6 +130,8 @@
 	contains = list(/obj/item/ammo_box/magazine/m22lr_himehabu/empty)
 	cost = 100
 	faction = /datum/faction/syndicate/scarborough
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /*
 /datum/supply_pack/magazine/hognose_mag
@@ -139,6 +163,8 @@
 	cost = 150
 	faction = /datum/faction/syndicate/scarborough
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/m9mm_rattlesnake
 	name = "Rattlesnake Magazine Crate"
 	desc = "Contains a 9mm magazine for the Rattlesnake machine pistol, with a capacity of 18 rounds."
@@ -154,6 +180,8 @@
 	faction_discount = 20
 	faction = /datum/faction/syndicate/scarborough
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/sidewinder_mag
 	name = "Sidewinder Magazine Crate"
 	desc = "Contains a 30 round magazine for the Sidewinder SMG."
@@ -161,12 +189,16 @@
 	cost = 300
 	faction = /datum/faction/syndicate/scarborough
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/c45_cobra_mag
 	name = "Cobra Magazine Crate"
 	desc = "Contains a .45 magazine for the Cobra-20, with a capacity of 24 rounds."
 	cost = 300
 	contains = list(/obj/item/ammo_box/magazine/m45_cobra/empty)
 	faction = /datum/faction/syndicate/scarborough
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/short_hydra_mag
 	name = "SBR-80 DMR Short Magazine Crate"
@@ -215,6 +247,8 @@
 	cost = 150
 	faction = /datum/faction/clip
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/cm70_mag
 	name = "CM-70 Magazine Crate"
 	desc = "Contains a 9mm magazine for the CM-70 machinepistol."
@@ -223,12 +257,16 @@
 	faction = /datum/faction/clip
 	faction_discount = 20
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/cm357_mag
 	name = "CM-357 Magazine Crate"
 	desc = "Contains a .357 magazine for the CM-357 automag pistol with a capacity of 7 rounds."
 	contains = list(/obj/item/ammo_box/magazine/cm357/empty)
 	cost = 150
 	faction = /datum/faction/clip
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/cm5_mag
 	name = "CM-5 Magazine Crate"
@@ -237,6 +275,8 @@
 	cost = 300
 	faction = /datum/faction/clip
 	faction_discount = 20
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/cm82_mag
 	name = "CM-82 Magazine Crate"
@@ -287,6 +327,7 @@
 	contains = list(/obj/item/ammo_box/magazine/cm15_12g/empty)
 	cost = 400
 	faction = /datum/faction/clip
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/cm40
 	name = "CM-40 Magazine Crate"
@@ -304,12 +345,16 @@
 	contains = list(/obj/item/ammo_box/magazine/wt550m9/empty)
 	faction = /datum/faction/warra
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/expedition_mag
 	name = "SGL9 Expedition Submachinegun Magazine Crate"
 	desc = "Contains a 30-round magazine for the Expedition Submachinegun, chambered in 9mm."
 	cost = 250
 	contains = list(/obj/item/ammo_box/magazine/m9mm_expedition)
 	faction = /datum/faction/warra
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /* SolGov */
 
@@ -320,12 +365,15 @@
 	cost = 150
 	faction = /datum/faction/solgov
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/fms_mag
 	name = "Ferromagnetic Slug Magazine Crate"
 	desc = "Contains a ferromagnetic slug magazine for the Model H pistol, with a capacity of ten rounds."
 	contains = list(/obj/item/ammo_box/magazine/modelh/empty)
 	cost = 350
 	faction = /datum/faction/solgov
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/gar_ammo
 	name = "GAR Ferromagnetic Lance Magazine Crate"
@@ -333,6 +381,7 @@
 	contains = list(/obj/item/ammo_box/magazine/gar/empty)
 	cost = 500
 	faction = /datum/faction/solgov
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/claris_ammo
 	name = "Claris Ferromagnetic Pellet Speedloader Crate"
@@ -340,6 +389,7 @@
 	contains = list(/obj/item/ammo_box/amagpellet_claris/empty)
 	cost = 400
 	faction = /datum/faction/solgov
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /* Inteq */
 
@@ -349,6 +399,8 @@
 	contains = list(/obj/item/ammo_box/magazine/smgm10mm/empty)
 	cost = 200
 	faction = /datum/faction/inteq
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/rottweiler_mag
 
@@ -367,6 +419,8 @@
 	cost = 400
 	faction = /datum/faction/syndicate/scarborough
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/bulldog_12
 	name = "Bulldog Drum Magazine Crate"
 	desc = "Contains a 12-round 12ga drum magazine for the Bulldog weapons platform."
@@ -379,6 +433,8 @@
 	desc = "Contains a 6-round 12ga magazine for the Slammer shotgun."
 	contains = list(/obj/item/ammo_box/magazine/m12g_slammer)
 	cost = 300
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /* E-40 */
 
@@ -396,6 +452,8 @@
 	contains = list(/obj/item/stock_parts/cell/gun)
 	cost = 500
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/solgovcell
 	name = "SolCon Weapon Cell Crate"
 	desc = "Contains a Solarian weapon cell, compatible with Solarian gauss weaponry."
@@ -405,6 +463,8 @@
 	faction_discount = 0
 	faction_locked = TRUE
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/warra_guncell
 	name = "Sharplite Power Cell"
 	desc = "Contains a proprietary weapon cell, compatible with most Sharplite energy weapons."
@@ -413,6 +473,8 @@
 	faction_discount = 25 /*300 credits*/
 	cost = 400
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/tinyguncell
 	name = "Sharplite Mini Power Cell"
 	desc = "Contains a proprietary weapon cell, compatible with the Ohm self-defence pistol."
@@ -420,6 +482,8 @@
 	faction = /datum/faction/warra
 	faction_discount = 20 /*200 credits*/
 	cost = 250
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/magazine/upgradedguncell
 	name = "Sharplite Plus Proprietary Weapon Cell"
@@ -439,6 +503,8 @@
 	faction_discount = 0
 	faction_locked = TRUE
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /* etherbor */
 
 /datum/supply_pack/magazine/kalixcell
@@ -448,6 +514,8 @@
 	cost = 500
 	faction = /datum/faction/pgf
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/magazine/pgfcell
 	name = "Military-Grade Etherbor Cell Crate"
 	desc = "Contains a military-grade Etherbor weapon cell produced for the PGFMC, compatible with Etherbor armaments with a significantly higher capacity."
@@ -456,5 +524,7 @@
 	faction = /datum/faction/pgf
 	faction_discount = 0
 	faction_locked = TRUE
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /* Expand once the energy weapons have been actually expanded upon */

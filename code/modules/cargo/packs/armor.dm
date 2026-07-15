@@ -2,6 +2,8 @@
 	category = "Armor"
 	crate_type = /obj/structure/closet/crate/secure
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 
 /*
 		Non-spaceworthy (armor)
@@ -76,6 +78,8 @@
 	faction_discount = 0
 	faction_locked = TRUE
 
+	markets = list(/datum/cargo_market/outpost)
+
 /datum/supply_pack/armor/clip_riot
 	name = "CLIP Riot Armor Crate"
 	desc = "One set of Clover Corp-manufactured Riot armor, traditionally issued to BARD for xenofauna removal, but available to League vessels deployed in the Frontier due to high Xenofauna density."
@@ -88,6 +92,8 @@
 	faction = /datum/faction/clip
 	faction_discount = 0
 	faction_locked = TRUE
+
+	markets = list(/datum/cargo_market/outpost)
 
 //gezena
 /datum/supply_pack/armor/pgf_marine_armor
@@ -104,6 +110,8 @@
 	faction_discount = 0
 	faction_locked = TRUE
 
+	markets = list(/datum/cargo_market/outpost)
+
 /datum/supply_pack/armor/pgf_navy_armor
 	name = "Navy Flak Armor Crate"
 	desc = "One set of standard issue PGFN flak armor. All a sailor needs when general quarters is called. Comes with a matching respirator."
@@ -117,6 +125,7 @@
 	faction = /datum/faction/pgf
 	faction_discount = 0
 	faction_locked = TRUE
+	markets = list(/datum/cargo_market/outpost)
 
 /datum/supply_pack/armor/pgf_armor
 	name = "Navywear Coat Crate"
@@ -128,6 +137,8 @@
 	faction = /datum/faction/pgf
 	faction_discount = 0
 	faction_locked = TRUE
+
+	markets = list(/datum/cargo_market/outpost)
 
 //jardliner
 
@@ -168,6 +179,8 @@
 	faction_discount = 0
 	faction_locked = TRUE
 
+	markets = list(/datum/cargo_market/outpost)
+
 //srm
 
 /datum/supply_pack/armor/srm_duster
@@ -181,6 +194,8 @@
 	faction = /datum/faction/srm
 	faction_discount = 0
 	faction_locked = TRUE
+
+	markets = list(/datum/cargo_market/outpost)
 
 /datum/supply_pack/armor/srm_trench
 	name = "SRM Heavy Duster Crate"

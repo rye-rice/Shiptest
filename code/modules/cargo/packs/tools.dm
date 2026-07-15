@@ -1,6 +1,7 @@
 /datum/supply_pack/tools
 	category = "Tools & Tanks"
 	crate_type = /obj/structure/closet/crate/engineering
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 /*
 		Actual tools
@@ -37,6 +38,8 @@
 	contains = list(/obj/item/bodycamera)
 	crate_name = "bodycamera crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/tools/assbelt
 	name = "Assault Belt Crate"
 	desc = "Contains an assault belt, with not one, not two, but six pockets."
@@ -44,12 +47,16 @@
 	contains = list(/obj/item/storage/belt/military/assault)
 	crate_name = "assault belt crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/tools/chestrig
 	name = "Chest Rig Crate"
 	desc = "Contains a chest rig, with seven places to store small items."
 	cost = 500
 	contains = list(/obj/item/storage/belt/military)
 	crate_name = "chest rig crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/tools/cellcharger
 	name = "Cell Charger Crate"
@@ -63,6 +70,8 @@
 	cost = 750
 	contains = list(/obj/item/storage/part_replacer)
 	crate_name = "\improper RPED crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/tools/mining
 	name = "Basic Mining Crate"
@@ -101,6 +110,8 @@
 	contains = list(/obj/item/pickaxe/drill/jackhammer)
 	crate_name = "jackhammer crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/tools/metalfoam
 	name = "Metal Foam Grenade Crate"
 	desc = "Seal up those pesky hull breaches with 7 metal foam grenades."
@@ -131,17 +142,23 @@
 	crate_name = "jetpack crate"
 	crate_type = /obj/structure/closet/crate/secure/plasma
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/tools/jetpack/harness
 	name = "Jetpack Harness Crate"
 	desc = "A compact jetpack harness for those who don't wish to be weighed down by larger traditional jetpacks."
 	cost = 750
 	contains = list(/obj/item/tank/jetpack/oxygen/harness)
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/tools/jetpack/suit
 	name = "Hardsuit Jetpack Upgrade Crate"
 	desc = "A standardized jetpack attachment designed for direct integration with hardsuits. For when every gram matters."
 	cost = 1250
 	contains = list(/obj/item/tank/jetpack/suit)
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/tools/anglegrinder
 	name = "Angle Grinder"
@@ -152,6 +169,8 @@
 		/obj/item/radio/headset/alt
 		)
 	crate_name = "angle grinder crate"
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/tools/electric_welder
 	name = "Electric Welder"
@@ -174,6 +193,8 @@
 	contains = list(/obj/item/plasmacutter)
 	crate_name = "plasmacutter crate"
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/tools/sledgehammer
 	name = "Sledgehammer Crate"
 	desc = "Contains a Sledgehammer, useful for demolishing any obstacles in your path."
@@ -190,6 +211,8 @@
 	faction = /datum/faction/syndicate/ngr
 	faction_locked = TRUE
 	faction_discount = 0
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /*
 		Liquid tanks
@@ -242,6 +265,8 @@
 	crate_name = "foam tank crate"
 	crate_type = /obj/structure/closet/crate/large
 	no_bundle = TRUE
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /datum/supply_pack/tools/headlight
 	name = "Headlamp Crate"

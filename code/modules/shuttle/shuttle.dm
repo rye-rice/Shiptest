@@ -237,6 +237,7 @@
 
 /obj/docking_port/stationary/Initialize(mapload, datum/overmap/dock_holder)
 	. = ..()
+	dock_holder = SSovermap.get_overmap_object_by_location(src, TRUE)
 	SSshuttle.stationary += src
 	initial_location = list("x" = x, "y" = y, "z" = z)
 	if(name == "dock")
@@ -247,9 +248,10 @@
 			T.flags_1 |= NO_RUINS_1
 		if(SSshuttle.initialized && load_template_on_initialize) // If the docking port is loaded via map but SSshuttle has already init (therefore this would never be called)
 			INVOKE_ASYNC(src, PROC_REF(load_roundstart))
-	if(istype(dock_holder, /datum/overmap/outpost))
+	if(istype(dock_holder, /datum/overmap/outpost) && roundstart_template)
 		var/datum/overmap/outpost/parent_outpost = dock_holder
 		LAZYADD(parent_outpost.main_floor_docks,src)
+
 
 	#ifdef DOCKING_PORT_HIGHLIGHT
 	highlight("#f00")

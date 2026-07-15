@@ -16,6 +16,8 @@
 	crate_name = "shoalwich crate"
 	crate_type = /obj/structure/closet/crate/freezer
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/food/shoalpockets/fill(obj/structure/closet/crate/C)
 	for(var/i in 1 to 3)
 		var/item = pick(contains)
@@ -33,6 +35,8 @@
 	crate_name = "pizza crate"
 	crate_type = /obj/structure/closet/crate/freezer
 
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
+
 /datum/supply_pack/food/ration
 	name = "Ration Crate"
 	desc = "One standard issue ration pack. For your inner jarhead."
@@ -40,6 +44,8 @@
 	contains = list(/obj/effect/spawner/random/food_or_drink/ration)
 	crate_name = "ration crate"
 	crate_type = /obj/structure/closet/crate
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 /*
 		Ingredients
@@ -532,6 +538,8 @@
 	contains = list(/obj/item/melee/knife/kitchen)
 	crate_name = "kitchen knife crate"
 	crate_type = /obj/structure/closet/crate/wooden
+
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/general_store, /datum/cargo_market/tadpole_city)
 
 
 /* Probably write better descriptions*/

@@ -333,6 +333,60 @@
 		token.color = current_overmap.primary_color
 	current_overmap.post_edit_token_state(src)
 
+/*
+	CLIP Ocean outpost //I really hated ghost leviathans, man
+*/
+/datum/map_template/outpost/tadpole_city
+	name = "tadpole_city"
+
+
+/datum/map_template/outpost/tadpole_city_z2
+	name = "tadpole_city_z2"
+
+/datum/map_template/outpost/tadpole_city_z3
+	name = "tadpole_city_z3"
+
+/datum/map_template/outpost/hangar/clip_ocean_20x20
+	name = "hangar/clip_ocean_20x20"
+	dock_width = 20
+	dock_height = 20
+
+/datum/map_template/outpost/hangar/clip_ocean_40x20
+	name = "hangar/clip_ocean_40x20"
+	dock_width = 40
+	dock_height = 20
+
+/datum/map_template/outpost/hangar/clip_ocean_40x40
+	name = "hangar/clip_ocean_40x40"
+	dock_width = 40
+	dock_height = 40
+
+/datum/map_template/outpost/hangar/clip_ocean_56x20
+	name = "hangar/clip_ocean_56x20"
+	dock_width = 56
+	dock_height = 20
+
+/datum/map_template/outpost/hangar/clip_ocean_56x40
+	name = "hangar/clip_ocean_56x40"
+	dock_width = 56
+	dock_height = 40
+
+/datum/overmap/outpost/indie_smallshop
+	outpost_name = "SMV Bearcat"
+	outpost_administrator = "Bearcat"
+	token_icon_state = "ship_massive_generic"
+	main_template = /datum/map_template/outpost/indie_smallshop
+	faction = FACTION_INDEPENDENT
+//	market = /datum/cargo_market/outpost
+
+/datum/overmap/outpost/indie_smallshop/Initialize(position, datum/overmap_star_system/system_spawned_in, ...)
+	. = ..()
+	market = new /datum/cargo_market/general_store()
+	market.name = "[name] market"
+
+/datum/map_template/outpost/indie_smallshop
+	name = "indie_smallshop"
+
 /datum/overmap/outpost/no_main_level // For example and adminspawn.
 	main_template = null
 	elevator_template = /datum/map_template/outpost/elevator_test

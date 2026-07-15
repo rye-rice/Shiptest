@@ -2,6 +2,7 @@
 	category = "Hydroponics & Gardening"
 	crate_name = "gardening crate"
 	crate_type = /obj/structure/closet/crate/hydroponics
+	markets = list(/datum/cargo_market/outpost, /datum/cargo_market/tadpole_city)
 
 
 
