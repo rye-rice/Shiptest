@@ -385,7 +385,7 @@
 	market.name = "[name] market"
 
 /datum/map_template/outpost/indie_smallshop
-	name = "indie_smallshop"
+	name = "indie_bearcat"
 
 /datum/overmap/outpost/no_main_level // For example and adminspawn.
 	main_template = null

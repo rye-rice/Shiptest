@@ -8,6 +8,7 @@ and then spawns a crate at the spawner's turf
 
 /obj/effect/landmark/outpost/hangar_crate_spawner
 	name = "hangar crate spawner"
+	var/id
 
 /obj/effect/landmark/outpost/hangar_crate_spawner/proc/create_spawner()
 	var/obj/hangar_crate_spawner/spawner = new /obj/hangar_crate_spawner(get_turf(src))

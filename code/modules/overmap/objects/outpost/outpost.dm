@@ -268,6 +268,15 @@
 		if((port.virtual_z() == vlevel.id) && !(port.roundstart_template) && !(port in main_floor_docks))
 			reserve_docks += port
 
+	for(var/obj/effect/landmark/outpost/hangar_crate_spawner/crate_spawner_mark in GLOB.outpost_landmarks)
+		if(!vlevel.is_in_bounds(crate_spawner_mark))
+			continue
+		if(crate_spawner_mark.id)
+			for(var/obj/docking_port/stationary/available_port in reserve_docks)
+				if(crate_spawner_mark.id == available_port.crate_spawner)
+					available_port.crate_spawner = crate_spawner_mark.create_spawner()
+					break
+
 	for(var/shaft_name in shaft_lists)
 		var/list/obj/shaft_li = shaft_lists[shaft_name]
 		var/obj/effect/landmark/outpost/elevator/anchor_landmark = shaft_li[1]
@@ -480,8 +489,11 @@
 	for(var/obj/effect/landmark/outpost/hangar_crate_spawner/crate_spawner_mark in GLOB.outpost_landmarks)
 		if(!vlevel.is_in_bounds(crate_spawner_mark))
 			continue
-		for(var/obj/docking_port/stationary/available_port as anything in found_ports)
-			available_port.crate_spawner = crate_spawner_mark.create_spawner()
+		if(crate_spawner_mark.id)
+			for(var/obj/docking_port/stationary/available_port in found_ports)
+				if(crate_spawner_mark.id == available_port.crate_spawner)
+					available_port.crate_spawner = crate_spawner_mark.create_spawner()
+					break
 	if(!shaft.shaft_elevator)
 		// if there's no elevator in this shaft, then delete the landmarks
 		for(var/obj/effect/landmark/outpost/mark as anything in GLOB.outpost_landmarks)

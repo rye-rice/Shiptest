@@ -560,6 +560,10 @@
 /obj/machinery/vending/clothing,
 /turf/open/floor/plasteel/mono/white,
 /area/outpost/crew/cryo)
+"kn" = (
+/obj/structure/rack,
+/turf/open/floor/plasteel/elevatorshaft,
+/area/outpost/security/armory)
 "ko" = (
 /obj/structure/table/optable,
 /obj/effect/turf_decal/borderfloorblack/full,
@@ -2570,10 +2574,6 @@
 /obj/machinery/power/apc/auto_name/directional/north,
 /turf/open/floor/wood,
 /area/outpost/crew/bar)
-"Vj" = (
-/obj/structure/rack,
-/turf/open/floor/plasteel/elevatorshaft,
-/area/outpost/security/armory)
 "Vk" = (
 /turf/open/floor/plasteel/tech,
 /area/outpost/hallway/fore)
@@ -9570,7 +9570,7 @@ SJ
 fo
 OX
 Oz
-Vj
+kn
 Ho
 nm
 NS
@@ -9817,7 +9817,7 @@ Bq
 ic
 Oz
 AY
-Vj
+kn
 nm
 NS
 NS
