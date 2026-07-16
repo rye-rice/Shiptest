@@ -289,22 +289,38 @@
 	var/list/docker_bounds = shuttle.return_union_bounds(shuttle.get_all_towed_shuttles())
 	var/docker_dwidth = docker_bounds[1]
 	var/docker_dheight = docker_bounds[2]
-	var/docker_rwidth = docker_bounds[3] - docker_dwidth
-	var/docker_rheight = docker_bounds[4] - docker_dheight
+	var/docker_rwidth = docker_bounds[3]
+	var/docker_rheight = docker_bounds[4]
 
 	//use width on height instead of other way ariound
 	var/checking_sideways_dock = FALSE
 
+	//basically, nearly 100% of the time ships intentionally want this set this to east, but if theres an exception, we try to land in another direction
+	//var/final_facing_dir = SIMPLIFY_DEGREES(dir2angle(shuttle.preferred_direction) + dir2angle(shuttle.port_direction))
+
+
 	// the shuttle's dimensions where "true height" measures distance from the shuttle's fore to its aft
-	var/shuttle_true_height = shuttle.height
-	var/shuttle_true_width = shuttle.width
+	var/shuttle_true_height = docker_rheight
+	var/shuttle_true_width = docker_rwidth
+	var/shuttle_true_dheight = docker_dheight
+	var/shuttle_true_dwidth = docker_dwidth
+
 	// if the port's location is perpendicular to the shuttle's fore, the "true height" is the port's "width" and vice-versa
-	if(EWCOMPONENT(shuttle.port_direction))
-		shuttle_true_height = shuttle.width
-		shuttle_true_width = shuttle.height
+
+	//to avoid redundant work, if we figure out we dont fit immediately stop
+	if(docker_rheight > height || docker_rwidth > width)
+		shuttle_true_height = docker_rwidth
+		shuttle_true_width = docker_rheight
+		shuttle_true_dheight = docker_dwidth
+		shuttle_true_dwidth = docker_dheight
+
+		checking_sideways_dock = TRUE
+		if(docker_rwidth > height || docker_rheight > width)
+			is_adjusting_now = FALSE
+			return FALSE
 
 	// the dir the stationary port should be facing (note that it points inwards)
-	var/final_facing_dir = angle2dir(dir2angle(shuttle_true_height > shuttle_true_width ? EAST : NORTH)+dir2angle(shuttle.port_direction)+180)
+	var/final_facing_dir = angle2dir(dir2angle(checking_sideways_dock ? EAST : NORTH)+dir2angle(shuttle.port_direction)+180)
 
 	var/oldloc = loc
 	var/olddir = dir
@@ -330,7 +346,7 @@
 		width = dock_height_store
 
 	dir = final_facing_dir
-	if(docker_rheight > height || docker_rwidth > width)
+	if(shuttle_true_height > shuttle_true_height || shuttle_true_width > shuttle_true_width)
 		forceMove(oldloc)
 		dir = olddir
 		dheight = olddheight
@@ -341,8 +357,8 @@
 		return FALSE
 
 	// offset for the dock within its area
-	var/new_dheight = round((height-shuttle.height)/2) + shuttle.dheight
-	var/new_dwidth = round((width-shuttle.width)/2) + shuttle.dwidth
+	var/new_dheight = round((height-docker_rheight)/2) + docker_dwidth
+	var/new_dwidth = round((width-docker_rwidth)/2) + docker_dwidth
 
 	// use the relative-to-dir offset above to find the absolute position offset for the dock
 	switch(final_facing_dir)
