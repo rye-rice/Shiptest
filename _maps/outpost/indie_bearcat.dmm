@@ -42,6 +42,11 @@
 /obj/effect/turf_decal/industrial/warning,
 /turf/open/floor/plasteel/patterned,
 /area/outpost/hallway/fore)
+"aF" = (
+/obj/effect/turf_decal/number/left_zero,
+/obj/effect/turf_decal/number/right_three,
+/turf/open/floor/plasteel/patterned,
+/area/hangar)
 "aH" = (
 /obj/structure/disposalpipe/trunk{
 	dir = 4
@@ -60,15 +65,13 @@
 	dir = 1
 	},
 /obj/machinery/door/firedoor/border_only,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /obj/machinery/door/airlock/grunge{
 	name = "Communications Equipment";
 	req_one_access = list(20, 57, 58, 10);
 	fast_close = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /turf/open/floor/plasteel/tech/grid,
 /area/outpost/maintenance/fore)
 "aS" = (
@@ -84,7 +87,7 @@
 	dir = 4
 	},
 /turf/open/floor/plasteel/tech,
-/area/outpost/external)
+/area/outpost/exterior)
 "bb" = (
 /turf/closed/indestructible/edge,
 /area/outpost/external)
@@ -153,6 +156,16 @@
 	},
 /turf/open/floor/plasteel/white,
 /area/outpost/operations)
+"bT" = (
+/obj/docking_port/stationary{
+	height = 14;
+	width = 14;
+	name = "Hangar 03 (Small)";
+	adjust_dock_for_landing = 1;
+	crate_spawner = "03"
+	},
+/turf/open/floor/plating,
+/area/hangar)
 "bX" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -370,14 +383,6 @@
 	},
 /turf/open/floor/plasteel/white,
 /area/outpost/operations)
-"ei" = (
-/obj/machinery/atmospherics/pipe/layer_manifold,
-/obj/effect/turf_decal/industrial/traffic{
-	dir = 4
-	},
-/obj/machinery/advanced_airlock_controller/directional/east,
-/turf/open/floor/plasteel/tech/grid,
-/area/outpost/external)
 "ek" = (
 /turf/open/floor/engine,
 /area/outpost/engineering)
@@ -419,7 +424,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
 /obj/machinery/door/airlock/external/glass,
 /turf/open/floor/plating,
-/area/outpost/external)
+/area/outpost/exterior)
 "eX" = (
 /obj/structure/table/reinforced{
 	color = "#c1b6a5"
@@ -466,15 +471,6 @@
 	},
 /turf/open/floor/plasteel/mono/dark,
 /area/outpost/operations)
-"fp" = (
-/obj/effect/turf_decal/industrial/traffic{
-	dir = 8
-	},
-/obj/machinery/suit_storage_unit/inherit,
-/obj/item/clothing/suit/space/fragile,
-/obj/item/clothing/head/helmet/space/fragile,
-/turf/open/floor/plasteel/tech/grid,
-/area/outpost/external)
 "fr" = (
 /obj/structure/sign/barsign{
 	pixel_y = 32
@@ -581,11 +577,6 @@
 	},
 /turf/open/floor/plasteel/tech,
 /area/outpost/hallway/fore)
-"gq" = (
-/obj/effect/turf_decal/number/left_zero,
-/obj/effect/turf_decal/number/right_three,
-/turf/open/floor/plasteel/patterned,
-/area/hangar)
 "gt" = (
 /obj/machinery/airalarm/directional/south,
 /turf/open/floor/plasteel/patterned,
@@ -636,6 +627,13 @@
 /obj/structure/chair/bench/beige/directional/north,
 /turf/open/floor/plasteel/patterned,
 /area/hangar)
+"gP" = (
+/obj/effect/turf_decal/industrial/traffic{
+	dir = 8
+	},
+/obj/structure/closet/emcloset/anchored,
+/turf/open/floor/plasteel/tech/grid,
+/area/outpost/exterior)
 "gQ" = (
 /obj/effect/turf_decal/number/left_zero,
 /obj/effect/turf_decal/number/right_two,
@@ -645,13 +643,6 @@
 /obj/machinery/light/directional/west,
 /turf/open/floor/plasteel/patterned,
 /area/outpost/hallway/starboard)
-"gU" = (
-/obj/effect/turf_decal/industrial/traffic{
-	dir = 8
-	},
-/obj/structure/closet/emcloset/anchored,
-/turf/open/floor/plasteel/tech/grid,
-/area/outpost/external)
 "hg" = (
 /obj/effect/turf_decal/techfloor{
 	dir = 4
@@ -666,6 +657,9 @@
 /obj/machinery/power/smes/magical,
 /obj/effect/turf_decal/techfloor{
 	dir = 4
+	},
+/obj/structure/cable{
+	icon_state = "0-8"
 	},
 /turf/open/floor/plasteel/tech/grid,
 /area/outpost/engineering)
@@ -691,6 +685,9 @@
 	dir = 8
 	},
 /obj/structure/catwalk/over,
+/obj/structure/cable{
+	icon_state = "4-8"
+	},
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "hV" = (
@@ -739,7 +736,6 @@
 /obj/structure/cable{
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer2{
 	dir = 1
@@ -828,6 +824,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
 	dir = 9
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "jB" = (
@@ -943,16 +940,9 @@
 "kA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
-"kB" = (
-/obj/effect/turf_decal/ihejirika_small/left,
-/turf/open/floor/engine,
-/area/outpost/engineering)
-"kK" = (
-/obj/effect/turf_decal/ihejirika_small/right,
-/turf/open/floor/engine,
-/area/outpost/engineering)
 "kM" = (
 /obj/effect/turf_decal/corner/opaque/brown/border{
 	dir = 4
@@ -1039,6 +1029,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "lE" = (
@@ -1115,13 +1106,6 @@
 	},
 /turf/open/floor/plasteel/tech/grid,
 /area/outpost/engineering)
-"mv" = (
-/obj/effect/turf_decal/industrial/traffic{
-	dir = 8
-	},
-/obj/machinery/light/directional/west,
-/turf/open/floor/plasteel/tech/grid,
-/area/outpost/external)
 "mw" = (
 /obj/effect/turf_decal/techfloor{
 	dir = 1
@@ -1187,6 +1171,12 @@
 	dir = 4
 	},
 /area/outpost/operations)
+"mF" = (
+/obj/machinery/atmospherics/components/unary/outlet_injector/on/layer4{
+	dir = 4
+	},
+/turf/open/floor/plating,
+/area/outpost/exterior)
 "mG" = (
 /obj/effect/turf_decal/siding/thinplating{
 	dir = 8
@@ -1231,6 +1221,7 @@
 /obj/structure/cable{
 	icon_state = "2-8"
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "mW" = (
@@ -1243,16 +1234,8 @@
 /turf/open/floor/plasteel/tech,
 /area/hangar)
 "nc" = (
-/obj/structure/cable{
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
-	dir = 8
-	},
-/turf/open/floor/plating,
+/obj/machinery/light/directional/west,
+/turf/open/floor/plasteel/patterned,
 /area/outpost/hallway/port)
 "nf" = (
 /obj/structure/table/emptycomputer{
@@ -1339,6 +1322,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
 	dir = 10
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/starboard)
 "od" = (
@@ -1594,7 +1578,7 @@
 	},
 /obj/structure/catwalk/over/plated_catwalk/dark,
 /turf/open/floor/plating,
-/area/outpost/external)
+/area/outpost/exterior)
 "qa" = (
 /obj/structure/table/reinforced,
 /obj/machinery/light/directional/south,
@@ -1796,26 +1780,6 @@
 /obj/machinery/light/directional/south,
 /turf/open/floor/plasteel/patterned,
 /area/outpost/hallway/port)
-"rX" = (
-/obj/structure/table/reinforced,
-/obj/machinery/computer/secure_data/laptop{
-	pixel_y = 14;
-	pixel_x = 5
-	},
-/obj/item/reagent_containers/food/drinks/coffee{
-	pixel_x = -5;
-	pixel_y = 6
-	},
-/obj/item/phone{
-	pixel_x = 1;
-	pixel_y = -10
-	},
-/obj/structure/filingcabinet/double{
-	dir = 4;
-	pixel_x = -10
-	},
-/turf/open/floor/plasteel/dark,
-/area/outpost/operations)
 "rZ" = (
 /turf/closed/wall/mineral/plastitanium/nodiagonal,
 /area/outpost/engineering)
@@ -1885,6 +1849,7 @@
 "tf" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/starboard)
 "tl" = (
@@ -2173,7 +2138,7 @@
 /area/outpost/cargo)
 "wl" = (
 /turf/closed/wall/mineral/plastitanium,
-/area/outpost/external)
+/area/outpost/exterior)
 "wn" = (
 /obj/effect/turf_decal/siding/thinplating/dark,
 /obj/structure/chair/office,
@@ -2373,11 +2338,12 @@
 /turf/open/floor/plasteel/patterned/brushed,
 /area/outpost/operations)
 "yC" = (
-/obj/machinery/door/poddoor/ert{
-	dir = 4
+/obj/effect/turf_decal/industrial/traffic{
+	dir = 8
 	},
-/turf/open/space/basic,
-/area/outpost/engineering)
+/obj/machinery/light/directional/west,
+/turf/open/floor/plasteel/tech/grid,
+/area/outpost/exterior)
 "yJ" = (
 /obj/structure/cable{
 	icon_state = "4-8"
@@ -2433,6 +2399,14 @@
 "zs" = (
 /turf/open/floor/plating,
 /area/outpost/engineering)
+"zu" = (
+/obj/machinery/atmospherics/pipe/layer_manifold,
+/obj/effect/turf_decal/industrial/traffic{
+	dir = 4
+	},
+/obj/machinery/advanced_airlock_controller/directional/east,
+/turf/open/floor/plasteel/tech/grid,
+/area/outpost/exterior)
 "zx" = (
 /obj/effect/turf_decal/number/left_zero{
 	dir = 1
@@ -2467,9 +2441,6 @@
 	},
 /obj/structure/catwalk/over/plated_catwalk/dark,
 /turf/open/floor/plating,
-/area/outpost/external)
-"zP" = (
-/turf/open/floor/plating,
 /area/outpost/exterior)
 "zQ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
@@ -2482,7 +2453,6 @@
 	height = 37;
 	width = 120;
 	name = "Portside Docking Port 04";
-	adjust_dock_for_landing = 1;
 	dheight = 1;
 	dwidth = 60;
 	crate_spawner = "04"
@@ -2511,10 +2481,6 @@
 	},
 /turf/open/floor/wood/walnut,
 /area/outpost/crew/bar)
-"Am" = (
-/obj/machinery/light/directional/west,
-/turf/open/floor/plasteel/patterned,
-/area/outpost/hallway/port)
 "Ao" = (
 /obj/structure/cable{
 	icon_state = "1-2"
@@ -2593,10 +2559,6 @@
 	},
 /turf/open/floor/plasteel/tech,
 /area/outpost/crew/bar)
-"Bo" = (
-/obj/machinery/door/airlock/external/glass,
-/turf/open/floor/plating,
-/area/outpost/external)
 "Bs" = (
 /obj/machinery/light/directional/north,
 /turf/open/floor/plasteel/telecomms_floor,
@@ -2623,23 +2585,12 @@
 /turf/closed/wall/mineral/plastitanium/nodiagonal,
 /area/outpost/hallway/fore)
 "BM" = (
-/obj/machinery/door/poddoor/ert{
-	dir = 4
-	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/open/space/basic,
-/area/outpost/engineering)
+/turf/open/floor/plating,
+/area/outpost/exterior)
 "BP" = (
-/obj/structure/railing/thick{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4{
-	dir = 4
-	},
-/turf/open/floor/plasteel/patterned,
-/area/outpost/hallway/port)
+/obj/machinery/door/airlock/external/glass,
+/turf/open/floor/plating,
+/area/outpost/exterior)
 "BY" = (
 /obj/structure/table/wood/poker,
 /obj/item/toy/cards/deck{
@@ -2691,9 +2642,18 @@
 	},
 /turf/open/floor/plasteel/tech/grid,
 /area/outpost/engineering)
+"Cx" = (
+/obj/effect/turf_decal/industrial/traffic{
+	dir = 8
+	},
+/obj/machinery/suit_storage_unit/inherit,
+/obj/item/clothing/suit/space/fragile,
+/obj/item/clothing/head/helmet/space/fragile,
+/turf/open/floor/plasteel/tech/grid,
+/area/outpost/exterior)
 "CO" = (
-/turf/closed/indestructible/plastitanium/nodiagnonal,
-/area/outpost/external)
+/turf/closed/wall/mineral/plastitanium/nodiagonal,
+/area/outpost/exterior)
 "CU" = (
 /obj/structure/disposaloutlet,
 /obj/structure/disposalpipe/trunk{
@@ -2875,12 +2835,10 @@
 "Fp" = (
 /obj/effect/turf_decal/number/left_zero,
 /obj/effect/turf_decal/number/right_four,
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer2{
-	dir = 4
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
+	dir = 6
 	},
-/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
-	dir = 4
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /turf/open/floor/plasteel/patterned,
 /area/outpost/hallway/port)
 "Fq" = (
@@ -2922,6 +2880,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4{
 	dir = 8
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/starboard)
 "FE" = (
@@ -3099,6 +3058,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "Hi" = (
@@ -3208,9 +3168,6 @@
 /area/outpost/operations)
 "Is" = (
 /obj/machinery/power/terminal,
-/obj/structure/cable{
-	icon_state = "0-8"
-	},
 /obj/effect/turf_decal/techfloor{
 	dir = 4
 	},
@@ -3287,7 +3244,7 @@
 	},
 /obj/structure/catwalk/over/plated_catwalk/dark,
 /turf/open/floor/plating,
-/area/outpost/external)
+/area/outpost/exterior)
 "Jk" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer2{
 	dir = 4
@@ -3342,7 +3299,7 @@
 	dir = 8
 	},
 /turf/open/floor/plasteel/tech,
-/area/outpost/external)
+/area/outpost/exterior)
 "JI" = (
 /obj/structure/cable{
 	icon_state = "1-2"
@@ -3532,7 +3489,7 @@
 /obj/machinery/atmospherics/pipe/layer_manifold,
 /obj/machinery/door/airlock/external/glass,
 /turf/open/floor/plating,
-/area/outpost/external)
+/area/outpost/exterior)
 "LS" = (
 /obj/structure/cable{
 	icon_state = "4-8"
@@ -3552,16 +3509,6 @@
 	dir = 9
 	},
 /turf/open/floor/plasteel/patterned,
-/area/hangar)
-"LX" = (
-/obj/docking_port/stationary{
-	height = 14;
-	width = 14;
-	name = "Hangar 03 (Small)";
-	adjust_dock_for_landing = 1;
-	crate_spawner = "03"
-	},
-/turf/open/floor/plating,
 /area/hangar)
 "Ma" = (
 /obj/structure/plasticflaps/outpost,
@@ -3606,10 +3553,6 @@
 	dir = 8
 	},
 /turf/open/floor/plasteel/tech/grid,
-/area/outpost/engineering)
-"MC" = (
-/obj/effect/turf_decal/ihejirika_small,
-/turf/open/floor/engine,
 /area/outpost/engineering)
 "MD" = (
 /obj/structure/cable{
@@ -3756,6 +3699,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "OI" = (
@@ -3766,16 +3710,19 @@
 /area/outpost/crew/bar)
 "OM" = (
 /obj/machinery/conveyor/auto/outpost{
-	dir = 6
+	dir = 8
 	},
 /obj/structure/plasticflaps/outpost,
 /turf/open/floor/plasteel/dark,
 /area/outpost/cargo)
 "OS" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
-	dir = 6
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer2{
+	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4{
+	dir = 8
+	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "OW" = (
@@ -3955,6 +3902,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
 	dir = 5
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/starboard)
 "QU" = (
@@ -4140,9 +4088,6 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
 /turf/open/floor/plasteel/tech/grid,
 /area/outpost/maintenance/fore)
-"SU" = (
-/turf/closed/indestructible/plastitanium/nodiagnonal,
-/area/ship/external/dark)
 "SW" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -4506,6 +4451,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layer4{
 	dir = 8
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "WP" = (
@@ -4650,7 +4596,7 @@
 /obj/item/clothing/suit/space/fragile,
 /obj/item/clothing/head/helmet/space/fragile,
 /turf/open/floor/plasteel/tech/grid,
-/area/outpost/external)
+/area/outpost/exterior)
 "XH" = (
 /obj/structure/fluff/hedge,
 /obj/structure/cable{
@@ -4670,12 +4616,6 @@
 	},
 /turf/open/floor/plasteel/patterned/brushed,
 /area/outpost/operations)
-"XS" = (
-/obj/machinery/atmospherics/components/unary/outlet_injector/on/layer4{
-	dir = 4
-	},
-/turf/open/floor/plating,
-/area/outpost/exterior)
 "Yf" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer2{
 	dir = 8
@@ -4845,7 +4785,7 @@
 	},
 /obj/structure/closet/emcloset/anchored,
 /turf/open/floor/plasteel/tech/grid,
-/area/outpost/external)
+/area/outpost/exterior)
 "ZF" = (
 /obj/machinery/light/directional/north,
 /obj/structure/cable{
@@ -4875,6 +4815,7 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4,
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "ZO" = (
@@ -4912,6 +4853,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer2{
 	dir = 4
 	},
+/obj/structure/catwalk/over,
 /turf/open/floor/plating,
 /area/outpost/hallway/port)
 "ZT" = (
@@ -4920,20 +4862,13 @@
 	},
 /obj/structure/catwalk/over/plated_catwalk/dark,
 /turf/open/floor/plating,
-/area/outpost/external)
+/area/outpost/exterior)
 "ZW" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
 /turf/open/floor/plasteel/patterned,
 /area/outpost/hallway/central)
 
 (1,1,1) = {"
-bb
-bb
-bb
-bb
-bb
-bb
-bb
 bb
 bb
 bb
@@ -5175,24 +5110,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (3,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -5433,24 +5354,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (5,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -5691,24 +5598,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (7,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -5949,24 +5842,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (9,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -6207,24 +6086,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (11,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -6465,24 +6330,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (13,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -6723,24 +6574,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (15,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -6981,24 +6818,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (17,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -7239,24 +7062,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (19,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -7497,24 +7306,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (21,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -7755,24 +7550,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (23,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -8013,24 +7794,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (25,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -8271,24 +8038,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (27,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -8529,24 +8282,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (29,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -8787,24 +8526,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (31,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -9045,24 +8770,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (33,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -9303,24 +9014,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (35,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -9500,13 +9197,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 rZ
 ru
 ru
@@ -9572,13 +9262,6 @@ bb
 "}
 (37,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -9758,13 +9441,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 rZ
 Tg
 Tg
@@ -9885,15 +9561,8 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-XS
-zP
+mF
+BM
 rZ
 Tg
 Tg
@@ -9959,13 +9628,6 @@ bb
 "}
 (40,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -10120,13 +9782,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 MK
 WB
@@ -10249,13 +9904,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -10271,7 +9919,7 @@ fJ
 fJ
 fJ
 fJ
-LX
+bT
 WB
 Qa
 oU
@@ -10346,13 +9994,6 @@ bb
 "}
 (43,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -10507,13 +10148,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -10636,13 +10270,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -10669,9 +10296,9 @@ hx
 zQ
 hx
 rZ
-yC
-BM
-yC
+Hs
+iu
+Hs
 rZ
 SW
 hx
@@ -10733,13 +10360,6 @@ bb
 "}
 (46,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -10894,13 +10514,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -11023,13 +10636,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -11046,7 +10652,7 @@ fJ
 fJ
 fJ
 fJ
-gq
+aF
 Qa
 st
 Ie
@@ -11094,10 +10700,10 @@ zs
 zs
 zs
 aa
-SU
-SU
-SU
-SU
+aa
+aa
+aa
+aa
 ru
 ru
 ru
@@ -11120,13 +10726,6 @@ bb
 "}
 (49,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -11226,7 +10825,7 @@ aa
 cZ
 Vu
 mz
-SU
+aa
 ru
 ru
 ru
@@ -11249,13 +10848,6 @@ bb
 "}
 (50,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -11323,8 +10915,8 @@ hx
 sK
 hx
 hx
+hx
 lh
-tl
 tl
 tl
 ty
@@ -11410,13 +11002,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -11452,8 +11037,8 @@ tn
 Bc
 tn
 Po
-le
 hx
+le
 hx
 hx
 KI
@@ -11507,13 +11092,6 @@ bb
 "}
 (52,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -11609,11 +11187,11 @@ zs
 zs
 zs
 zs
-SU
+aa
 Sx
 HG
 dP
-SU
+aa
 ru
 ru
 ru
@@ -11636,13 +11214,6 @@ bb
 "}
 (53,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -11738,11 +11309,11 @@ zs
 zs
 zs
 zs
-SU
-SU
-SU
-SU
-SU
+aa
+aa
+aa
+aa
+aa
 ru
 ru
 ru
@@ -11765,13 +11336,6 @@ bb
 "}
 (54,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -11834,7 +11398,7 @@ Gh
 GG
 nU
 HZ
-kB
+ek
 ek
 Vj
 Pa
@@ -11926,13 +11490,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 fJ
@@ -11963,7 +11520,7 @@ ka
 bm
 vD
 HZ
-MC
+ek
 ek
 ek
 ek
@@ -12054,13 +11611,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 wl
 Gc
 MK
@@ -12092,7 +11642,7 @@ ZO
 gD
 vt
 HZ
-kK
+ek
 ek
 ek
 ek
@@ -12181,13 +11731,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 CO
 CO
 CO
@@ -12210,7 +11753,7 @@ Qa
 Qa
 fU
 st
-nc
+qE
 st
 fU
 Qa
@@ -12310,25 +11853,18 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 CO
-gU
-mv
-fp
+gP
+yC
+Cx
 CO
-ZL
+nc
+pu
 st
 st
 st
 st
-st
-Am
+nc
 pu
 st
 st
@@ -12339,7 +11875,7 @@ st
 ZL
 st
 st
-nc
+qE
 st
 st
 ZL
@@ -12438,15 +11974,8 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 zT
-Bo
+BP
 zK
 JG
 ZT
@@ -12568,20 +12097,13 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-Bo
+BP
 pG
 ba
 Jj
 eV
-BP
 Se
+mh
 ML
 ML
 ML
@@ -12697,16 +12219,9 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 CO
 ZC
-ei
+zu
 XD
 CO
 Xx
@@ -12797,13 +12312,6 @@ bb
 "}
 (62,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -12957,13 +12465,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 kx
 Gc
 CZ
@@ -13055,13 +12556,6 @@ bb
 "}
 (64,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -13215,13 +12709,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 mc
@@ -13313,13 +12800,6 @@ bb
 "}
 (66,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -13472,13 +12952,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -13571,13 +13044,6 @@ bb
 "}
 (68,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -13730,13 +13196,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -13829,13 +13288,6 @@ bb
 "}
 (70,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -13988,13 +13440,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 ID
 WB
@@ -14087,13 +13532,6 @@ bb
 "}
 (72,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -14246,13 +13684,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -14345,13 +13776,6 @@ bb
 "}
 (74,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -14504,13 +13928,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -14603,13 +14020,6 @@ bb
 "}
 (76,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -14762,13 +14172,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -14861,13 +14264,6 @@ bb
 "}
 (78,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -15020,13 +14416,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -15119,13 +14508,6 @@ bb
 "}
 (80,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -15278,13 +14660,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 ID
 WB
@@ -15377,13 +14752,6 @@ bb
 "}
 (82,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -15536,13 +14904,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -15635,13 +14996,6 @@ bb
 "}
 (84,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -15794,13 +15148,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -15893,13 +15240,6 @@ bb
 "}
 (86,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -16052,13 +15392,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -16151,13 +15484,6 @@ bb
 "}
 (88,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -16310,13 +15636,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -16409,13 +15728,6 @@ bb
 "}
 (90,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -16568,13 +15880,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 ID
 WB
@@ -16667,13 +15972,6 @@ bb
 "}
 (92,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -16826,13 +16124,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -16925,13 +16216,6 @@ bb
 "}
 (94,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -17084,13 +16368,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -17183,13 +16460,6 @@ bb
 "}
 (96,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -17342,13 +16612,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -17396,7 +16659,7 @@ mw
 DH
 uR
 lz
-rX
+tt
 Dq
 oF
 SL
@@ -17441,13 +16704,6 @@ bb
 "}
 (98,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -17600,13 +16856,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -17699,13 +16948,6 @@ bb
 "}
 (100,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -17858,13 +17100,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 ID
 WB
@@ -17957,13 +17192,6 @@ bb
 "}
 (102,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -18116,13 +17344,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -18215,13 +17436,6 @@ bb
 "}
 (104,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -18374,13 +17588,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 DG
 ID
 WB
@@ -18503,13 +17710,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 ID
 WB
@@ -18602,13 +17802,6 @@ bb
 "}
 (107,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -18762,13 +17955,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 Gc
 WB
 mc
@@ -18860,13 +18046,6 @@ bb
 "}
 (109,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -19107,24 +18286,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (111,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -19365,24 +18530,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (113,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -19623,24 +18774,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (115,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -19881,24 +19018,10 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (117,1,1) = {"
 bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 ru
 ru
 ru
@@ -20139,13 +19262,6 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (119,1,1) = {"
@@ -20268,926 +19384,9 @@ ru
 ru
 ru
 ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
 bb
 "}
 (120,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(121,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(122,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(123,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(124,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(125,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(126,1,1) = {"
-bb
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-ru
-bb
-"}
-(127,1,1) = {"
-bb
-bb
-bb
-bb
-bb
-bb
-bb
 bb
 bb
 bb

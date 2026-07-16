@@ -341,8 +341,8 @@
 		return FALSE
 
 	// offset for the dock within its area
-	var/new_dheight = round((height-docker_rheight)/2) + docker_rheight
-	var/new_dwidth = round((width-docker_rwidth)/2) + docker_rwidth
+	var/new_dheight = round((height-shuttle.height)/2) + shuttle.dheight
+	var/new_dwidth = round((width-shuttle.width)/2) + shuttle.dwidth
 
 	// use the relative-to-dir offset above to find the absolute position offset for the dock
 	switch(final_facing_dir)
