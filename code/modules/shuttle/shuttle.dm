@@ -284,6 +284,17 @@
 		is_adjusting_now = FALSE
 		CRASH("Invalid docking port ([shuttle]) passed to adjust_dock_to_shuttle().")
 	log_shuttle("[src] [REF(src)] DOCKING: ADJUST [src] [REF(src)] TO [shuttle][REF(shuttle)]")
+
+	//coordinate of combined shuttle bounds in our dock's vector space (positive Y towards shuttle direction, positive determinant, our dock at (0,0))
+	var/list/docker_bounds = shuttle.return_union_bounds(shuttle.get_all_towed_shuttles())
+	var/docker_dwidth = docker_bounds[1]
+	var/docker_dheight = docker_bounds[2]
+	var/docker_rwidth = docker_bounds[3] - docker_dwidth
+	var/docker_rheight = docker_bounds[4] - docker_dheight
+
+	//use width on height instead of other way ariound
+	var/checking_sideways_dock = FALSE
+
 	// the shuttle's dimensions where "true height" measures distance from the shuttle's fore to its aft
 	var/shuttle_true_height = shuttle.height
 	var/shuttle_true_width = shuttle.width
@@ -319,13 +330,19 @@
 		width = dock_height_store
 
 	dir = final_facing_dir
-	if(shuttle.height > height || shuttle.width > width)
+	if(docker_rheight > height || docker_rwidth > width)
+		forceMove(oldloc)
+		dir = olddir
+		dheight = olddheight
+		dwidth = olddwidth
+		height = oldheight
+		width = oldwidth
 		is_adjusting_now = FALSE
-		return
+		return FALSE
 
 	// offset for the dock within its area
-	var/new_dheight = round((height-shuttle.height)/2) + shuttle.dheight
-	var/new_dwidth = round((width-shuttle.width)/2) + shuttle.dwidth
+	var/new_dheight = round((height-docker_rheight)/2) + docker_rheight
+	var/new_dwidth = round((width-docker_rwidth)/2) + docker_rwidth
 
 	// use the relative-to-dir offset above to find the absolute position offset for the dock
 	switch(final_facing_dir)
@@ -369,9 +386,11 @@
 				message_admins("[src] [ADMIN_VV(src)] adjusted to fit a vessel ([shuttle.current_ship.name]) but somehow it's bounds ended up in an edge tile ([ADMIN_JMP(edgeturf)])! Unable to fix because we ended up on a non-outpost!! Disabling until a manual fix!")
 				stack_trace("[src] adjusted to fit a vessel ([shuttle.current_ship.name]) but somehow it's bounds ended up in an edge! Unable to fix because we ended up on a non-outpost!! Disabling until a manual fix!")
 				enabled = FALSE
-		break
+		is_adjusting_now = FALSE
+		return FALSE
 
 	is_adjusting_now = FALSE
+	return TRUE
 
 
 /obj/docking_port/stationary/transit
@@ -641,11 +660,11 @@
 		if(S.is_adjusting_now)
 			return SHUTTLE_PORT_IS_ADJUSTING
 		//since we width/height is more like a box where the ship can land IN, we can easily check if we can land here
-		if(height > S.height)
-			if (width > S.height && height > S.width)
+		if(tow_dheight > S.height)
+			if (tow_rwidth > S.height && tow_dheight > S.width)
 				return SHUTTLE_ADJUSTABLE_OUR_HEIGHT_TOO_LARGE
-		if(width > S.width)
-			if (height > S.width && width > S.height)
+		if(tow_rwidth > S.width)
+			if (tow_dheight > S.width && tow_rwidth > S.height)
 				return SHUTTLE_ADJUSTABLE_OUR_WIDTH_TOO_LARGE
 		//hopefully that reduces the amount of procesing nesaary before running this proc's math
 		if(intention_to_dock)

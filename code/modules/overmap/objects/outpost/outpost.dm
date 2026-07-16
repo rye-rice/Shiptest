@@ -333,6 +333,9 @@
 		if(dock_requester.shuttle_port.is_in_shuttle_bounds(M))
 			M.play_screen_text("<span class='maptext' style=font-size:24pt;text-align:center valign='top'><u>[name]</u></span><br>[station_time_timestamp("hh:mm")]")
 
+	//prevents 'overmap vessel touched down...' messages
+	if(dock_requester.name == dock_requester::name)
+		return
 	// Instance the virtual speaker for use in radio messages. It needs an atom to trace things back to; we use the token.
 	// You might think "but wait, can't we just keep one speaker around instead of instancing it for each fucking radio message?"
 	// You'd think so, but you can't. It gets deleted after sending the radio message. Because GOD FORBID you send a message over radio
