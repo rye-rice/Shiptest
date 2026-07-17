@@ -8,6 +8,9 @@
 	chance_to_affect = 15
 	spread_chance = 30
 	interference_power = 15
+	visiblity_hiding_power = 30
+
+	override_visiblity = OVERMAP_VISIBILITY_VISIBLE
 
 	spread_types = list(
 		/datum/overmap/event/electric = 40,
@@ -59,6 +62,8 @@
 		/datum/overmap/event/electric/major = 10
 	)
 
+	visiblity_hiding_power = 20
+
 
 /datum/overmap/event/electric/major
 	name = "electrical storm (major)"
@@ -72,3 +77,5 @@
 		/datum/overmap/event/electric/minor = 10,
 		/datum/overmap/event/electric/major = 40
 	)
+
+	visiblity_hiding_power = 40

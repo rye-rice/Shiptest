@@ -15,6 +15,27 @@
 /obj/overmap/rendered
 	render_map = TRUE
 
+/obj/fake_overmap
+	name = "???"
+	desc = "There's no identification of what this is. It's possible to get more information with your radar by getting closer."
+	icon = 'icons/misc/overmap.dmi'
+	icon_state = "unknown"
+	layer = LOW_ITEM_LAYER
+	invisibility = INVISIBILITY_MAXIMUM
+//	mouse_opacity = FALSE
+	var/datum/overmap/parent
+
+/obj/fake_overmap/Initialize(mapload, new_parent)
+	. = ..()
+	parent = new_parent
+	update_appearance()
+
+/obj/fake_overmap/Destroy(force)
+	if(!QDELETED(parent))
+		stack_trace("attempted to qdel a token that still has a parent")
+		return QDEL_HINT_LETMELIVE
+	return ..()
+
 /obj/overmap/Initialize(mapload, new_parent)
 	. = ..()
 	parent = new_parent
@@ -103,7 +124,8 @@
 /obj/overmap/proc/update_screen()
 	if(render_map)
 		var/list/visible_turfs = list()
-		for(var/turf/T in view(parent.sensor_range, get_turf(src)))
+		var/list/ship_vision = view(parent.sensor_range, get_turf(src))
+		for(var/turf/T in ship_vision)
 			visible_turfs += T
 
 		var/list/bbox = get_bbox_of_atoms(visible_turfs)
@@ -113,8 +135,40 @@
 		cam_screen?.vis_contents = visible_turfs
 		cam_background.icon_state = "clear"
 		cam_background.fill_rect(1, 1, size_x, size_y)
+		SEND_SIGNAL(parent, COMSIG_OVERMAP_UPDATE_SEEN_HIDDEN_OBJECTS, ship_vision)
 		return TRUE
 
+/*
+/obj/overmap/proc/update_screen()
+	if(render_map)
+		var/list/visible_turfs = list()
+		var/list/hidden_objects = list()
+		for(var/turf/T in view(parent.sensor_range, get_turf(src)))
+			visible_turfs += T
+		for(var/obj/overmap/found_object as anything in visible_turfs)
+			var/cur_vis_level = found_object.parent.current_visiblity_level
+			if(!istype(found_object) || cur_vis_level > OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE)
+				continue
+			var/distance_away = get_dist(src, found_object)
+			switch(cur_vis_level)
+				if(OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE)
+				if(OVERMAP_VISIBILITY_DETAILS_2TILE_CLOSERANGE)
+				if(OVERMAP_VISIBILITY_DETAILS_1TILE_CLOSERANGE)
+				if(OVERMAP_VISIBILITY_UNKNOWN)
+				if(OVERMAP_VISIBILITY_UNKNOWN_3TILE_CLOSERANGE)
+				if(OVERMAP_VISIBILITY_UNKNOWN_2TILE_CLOSERANGE)
+				if(OVERMAP_VISIBILITY_UNKNOWN_1TILE_CLOSERANGE)
+				if(OVERMAP_VISIBILITY_CLOAKED)
+
+		var/list/bbox = get_bbox_of_atoms(visible_turfs)
+		var/size_x = bbox[3] - bbox[1] + 1
+		var/size_y = bbox[4] - bbox[2] + 1
+
+		cam_screen?.vis_contents = visible_turfs
+		cam_background.icon_state = "clear"
+		cam_background.fill_rect(1, 1, size_x, size_y)
+		return TRUE
+*/
 /obj/overmap/proc/choose_token(mob/user)
 	var/nearby_objects = parent.current_overmap.overmap_container[parent.x][parent.y]
 	if(length(nearby_objects) <= 1)

@@ -6,9 +6,12 @@
 	default_color = "#c053f3"
 	spread_chance = 75
 	chance_to_affect = 85
+
+	override_visiblity = OVERMAP_VISIBILITY_VISIBLE
 	layer = BELOW_OBJ_LAYER
 
 	interference_power = 50
+	visiblity_hiding_power = 40
 
 	spread_types = list(
 		/datum/overmap/event/nebula = 100
@@ -37,7 +40,7 @@
 
 			ship_vlevel = ship.shuttle_port.get_virtual_level()
 			affected_ships -= ship
-			REMOVE_TRAIT(ship, TRAIT_CLOAKED, REF(src))
+//			REMOVE_TRAIT(ship, TRAIT_CLOAKED, REF(src))
 
 			for(var/obj/machinery/light/light_to_mess in GLOB.machines)
 				if(light_to_mess.virtual_z() != ship_vlevel.id)
@@ -56,7 +59,7 @@
 	if(affected_ships.len == 0)
 		START_PROCESSING(SSfastprocess, src)
 	affected_ships += ship
-	ADD_TRAIT(ship, TRAIT_CLOAKED, REF(src))
+//	ADD_TRAIT(ship, TRAIT_CLOAKED, REF(src))
 
 
 	for(var/obj/machinery/light/light_to_mess in GLOB.machines)

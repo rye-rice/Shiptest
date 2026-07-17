@@ -9,6 +9,8 @@
 	spread_chance = 50
 	interference_power = 25
 
+	visiblity_hiding_power = 40
+
 	safe_speed = 6
 
 	var/blocks_sight = TRUE
@@ -32,6 +34,8 @@
 	name = "debris field (minor)"
 	base_icon_state = "debris_light_"
 	interference_power = 15
+
+	visiblity_hiding_power = 20
 
 	mountain_height_override = 0.85
 
@@ -57,6 +61,8 @@
 	base_icon_state = "debris_major_"
 	spread_chance = 25
 	interference_power = 35
+
+	visiblity_hiding_power = 50
 
 	mountain_height_override = 0.5
 

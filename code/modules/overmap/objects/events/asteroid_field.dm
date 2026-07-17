@@ -9,6 +9,8 @@
 	spread_chance = 50
 	interference_power = 15
 
+	visiblity_hiding_power = 30
+
 	spread_types = list(
 		/datum/overmap/event/meteor/minor = 30,
 		/datum/overmap/event/meteor = 40,
@@ -71,6 +73,8 @@
 
 	mountain_height_override = 0.85
 
+	visiblity_hiding_power = 15
+
 	spread_chance = 60
 
 	meteor_types = list(
@@ -94,6 +98,8 @@
 	interference_power = 20
 
 	mountain_height_override = 0.5
+
+	visiblity_hiding_power = 40
 
 	meteor_types = list(
 		/obj/effect/meteor/medium=50,

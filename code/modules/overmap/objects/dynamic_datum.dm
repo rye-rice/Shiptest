@@ -67,6 +67,7 @@
 	///Do we selfloop? If so the borders of the map connect to the other side of the planet. Not recommended.
 	var/selfloop
 
+	base_visiblity_level = OVERMAP_VISIBILITY_DYNAMIC_STATIC
 /datum/overmap/dynamic/Initialize(position, datum/overmap_star_system/system_spawned_in, load_now=TRUE, ...)
 	. = ..()
 	SSovermap.dynamic_encounters += src

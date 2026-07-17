@@ -132,12 +132,15 @@
 
 	/// If generator_type is set to OVERMAP_GENERATOR_JSON, we load all overmap objects from this
 	var/json
+
 	///Disables wideband for this sector only if TRUE, this also restricts holopads to only be able to call in the same sector. Should probably not be true outside of admin events
 	var/disable_wideband_in_sector = FALSE
 	///Adds interference to every radio messages sent in sector. Intended for nebula sector gen, with the custom nebulas that give 0 interference, since the sector is giving interference anyways, thus doesn't need to apply the debuff twice to have everything have 70% interference
 	var/passive_interference = 0
 	///Adds or subtract the following amount to any ships that jump in the sector. It's reversed upon leaving
 	var/sensor_mod = 0
+	///Adds or subtract the following visiblity (%) to every object in the sector. Values that set all visiblity under 70 are unrecomended, since it would show every object as unknown. 80 plus a sensor_mod of -1 is more the vibe you want
+	var/visiblity_mod = 0
 	///Enables the bluespace ghosts event, if false ghosts will no longer peroidicaly create bluespace ghosts on the overmap
 	var/allow_bluespace_ghosts = TRUE
 
@@ -720,6 +723,30 @@
 /datum/overmap_star_system/proc/update_all_colors()
 	for(var/datum/overmap/current_object as anything in overmap_objects)
 		current_object.alter_token_appearance()
+
+/**
+ * Returns the visiblity reduction of nearby objects
+ * * our_overmap_object - The overmap object we're checking for [/datum/overmap].
+ */
+/datum/overmap_star_system/proc/get_overmap_nearby_visiblity(datum/overmap/our_overmap_object)
+	var/visiblity_hiding_power = 0
+
+	if(our_overmap_object.current_overmap != src)
+		return //we're not checking for other overmaps
+
+	if(istype(our_overmap_object))
+		for(var/datum/overmap/nearby_obj as anything in our_overmap_object.get_nearby_overmap_objects(empty_if_src_docked = FALSE))
+			if(!istype(nearby_obj))
+				continue
+			visiblity_hiding_power += nearby_obj.visiblity_hiding_power
+
+		for(var/direction as anything in GLOB.cardinals)
+			var/newcords = our_overmap_object.get_overmap_step(direction)
+			for(var/datum/overmap/nearby_obj as anything in our_overmap_object.current_overmap.overmap_container[newcords["x"]][newcords["y"]])
+				if(!istype(nearby_obj))
+					continue
+				visiblity_hiding_power += nearby_obj.visiblity_hiding_power / 4
+		return max(visiblity_hiding_power,0)
 
 /**
  * Creates 2 jump points to link an overmap to another one bidirectionally

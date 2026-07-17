@@ -35,6 +35,17 @@
 	/// The total lists of interactions vessels can do with this object. If nothing, then vessels are unable to interact with this object.
 	var/list/interaction_options
 
+	/// Last visiblity level. Meant for ingame use, change base_visiblity_level instead.
+	var/last_visiblity_level = OVERMAP_VISIBILITY_VISIBLE
+	/// Current visiblity level. Meant for ingame use, change base_visiblity_level instead.
+	var/current_visiblity_level = OVERMAP_VISIBILITY_VISIBLE
+	/// remove
+	var/image/cloaked_image
+	/// Image shown to helm console viewers when visiblity is low, thus only sometimes being visible
+	var/image/visible_image
+	/// Image shown when an object is shown as unkown, and only shows up close
+	var/image/visible_unknown_image
+
 	/// The time, in deciseconds, needed for this object to call
 	var/dock_time
 	/// The current docking timer ID.
@@ -56,11 +67,20 @@
 
 	/// The token this datum is represented by.
 	var/obj/overmap/token
+	/// A fake overmap icon that follows the token. Used for hidden objects
+	var/obj/fake_overmap/fake_token
 	/// Token type to instantiate.
 	var/token_type = /obj/overmap
 
+	/// A % of how how visible this object is on helms. Check defines for more info
+	var/base_visiblity_level = OVERMAP_VISIBILITY_VISIBLE
+	/// Always has visility level set to this.
+	var/override_visiblity
+
 	///How much % of a radio message we scramble of radios nearby/on top of us before sending. Will only scramble 1/5th this value if the radio is an adjacent tile, not 100%. Meant for hazards
 	var/interference_power
+	///How much % of an object's visiblity we lower when in the same tile
+	var/visiblity_hiding_power
 
 
 	/// The current docking ticket of this object, if any
@@ -104,6 +124,9 @@
 	if(!char_rep && name)
 		char_rep = name[1]
 
+	current_overmap.on_datum_enter(src)
+
+	RegisterSignal(src, COMSIG_OVERMAP_UPDATE_VISIBLITY, PROC_REF(update_visiblity))
 	RegisterSignal(src, SIGNAL_ADDTRAIT(TRAIT_CLOAKED), PROC_REF(activate_cloak))
 	RegisterSignal(src, SIGNAL_REMOVETRAIT(TRAIT_CLOAKED), PROC_REF(deactivate_cloak))
 	Initialize(arglist(args))
@@ -120,7 +143,13 @@
 		current_overmap.overmap_container[x][y] -= src
 	token.parent = null
 	QDEL_LIST(contents)
+	QDEL_NULL(cloaked_image)
+	QDEL_NULL(visible_image)
+	QDEL_NULL(visible_unknown_image)
 	QDEL_NULL(token)
+	QDEL_NULL(fake_token)
+	if(visiblity_hiding_power)
+		update_adjacent_visiblity()
 	if(lifespan)
 		STOP_PROCESSING(SSfastprocess, src)
 	return ..()
@@ -137,6 +166,8 @@
  */
 /datum/overmap/proc/Initialize(position, datum/overmap_star_system/system_spawned_in, ...)
 	PROTECTED_PROC(TRUE)
+	if(visiblity_hiding_power)
+		update_adjacent_visiblity()
 	return
 
 /**
@@ -152,7 +183,9 @@
 	// we have a token, and we're taking over another token
 	if(!isnull(token) && token != takeover)
 		token.parent = null
+		fake_token = null
 		QDEL_NULL(token)
+		QDEL_NULL(fake_token)
 
 	// taking over an existing token
 	if(!isnull(takeover))
@@ -167,6 +200,7 @@
 
 	// creating a new token
 	token = new token_type(null, src)
+	fake_token = new /obj/fake_overmap(null, src)
 	alter_token_appearance()
 	update_token_location()
 
@@ -176,8 +210,10 @@
 /datum/overmap/proc/update_token_location()
 	if(!isnull(docked_to))
 		token.abstract_move(docked_to.token)
+		fake_token.abstract_move(docked_to.token)
 		return
 	token.abstract_move(OVERMAP_TOKEN_TURF(x, y, current_overmap))
+	fake_token.abstract_move(OVERMAP_TOKEN_TURF(x, y, current_overmap))
 
 /**
  * Called whenever you need to move an overmap datum to another position. Can be overridden to add additional movement functionality, as long as it calls the parent proc.
@@ -202,6 +238,9 @@
 		return
 	if(new_y > current_overmap.size || new_y == 0)
 		return
+	//updates old position
+	if(visiblity_hiding_power)
+		update_adjacent_visiblity()
 	try
 		current_overmap.overmap_container[x][y] -= src
 	catch(var/exception/error)
@@ -215,7 +254,13 @@
 	y = new_y
 	// Updates the token with the new position.
 	token.abstract_move(OVERMAP_TOKEN_TURF(x, y, current_overmap))
+	fake_token.abstract_move(OVERMAP_TOKEN_TURF(x, y, current_overmap))
 	SEND_SIGNAL(src, COMSIG_OVERMAP_MOVED, old_x, old_y)
+
+	update_visiblity()
+	if(visiblity_hiding_power)
+		update_adjacent_visiblity()
+
 	return TRUE
 
 /**
@@ -696,6 +741,7 @@
 /datum/overmap/proc/alter_token_appearance()
 	token.name = name
 	token.desc = desc
+	token.cut_overlays()
 
 	token.icon_state = token_icon_state
 	if(token.icon != current_overmap.tileset)
@@ -704,9 +750,157 @@
 	token.color = default_color
 	if(current_overmap.override_object_colors)
 		token.color = current_overmap.primary_color
+
+	if(visible_image)
+		visible_image.dir = token.dir
+		visible_image.appearance = token
+
+	if(update_visiblity(FALSE))
+		handle_visiblity_sprite()
+
 	current_overmap.post_edit_token_state(src)
 
 	token.layer = layer
+
+/*
+ * This just handles the 'unknown' sprite when visiblity is low
+ */
+
+/datum/overmap/proc/handle_visiblity_sprite()
+	//creates images if nessary
+	if(!visible_image)
+		var/mutable_appearance/token_appearance = new(token)
+		visible_image = new(loc = token)
+		token_appearance.dir = token.dir
+		//avoiids pallying colors twice
+		token_appearance.appearance_flags = RESET_COLOR|RESET_ALPHA
+		token_appearance.color = null
+		visible_image.appearance = token_appearance
+		//visible_image = new(token, loc = token)
+		//token_appearance.dir = token.dir
+	if(!visible_unknown_image)
+		var/mutable_appearance/token_appearance = new(fake_token)
+		visible_unknown_image = new(loc = fake_token)
+		token_appearance.appearance_flags = RESET_COLOR|RESET_ALPHA
+		token_appearance.color = null
+		visible_unknown_image.appearance = token_appearance
+
+	//then we mess with invisiblity if we are less visible, for any reason
+	if(current_visiblity_level <= OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE)
+		token.invisibility = INVISIBILITY_OBSERVER
+		var/mutable_appearance/vis_indicator = mutable_appearance(icon = token.icon, icon_state = "visibility_affected")
+		vis_indicator.color = current_overmap.hazard_secondary_color
+		vis_indicator.appearance_flags = RESET_COLOR|RESET_ALPHA
+		token.add_overlay(vis_indicator)
+
+	else
+		token.invisibility = FALSE
+
+/*
+ * Returns the hidden image to use when a ship is trying to look at us
+ * distance_between - Number of tiles between us and the ship, passedd by the ship so we dont have to keep recalculating it
+ */
+
+/datum/overmap/proc/get_hidden_image(distance_between)
+	var/distance_needed
+	var/distance_needed_unknown
+	if(isnull(distance_between) || current_visiblity_level == OVERMAP_VISIBILITY_VISIBLE ||  current_visiblity_level<= OVERMAP_VISIBILITY_CLOAKED)
+		return FALSE
+
+	switch(current_visiblity_level)
+		if(OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE to OVERMAP_VISIBILITY_VISIBLE)
+			distance_needed = 3
+			distance_needed_unknown = 7
+		if(OVERMAP_VISIBILITY_DETAILS_2TILE_CLOSERANGE to OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE)
+			distance_needed = 2
+			distance_needed_unknown = 6
+		if(OVERMAP_VISIBILITY_DETAILS_1TILE_CLOSERANGE to OVERMAP_VISIBILITY_DETAILS_2TILE_CLOSERANGE)
+			distance_needed = 1
+			distance_needed_unknown = 5
+		if(OVERMAP_VISIBILITY_UNKNOWN to OVERMAP_VISIBILITY_DETAILS_1TILE_CLOSERANGE)
+			distance_needed_unknown = 4
+		if(OVERMAP_VISIBILITY_UNKNOWN_3TILE_CLOSERANGE to OVERMAP_VISIBILITY_UNKNOWN)
+			distance_needed_unknown = 3
+		if(OVERMAP_VISIBILITY_UNKNOWN_2TILE_CLOSERANGE to OVERMAP_VISIBILITY_UNKNOWN_3TILE_CLOSERANGE)
+			distance_needed_unknown = 2
+		if(OVERMAP_VISIBILITY_UNKNOWN_1TILE_CLOSERANGE to OVERMAP_VISIBILITY_UNKNOWN_2TILE_CLOSERANGE)
+			distance_needed_unknown = 1
+	if(!distance_needed && !distance_needed_unknown)
+		return FALSE
+	//then calcualate if we can see the hidden image
+	switch(current_visiblity_level)
+		if(OVERMAP_VISIBILITY_UNKNOWN to OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE)
+			if(current_visiblity_level != OVERMAP_VISIBILITY_UNKNOWN && (distance_between <= distance_needed))
+				return visible_image
+	switch(current_visiblity_level)
+		if(OVERMAP_VISIBILITY_CLOAKED to OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE)
+			if(distance_between <= distance_needed_unknown)
+				return visible_unknown_image
+
+	return FALSE
+
+/*
+ * Updates the visibility of this object. Does not update the icon if visiblity has not changed
+ * update_token_icon - Invokes alter_token_appearance() when true after checking.
+ */
+
+/datum/overmap/proc/update_visiblity(update_token_icon=TRUE)
+//	var/old_vis = current_visiblity_level
+//	if(get_visiblity() != old_vis)
+	get_visiblity()
+	if(update_token_icon)
+		INVOKE_ASYNC(src, PROC_REF(alter_token_appearance))
+	return TRUE
+
+
+/*
+ * Updates visiblity, but does not update the sprite.
+ */
+
+/datum/overmap/proc/get_visiblity()
+	var/new_vis = base_visiblity_level
+	//Early ovveride in case we are overridden
+	if(override_visiblity)
+		current_visiblity_level = override_visiblity
+		return override_visiblity
+
+	new_vis += current_overmap.visiblity_mod
+	//gets the visilbity reduction of nearby objects
+	new_vis -= current_overmap.get_overmap_nearby_visiblity(src)
+
+	//'maxes' visilbity out at 20% IF visiblity is higher.
+	if(HAS_TRAIT(src, TRAIT_CLOAKED))
+		new_vis = min(new_vis, OVERMAP_VISIBILITY_CLOAKED)
+
+	//'maxes' visiblity to 100
+	new_vis = min(new_vis, OVERMAP_VISIBILITY_VISIBLE)
+
+	//'minimizes' visiblity, cant go lower than this
+	new_vis = max(new_vis, OVERMAP_VISIBILITY_MINIMUM)
+
+	//finally, we set the visiblity
+	current_visiblity_level = new_vis
+	return new_vis
+
+/*
+ * Updates the visibility of this object. Does not update the icon if visiblity has not changed
+ * update_token_icon - Invokes alter_token_appearance() when true after checking.
+ */
+
+/datum/overmap/proc/update_adjacent_visiblity()
+	if(!visiblity_hiding_power)
+		return
+	for(var/datum/overmap/nearby_obj as anything in get_nearby_overmap_objects(empty_if_src_docked = FALSE))
+		if(!istype(nearby_obj))
+			continue
+		SEND_SIGNAL(nearby_obj, COMSIG_OVERMAP_UPDATE_VISIBLITY)
+
+	for(var/direction as anything in GLOB.cardinals)
+		var/newcords = get_overmap_step(direction)
+		for(var/datum/overmap/nearby_obj as anything in current_overmap.overmap_container[newcords["x"]][newcords["y"]])
+			if(!istype(nearby_obj))
+				continue
+			SEND_SIGNAL(nearby_obj, COMSIG_OVERMAP_UPDATE_VISIBLITY)
 
 /datum/overmap/proc/activate_cloak()
 	alter_token_appearance()
@@ -770,3 +964,17 @@
 
 /datum/overmap/proc/admin_load()
 	return
+
+/datum/overmap/vv_edit_var(var_name, var_value)
+	switch(var_name)
+		if(NAMEOF(src, base_visiblity_level))
+			update_visiblity()
+
+//		if(NAMEOF(src, x))
+//			return parent.overmap_move(var_value, parent.y)
+//		if(NAMEOF(src, y))
+//			return parent.overmap_move(parent.x, var_value)
+//		if(NAMEOF(src, name))
+//			parent.Rename(var_value, TRUE)
+//			return TRUE
+	return ..()

@@ -8,6 +8,8 @@
 	chance_to_affect = 60
 	interference_power = 40
 
+	override_visiblity = OVERMAP_VISIBILITY_VISIBLE
+
 	spread_types = list(
 		/datum/overmap/event/rad = 40,
 		/datum/overmap/event/rad/minor = 20,

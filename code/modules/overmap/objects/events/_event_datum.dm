@@ -20,6 +20,8 @@
 	/// Override the mountain value of the mapgen to this value.
 	var/mountain_height_override
 
+	//base_visiblity_level = OVERMAP_VISIBILITY_EVENT
+
 /datum/overmap/event/Initialize(position, datum/overmap_star_system/system_spawned_in, set_lifespan,...)
 	. = ..()
 	SSovermap.events += src

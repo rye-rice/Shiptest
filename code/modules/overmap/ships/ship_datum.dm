@@ -294,8 +294,3 @@
 		token.color = HAS_TRAIT(src, TRAIT_BLUESPACE_SHIFT) ? COLOR_BLUE : COLOR_RED
 	animate(token, 0.8 SECONDS, alpha = token::alpha, color = current_overmap.primary_structure_color)
 	return ..()
-
-// ensures the camera always moves when the ship moves
-/datum/overmap/ship/overmap_move(new_x, new_y)
-	. = ..()
-	token.update_screen()

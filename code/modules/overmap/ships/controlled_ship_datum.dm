@@ -79,8 +79,8 @@
 	///The ship's real name, without the prefix
 	var/real_name
 
-	///Image shown to helm console viewers while cloaked, allows the pilot to see
-	var/image/cloaked_image
+	///has all images of hidden objects thats shown
+	var/list/visible_images = list()
 
 	///Stations the ship has been blacklisted from landing at, associative station = reason
 	var/list/blacklisted = list()
@@ -149,6 +149,7 @@
 	else
 		stack_trace("Attempted to create a controlled ship without a template!")
 		source_template = new(rename = "Overmap Object [length(SSovermap.overmap_objects)]")
+	RegisterSignal(src, COMSIG_OVERMAP_UPDATE_SEEN_HIDDEN_OBJECTS, PROC_REF(update_hidden_list))
 	RegisterSignal(src, COMSIG_OVERMAP_CALIBRATE_JUMP, PROC_REF(do_jump))
 	RegisterSignal(src, COMSIG_OVERMAP_CANCEL_JUMP, PROC_REF(stop_jump))
 #ifdef UNIT_TESTS
@@ -577,6 +578,43 @@
 				continue
 			user.client.images -= cloaked_image
 	QDEL_NULL(cloaked_image)
+
+// ensures the camera always moves when the ship moves
+/datum/overmap/ship/controlled/overmap_move(new_x, new_y)
+	. = ..()
+	token.update_screen()
+
+
+// ensures the camera always moves when the ship moves
+/datum/overmap/ship/controlled/proc/update_hidden_list(atom/source, list/passed_vision)
+	if(!passed_vision)
+		return
+
+	var/new_visible_images = list()
+	for(var/obj/overmap/current_obj as anything in passed_vision)
+		if(!istype(current_obj) || !current_obj.parent)
+			continue
+
+		var/ourrange = get_dist(token, current_obj)
+		var/potential_image = current_obj.parent.get_hidden_image(ourrange)
+
+		if(!potential_image)
+			continue
+
+		new_visible_images += potential_image
+
+	for(var/obj/machinery/computer/helm/helm_console as anything in helms)
+		for(var/user_ref in helm_console.concurrent_users)
+			var/mob/user = locate(user_ref)
+			if(!user)
+				continue
+			for(var/image/iteration as anything in visible_images)
+				user.client.images -= iteration
+			for(var/image/iteration as anything in new_visible_images)
+				user.client.images += iteration
+	qdel(visible_images)
+	visible_images = new_visible_images
+
 
 /obj/item/key/ship
 	name = "ship key"

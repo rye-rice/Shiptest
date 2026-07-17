@@ -14,6 +14,8 @@
 	)
 	primary_ores = null
 
+	visiblity_hiding_power = 5
+
 	spread_types = list(
 		/datum/overmap/event/meteor/dust = 80,
 		/datum/overmap/event/meteor/minor = 20

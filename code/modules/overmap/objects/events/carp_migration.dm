@@ -21,6 +21,8 @@
 		/datum/overmap/event/meteor/carp/major = 20
 	)
 
+	visiblity_hiding_power = 0
+
 
 /datum/overmap/event/meteor/carp/alter_token_appearance()
 	icon_suffix = "[rand(1, 4)]"

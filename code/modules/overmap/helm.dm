@@ -195,8 +195,6 @@
 			user.client.register_map_obj(current_ship.token.cam_screen)
 			user.client.register_map_obj(current_ship.token.cam_plane_master)
 			user.client.register_map_obj(current_ship.token.cam_background)
-			if(current_ship.cloaked_image)
-				user.client.images += current_ship.cloaked_image
 			current_ship.token.update_screen()
 
 		// Open UI
@@ -471,8 +469,10 @@
 		if(current_ship.burn_direction > BURN_NONE && !length(concurrent_users) && !viewer && is_living) // If accelerating with nobody else to stop it
 			say("Pilot absence detected, engaging acceleration safeties.")
 			current_ship.change_heading(BURN_NONE)
-		if(current_ship.cloaked_image)
-			user.client.images -= current_ship.cloaked_image
+
+		if(current_ship.visible_images.len)
+			for(var/image/iteration as anything in current_ship.visible_images)
+				user.client.images -= iteration
 
 	// Turn off the console
 	if(!length(concurrent_users) && is_living)

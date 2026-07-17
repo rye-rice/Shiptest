@@ -17,6 +17,10 @@
 #define COMSIG_OVERMAP_PLANET_UNLOADED "overmap_planet_unloaded"
 /// From overmap alter_token_appearance()
 #define COMSIG_OVERMAP_UPDATE_ICON "overmap_update_icon"
+/// From overmap update_visiblity()
+#define COMSIG_OVERMAP_UPDATE_VISIBLITY "overmap_update_visiblity"
+/// From overmap update_visiblity()
+#define COMSIG_OVERMAP_UPDATE_SEEN_HIDDEN_OBJECTS "overmap_update_hidden_objects"
 
 
 /// From overmap jump points: (/datum/overmap_star_system, new_x, new_y)

@@ -130,7 +130,14 @@
 
 
 //default behavior
+#define OVERMAP_VISIBILITY_OUTPOST 200
+//Use for planets, punchcard or otherwise
+#define OVERMAP_VISIBILITY_DYNAMIC_STATIC 130
+//use for 'events', events are meant to be hidden sometimes, but much less, so it isnt just affected by its surroundings, unless surroundings are really toned down or hellish
+#define OVERMAP_VISIBILITY_EVENT 110
+//default behavior
 #define OVERMAP_VISIBILITY_VISIBLE 100
+
 //shown as unknown from more than 3 tiles away, shows proper sprite within 3 tiles
 // ships under PLACEHOLDER tons (classified as 'small' ships) with transponders on max out to this
 #define OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE 90
@@ -153,5 +160,6 @@
 //invisible, still shows proper information in act menu
 //this is the lowest possible, a subshuttle or small ship with all APCs+transponder off are reduced to this
 #define OVERMAP_VISIBILITY_CLOAKED 20
+#define OVERMAP_VISIBILITY_MINIMUM 2
 //doesnt even shot up in act menu, used by special events (such as gravity fields) or event spawners that shouldnt be visible, visibliity always has a floor of 2, making this unreachable ina normal round
 #define OVERMAP_VISIBILITY_UNDETECTABLE 1

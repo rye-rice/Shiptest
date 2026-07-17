@@ -475,3 +475,37 @@
 	overmap_color_type = STARSYSTEM_COLOR_SECONDARY_STRUCTURE_COLOR
 	docking_message = "Extreme munition hazards and debris prevents docking. Aborting."
 	interference_power = 5
+
+/datum/overmap/fluff/visiblity_test
+	name = "vis_test"
+	desc = "Testing vis, decrementing by 10 per tile."
+	token_icon_state = "marker"
+	flag_overlay = FALSE
+	base_visiblity_level = 100
+
+/datum/overmap/fluff/visiblity_test/v_90
+	base_visiblity_level = 90
+
+/datum/overmap/fluff/visiblity_test/v_80
+	base_visiblity_level = 80
+
+/datum/overmap/fluff/visiblity_test/v_70
+	base_visiblity_level = 70
+
+/datum/overmap/fluff/visiblity_test/v_60
+	base_visiblity_level = 60
+
+/datum/overmap/fluff/visiblity_test/v_50
+	base_visiblity_level = 50
+
+/datum/overmap/fluff/visiblity_test/v_40
+	base_visiblity_level = 40
+
+/datum/overmap/fluff/visiblity_test/v_30
+	base_visiblity_level = 30
+
+/datum/overmap/fluff/visiblity_test/v_20
+	base_visiblity_level = 20
+
+/datum/overmap/fluff/visiblity_test/v_10
+	base_visiblity_level = 10
