@@ -15,6 +15,8 @@
 #define COMSIG_OVERMAP_LOADED "overmap_loaded"
 /// From destroy of a dynamic encounter datum
 #define COMSIG_OVERMAP_PLANET_UNLOADED "overmap_planet_unloaded"
+/// From overmap alter_token_appearance()
+#define COMSIG_OVERMAP_UPDATE_ICON "overmap_update_icon"
 
 
 /// From overmap jump points: (/datum/overmap_star_system, new_x, new_y)

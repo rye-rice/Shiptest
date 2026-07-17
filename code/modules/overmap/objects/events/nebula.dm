@@ -2,10 +2,11 @@
 /datum/overmap/event/nebula
 	name = "nebula"
 	desc = "Beware of modular code."
-	base_icon_state = "nebula"
+	base_icon_state = "nebula_"
 	default_color = "#c053f3"
 	spread_chance = 75
 	chance_to_affect = 85
+	layer = BELOW_OBJ_LAYER
 
 	interference_power = 50
 
@@ -18,6 +19,9 @@
 
 /datum/overmap/event/nebula/alter_token_appearance()
 	. = ..()
+	icon_suffix = "[rand(1, 4)]"
+	..()
+
 	if(current_overmap.override_object_colors)
 		token.color = current_overmap.hazard_secondary_color
 	token.opacity = TRUE

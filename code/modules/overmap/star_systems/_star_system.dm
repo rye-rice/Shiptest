@@ -132,6 +132,14 @@
 
 	/// If generator_type is set to OVERMAP_GENERATOR_JSON, we load all overmap objects from this
 	var/json
+	///Disables wideband for this sector only if TRUE, this also restricts holopads to only be able to call in the same sector. Should probably not be true outside of admin events
+	var/disable_wideband_in_sector = FALSE
+	///Adds interference to every radio messages sent in sector. Intended for nebula sector gen, with the custom nebulas that give 0 interference, since the sector is giving interference anyways, thus doesn't need to apply the debuff twice to have everything have 70% interference
+	var/passive_interference = 0
+	///Adds or subtract the following amount to any ships that jump in the sector. It's reversed upon leaving
+	var/sensor_mod = 0
+	///Enables the bluespace ghosts event, if false ghosts will no longer peroidicaly create bluespace ghosts on the overmap
+	var/allow_bluespace_ghosts = TRUE
 
 	COOLDOWN_DECLARE(dynamic_despawn_cooldown)
 
@@ -682,8 +690,24 @@
 		. = null
 
 /**
+ * Edits a overmap object once it enters the sector.
+ * * moving_datum - The overmap object we're editing [/datum/overmap].
+ */
+/datum/overmap_star_system/proc/on_datum_enter(datum/overmap/moving_datum)
+	moving_datum.sensor_range += sensor_mod
+	return
+
+/**
+ * Edits a overmap object once it exits the sector.
+ * * moving_datum - The overmap object we're editing [/datum/overmap].
+ */
+/datum/overmap_star_system/proc/on_datum_exit(datum/overmap/moving_datum)
+	moving_datum.sensor_range -= sensor_mod
+	return
+
+/**
  * Edits a token after it's updated by alter_token_appearance(). Meant for visual effects
- * * token_to_edit - The overmap object we're editing [/datum/overmap/event].
+ * * datum_to_edit - The overmap object we're editing [/datum/overmap].
  */
 /datum/overmap_star_system/proc/post_edit_token_state(datum/overmap/datum_to_edit)
 	datum_to_edit.token.remove_filter("gloweffect")

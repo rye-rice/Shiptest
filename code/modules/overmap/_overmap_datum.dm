@@ -41,6 +41,8 @@
 	var/dock_timer_id
 	/// Whether or not the overmap object is currently docking.
 	var/docking
+	/// The amount of tiles we can see on the overmap. Useless on non-ships
+	var/sensor_range = 4
 
 	/// Whether this can attempt to dock to the special ports on the outpost
 	var/outpost_special_dock_perms = FALSE
@@ -60,8 +62,6 @@
 	///How much % of a radio message we scramble of radios nearby/on top of us before sending. Will only scramble 1/5th this value if the radio is an adjacent tile, not 100%. Meant for hazards
 	var/interference_power
 
-	/// The amount of tiles we can see on the overmap. Useless on non-ships
-	var/sensor_range = 4
 
 	/// The current docking ticket of this object, if any
 	var/datum/docking_ticket/current_docking_ticket
@@ -668,7 +668,7 @@
 		current_overmap.overmap_container[x][y] -= src
 	catch(var/exception/error)
 		message_admins("Something went wrong when [src.name] attempted to move. Exception: [error.name] at [error.file]: line [error.line]. Check runtimes!") //TODO: Remove this
-
+	current_overmap.on_datum_exit(src)
 	current_overmap = new_system // finally, we move
 	SEND_SIGNAL(src, COMSIG_OVERMAP_MOVE_SYSTEMS, src, new_x, new_y)
 
@@ -677,10 +677,14 @@
 	else
 		var/list/results = current_overmap.get_unused_overmap_square()
 		overmap_move(results["x"], results["y"])
+	current_overmap.on_datum_enter(src)
+
 	for(var/datum/overmap/towed_datum as anything in contents)
 		towed_datum.current_overmap = current_overmap
 		towed_datum.x = x
 		towed_datum.y = y
+		current_overmap.on_datum_enter(towed_datum)
+
 	alter_token_appearance()
 
 
