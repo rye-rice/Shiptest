@@ -128,3 +128,30 @@
 #define STARSYSTEM_COLOR_SECONDARY_STRUCTURE_COLOR "structure_secondary"
 
 
+
+//default behavior
+#define OVERMAP_VISIBILITY_VISIBLE 100
+//shown as unknown from more than 3 tiles away, shows proper sprite within 3 tiles
+// ships under PLACEHOLDER tons (classified as 'small' ships) with transponders on max out to this
+#define OVERMAP_VISIBILITY_DETAILS_3TILE_CLOSERANGE 90
+// proper sprite when 2 tiles close
+// shuttles under PLACEHOLDER tons with transponders on max out to this
+#define OVERMAP_VISIBILITY_DETAILS_2TILE_CLOSERANGE 80
+// proper sprite when 1 tile close
+// electric storms reduce adjacent objects with transponder on to this level (-30%)
+#define OVERMAP_VISIBILITY_DETAILS_1TILE_CLOSERANGE  70
+// always shows as unknown, only shows proper information in act menu
+// turning off transponder always caps maximum visiblity to this. smaller ships go down further
+//nebulas reduce ships to this (-40%) (thats the same value for interference now  i think about it...)
+#define OVERMAP_VISIBILITY_UNKNOWN 60
+// invisible unless within 3 tiles range
+#define OVERMAP_VISIBILITY_UNKNOWN_3TILE_CLOSERANGE 50
+// EMP storms or solar flares reduce adjacent objects with transponder on to this level (-60%)
+#define OVERMAP_VISIBILITY_UNKNOWN_2TILE_CLOSERANGE 40
+//ships with all APCs+transponder off are reduced to thiis
+#define OVERMAP_VISIBILITY_UNKNOWN_1TILE_CLOSERANGE 30
+//invisible, still shows proper information in act menu
+//this is the lowest possible, a subshuttle or small ship with all APCs+transponder off are reduced to this
+#define OVERMAP_VISIBILITY_CLOAKED 20
+//doesnt even shot up in act menu, used by special events (such as gravity fields) or event spawners that shouldnt be visible, visibliity always has a floor of 2, making this unreachable ina normal round
+#define OVERMAP_VISIBILITY_UNDETECTABLE 1
